@@ -202,6 +202,10 @@ jobs:
   build-linux:
     name: Build for Linux
     runs-on: ${{ matrix.os }}
+    # Needed by alexellis/upload-assets on tag pushes (releases) — the default
+    # token is read-only, which fails the upload with 403.
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
@@ -334,6 +338,10 @@ jobs:
   build-windows:
     name: Build for Windows
     runs-on: windows-latest
+    # Needed by alexellis/upload-assets on tag pushes (releases) — the default
+    # token is read-only, which fails the upload with 403.
+    permissions:
+      contents: write
     steps:
     - name: Support longpaths
       run: git config --system core.longpaths true
