@@ -7,6 +7,12 @@ on:
     branches: [ features/*, main ]
   workflow_dispatch:
 
+# Needed by the "Create Draft Release" step (softprops/action-gh-release):
+# the default GITHUB_TOKEN is read-only, which fails release creation with
+# "Resource not accessible by integration" (403).
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
