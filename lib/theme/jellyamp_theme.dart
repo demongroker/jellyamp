@@ -30,21 +30,108 @@ TextTheme jellyAmpTextTheme(TextTheme base) => base.copyWith(
   labelLarge: base.labelLarge?.copyWith(fontWeight: FontWeight.w600, letterSpacing: 0.2),
 );
 
-/// Applies the JellyAmp component system (cards/chips/buttons/inputs/sheets).
+/// 1.2 redesign — a clear, easy-to-grab seek bar with a visible rounded thumb,
+/// a chunky rounded track and a soft halo, replacing the hairline default.
+SliderThemeData _seekBarTheme(ColorScheme scheme) => SliderThemeData(
+  trackHeight: 6,
+  activeTrackColor: scheme.primary,
+  inactiveTrackColor: scheme.surfaceContainerHighest,
+  secondaryActiveTrackColor: scheme.primary.withValues(alpha: 0.35),
+  disabledActiveTrackColor: scheme.onSurface.withValues(alpha: 0.24),
+  disabledInactiveTrackColor: scheme.onSurface.withValues(alpha: 0.12),
+  thumbColor: scheme.primary,
+  overlayColor: scheme.primary.withValues(alpha: 0.16),
+  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8, elevation: 2, pressedElevation: 4),
+  overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
+  trackShape: const RoundedRectSliderTrackShape(),
+  // Snap the value bubble to the thumb, keep it readable over any artwork.
+  valueIndicatorColor: scheme.primary,
+  valueIndicatorTextStyle: TextStyle(color: scheme.onPrimary, fontWeight: FontWeight.w600),
+);
+
+/// Rounded, evenly-padded tiles — used by the library, downloads and queue lists.
+ListTileThemeData _listTileTheme(ColorScheme scheme) => ListTileThemeData(
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(jRadiusCard)),
+  contentPadding: const EdgeInsets.symmetric(horizontal: jSpaceMd, vertical: jSpaceXs),
+  minVerticalPadding: jSpaceSm,
+  iconColor: scheme.onSurfaceVariant,
+);
+
+/// Consistent bottom navigation (phone) styling.
+NavigationBarThemeData _navBarTheme(ColorScheme scheme) => NavigationBarThemeData(
+  height: 68,
+  elevation: 0,
+  backgroundColor: scheme.surfaceContainer,
+  indicatorColor: scheme.primaryContainer,
+  labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+  labelTextStyle: WidgetStateProperty.resolveWith(
+    (states) => TextStyle(
+      fontSize: 12,
+      fontWeight: states.contains(WidgetState.selected) ? FontWeight.w600 : FontWeight.w500,
+      color: states.contains(WidgetState.selected) ? scheme.onSurface : scheme.onSurfaceVariant,
+    ),
+  ),
+  iconTheme: WidgetStateProperty.resolveWith(
+    (states) => IconThemeData(
+      color: states.contains(WidgetState.selected) ? scheme.onPrimaryContainer : scheme.onSurfaceVariant,
+    ),
+  ),
+);
+
+/// Consistent side rail (tablet / desktop) styling — matches the bottom bar.
+NavigationRailThemeData _navRailTheme(ColorScheme scheme) => NavigationRailThemeData(
+  backgroundColor: scheme.surfaceContainer,
+  indicatorColor: scheme.primaryContainer,
+  selectedIconTheme: IconThemeData(color: scheme.onPrimaryContainer),
+  unselectedIconTheme: IconThemeData(color: scheme.onSurfaceVariant),
+  selectedLabelTextStyle: TextStyle(fontWeight: FontWeight.w600, color: scheme.onSurface),
+  unselectedLabelTextStyle: TextStyle(color: scheme.onSurfaceVariant),
+);
+
+/// Applies the JellyAmp component system (cards/chips/buttons/inputs/sheets/
+/// sliders/lists/navigation).
 ThemeData applyJellyAmpTheme(ThemeData theme) {
   final scheme = theme.colorScheme;
+  final isDark = theme.brightness == Brightness.dark;
   return theme.copyWith(
     useMaterial3: true,
     textTheme: jellyAmpTextTheme(theme.textTheme),
+    // Slightly lifted surfaces read better in dark mode than pure black.
+    scaffoldBackgroundColor: isDark ? scheme.surface : null,
     cardTheme: CardThemeData(
       elevation: 0,
       margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(jRadiusCard)),
+      color: scheme.surfaceContainerLow,
+    ),
+    listTileTheme: _listTileTheme(scheme),
+    sliderTheme: _seekBarTheme(scheme),
+    navigationBarTheme: _navBarTheme(scheme),
+    navigationRailTheme: _navRailTheme(scheme),
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: scheme.primary,
+      linearTrackColor: scheme.surfaceContainerHighest,
+      circularTrackColor: scheme.surfaceContainerHighest,
+    ),
+    iconButtonTheme: IconButtonThemeData(
+      style: IconButton.styleFrom(shape: const CircleBorder(), highlightColor: scheme.primary.withValues(alpha: 0.12)),
+    ),
+    segmentedButtonTheme: SegmentedButtonThemeData(
+      style: SegmentedButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(jRadiusCard)),
+        selectedBackgroundColor: scheme.primaryContainer,
+        selectedForegroundColor: scheme.onPrimaryContainer,
+      ),
+    ),
+    scrollbarTheme: ScrollbarThemeData(
+      thumbColor: WidgetStatePropertyAll(scheme.onSurfaceVariant.withValues(alpha: 0.5)),
+      radius: const Radius.circular(jRadiusArtwork),
+      thickness: const WidgetStatePropertyAll(6),
     ),
     chipTheme: theme.chipTheme.copyWith(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(jRadiusArtwork)),
-      side: BorderSide(color: scheme.outlineVariant.withOpacity(0.4)),
+      side: BorderSide(color: scheme.outlineVariant.withValues(alpha: 0.4)),
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
