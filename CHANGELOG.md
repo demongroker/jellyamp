@@ -6,6 +6,36 @@ Tags are semver (`vX.Y.Z`) — the in-app update checker parses them.
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-16
+### Added
+- **CI**: every APK build now publishes a matching `<apk>.sha256` alongside the
+  APK (workflow artifact and draft release), so a build's checksum always ships
+  with it.
+- **CI**: healthcheck/test workflow pinned to Flutter **3.44.9** (same as the APK
+  build) so formatting and codegen checks agree with the branch.
+
+### Changed
+- **UI — clearer seek bar**: the progress slider now uses a 6px rounded track and
+  a visible rounded thumb with a soft halo, making it easy to grab and read over
+  any artwork.
+- **UI — theme consistency**: rounded cards and uniform list-tile padding across
+  the library, downloads and queue; matched bottom-nav / side-rail styling;
+  consistent progress, scrollbar, icon-button and segmented-button themes.
+- **UI — dark mode**: cards lift to `surfaceContainerLow` and the scaffold raises
+  off pure black, so surfaces separate instead of blending together.
+- **QoL — snappier search**: search debounce tightened 400 ms → 250 ms.
+
+### Fixed
+- **Housekeeping/versioning**: `.gitignore` now covers `*.pfx` / `*.p12` / `*.cer`
+  in one place, so no signing material can be committed.
+- Pre-existing `dart format` and `pubspec.lock` drift on the 1.1 branch, cleared
+  under the pinned Flutter 3.44.9 toolchain.
+
+### Notes
+- Dynamic colour from album art, mini-player swipe-to-skip, the sleep timer and
+  the downloaded-track indicator were already present in 1.1 and were deliberately
+  left as-is rather than duplicated.
+
 ## [1.0.0] - 2026-08-16
 ### Added
 - **Core hardening milestone** — completes the P0 power-user audit:
