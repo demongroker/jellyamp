@@ -217,7 +217,9 @@ class FinampMusicScreenHeader extends ConsumerWidget implements PreferredSizeWid
                       textInputAction: TextInputAction.search,
                       onChanged: (value) {
                         if (debounce?.isActive ?? false) debounce!.cancel();
-                        debounce = Timer(const Duration(milliseconds: 400), () {
+                        // 1.2: 400ms -> 250ms. Snappier results while still
+                        // coalescing keystrokes so we don't hammer the server.
+                        debounce = Timer(const Duration(milliseconds: 250), () {
                           onUpdateSearchQuery?.call(value);
                         });
                       },
