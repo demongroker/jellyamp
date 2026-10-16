@@ -45,9 +45,8 @@ class _HomeScreenQuickActionButtonState extends State<HomeScreenQuickActionButto
       Text(
         widget.text,
         style: TextStyle(
-          color:
-              (isDark ? scheme.onSurface : Color.alphaBlend(accentColor.withOpacity(0.22), scheme.onSurface))
-                  .withOpacity(widget.disabled ? 0.5 : 1.0),
+          color: (isDark ? scheme.onSurface : Color.alphaBlend(accentColor.withOpacity(0.22), scheme.onSurface))
+              .withOpacity(widget.disabled ? 0.5 : 1.0),
           fontSize: 13,
           height: 1.05,
           fontWeight: FontWeight.w600,
@@ -59,18 +58,27 @@ class _HomeScreenQuickActionButtonState extends State<HomeScreenQuickActionButto
       ),
     ];
 
-    final buttonContent = widget.vertical
-        ? Column(mainAxisAlignment: MainAxisAlignment.center, spacing: isDesktop ? 6.0 : 5.0, children: buttonChildren)
-        : Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
-            alignment: WrapAlignment.center,
-            spacing: 8.0,
-            children: buttonChildren,
-          );
+    final buttonContent =
+        widget.vertical
+            ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: isDesktop ? 6.0 : 5.0,
+              children: buttonChildren,
+            )
+            : Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              alignment: WrapAlignment.center,
+              spacing: 8.0,
+              children: buttonChildren,
+            );
 
-    final fill = isDark
-        ? Color.alphaBlend(accentColor.withOpacity(widget.disabled ? 0.05 : 0.12), const Color(0xFF121820).withOpacity(0.55))
-        : Color.alphaBlend(accentColor.withOpacity(widget.disabled ? 0.06 : 0.10), Colors.white.withOpacity(0.62));
+    final fill =
+        isDark
+            ? Color.alphaBlend(
+              accentColor.withOpacity(widget.disabled ? 0.05 : 0.12),
+              const Color(0xFF121820).withOpacity(0.55),
+            )
+            : Color.alphaBlend(accentColor.withOpacity(widget.disabled ? 0.06 : 0.10), Colors.white.withOpacity(0.62));
 
     return Semantics(
       label: widget.text,
@@ -83,26 +91,29 @@ class _HomeScreenQuickActionButtonState extends State<HomeScreenQuickActionButto
       child: SizedBox(
         width: widget.width,
         child: GestureDetector(
-          onLongPress: widget.disabled || widget.onSecondaryPressed == null
-              ? null
-              : () {
-                  FeedbackHelper.feedback(FeedbackType.selection);
-                  widget.onSecondaryPressed!();
-                },
-          onSecondaryTap: widget.disabled || widget.onSecondaryPressed == null
-              ? null
-              : () {
-                  FeedbackHelper.feedback(FeedbackType.selection);
-                  widget.onSecondaryPressed!();
-                },
+          onLongPress:
+              widget.disabled || widget.onSecondaryPressed == null
+                  ? null
+                  : () {
+                    FeedbackHelper.feedback(FeedbackType.selection);
+                    widget.onSecondaryPressed!();
+                  },
+          onSecondaryTap:
+              widget.disabled || widget.onSecondaryPressed == null
+                  ? null
+                  : () {
+                    FeedbackHelper.feedback(FeedbackType.selection);
+                    widget.onSecondaryPressed!();
+                  },
           onTapDown: widget.disabled ? null : (_) => setState(() => _pressed = true),
-          onTapUp: widget.disabled
-              ? null
-              : (_) {
-                  setState(() => _pressed = false);
-                  FeedbackHelper.feedback(FeedbackType.selection);
-                  widget.onPressed();
-                },
+          onTapUp:
+              widget.disabled
+                  ? null
+                  : (_) {
+                    setState(() => _pressed = false);
+                    FeedbackHelper.feedback(FeedbackType.selection);
+                    widget.onPressed();
+                  },
           onTapCancel: () => setState(() => _pressed = false),
           child: AnimatedScale(
             scale: _pressed ? 0.97 : 1.0,
@@ -116,17 +127,11 @@ class _HomeScreenQuickActionButtonState extends State<HomeScreenQuickActionButto
                   decoration: BoxDecoration(
                     color: fill,
                     borderRadius: BorderRadius.circular(radius),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(isDark ? 0.14 : 0.35),
-                      width: 0.9,
-                    ),
+                    border: Border.all(color: Colors.white.withOpacity(isDark ? 0.14 : 0.35), width: 0.9),
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [
-                        Colors.white.withOpacity(isDark ? 0.12 : 0.40),
-                        Colors.white.withOpacity(0.0),
-                      ],
+                      colors: [Colors.white.withOpacity(isDark ? 0.12 : 0.40), Colors.white.withOpacity(0.0)],
                     ),
                   ),
                   child: Padding(

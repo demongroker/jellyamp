@@ -20,23 +20,24 @@ class _SyncDownloadedPlaylistsButtonState extends ConsumerState<SyncDownloadsBut
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: _enabled && !ref.watch(finampSettingsProvider.isOffline)
-          ? () async {
-              // We don't want two checks to happen at once
-              setState(() {
-                _enabled = false;
-              });
+      onPressed:
+          _enabled && !ref.watch(finampSettingsProvider.isOffline)
+              ? () async {
+                // We don't want two checks to happen at once
+                setState(() {
+                  _enabled = false;
+                });
 
-              await GetIt.instance<DownloadsService>().resyncAll();
+                await GetIt.instance<DownloadsService>().resyncAll();
 
-              GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.syncComplete);
+                GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.syncComplete);
 
-              if (!mounted) return;
-              setState(() {
-                _enabled = true;
-              });
-            }
-          : null,
+                if (!mounted) return;
+                setState(() {
+                  _enabled = true;
+                });
+              }
+              : null,
       icon: const Icon(Icons.sync),
       tooltip: AppLocalizations.of(context)!.syncDownloads,
     );

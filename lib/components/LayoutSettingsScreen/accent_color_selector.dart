@@ -22,21 +22,22 @@ class AccentColorSelector extends ConsumerWidget {
       subtitle: useSystemAccent ? Text(AppLocalizations.of(context)!.systemAccentColorHasPriorityInfo) : null,
       title: Text(AppLocalizations.of(context)!.accentColor),
       trailing: GestureDetector(
-        onTap: useSystemAccent
-            ? null
-            : () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  useSafeArea: true,
-                  builder: (context) {
-                    return ScrollConfiguration(
-                      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                      child: SingleChildScrollView(child: const AccentColorPopup()),
-                    );
-                  },
-                );
-              },
+        onTap:
+            useSystemAccent
+                ? null
+                : () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    useSafeArea: true,
+                    builder: (context) {
+                      return ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                        child: SingleChildScrollView(child: const AccentColorPopup()),
+                      );
+                    },
+                  );
+                },
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -165,15 +166,16 @@ class _AccentColorPopupState extends ConsumerState<AccentColorPopup> {
                       child: Text(AppLocalizations.of(context)!.useDefaultButton),
                     ),
                     FilledButton(
-                      onPressed: previewColor == null
-                          ? null
-                          : () {
-                              final color = controller.text.toColorOrNull();
-                              if (color != null) {
-                                FinampSetters.setAccentColor(color);
-                                Navigator.pop(context);
-                              }
-                            },
+                      onPressed:
+                          previewColor == null
+                              ? null
+                              : () {
+                                final color = controller.text.toColorOrNull();
+                                if (color != null) {
+                                  FinampSetters.setAccentColor(color);
+                                  Navigator.pop(context);
+                                }
+                              },
                       child: Text(AppLocalizations.of(context)!.save),
                     ),
                   ],

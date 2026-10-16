@@ -98,11 +98,12 @@ class SimpleButton extends StatelessWidget {
         Text(
           text,
           style: TextStyle(
-            color: (disabled || inactive)
-                ? Theme.of(context).disabledColor
-                : (textColor != null)
-                ? textColor
-                : Theme.of(context).textTheme.bodyMedium!.color!,
+            color:
+                (disabled || inactive)
+                    ? Theme.of(context).disabledColor
+                    : (textColor != null)
+                    ? textColor
+                    : Theme.of(context).textTheme.bodyMedium!.color!,
             fontSize: textStyle.fontSize,
             fontWeight: (fontWeight != null) ? fontWeight : textStyle.fontWeight,
           ),

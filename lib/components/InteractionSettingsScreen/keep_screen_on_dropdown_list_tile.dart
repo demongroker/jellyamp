@@ -20,9 +20,12 @@ class KeepScreenOnDropdownListTile extends ConsumerWidget {
         children: [
           Text(AppLocalizations.of(context)!.keepScreenOnSubtitle),
           FinampSettingsDropdown<KeepScreenOnOption>(
-            dropdownItems: KeepScreenOnOption.values
-                .map((e) => DropdownMenuEntry<KeepScreenOnOption>(value: e, label: e.toLocalisedString(context.l10n)))
-                .toList(),
+            dropdownItems:
+                KeepScreenOnOption.values
+                    .map(
+                      (e) => DropdownMenuEntry<KeepScreenOnOption>(value: e, label: e.toLocalisedString(context.l10n)),
+                    )
+                    .toList(),
             selectedValue: ref.watch(finampSettingsProvider.keepScreenOnOption),
             onSelected: (value) {
               if (value != null) {

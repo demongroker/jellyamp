@@ -33,30 +33,33 @@ class IconButtonWithSemantics extends ConsumerWidget {
       excludeSemantics: true, // replace child semantics with custom semantics
       container: true,
       child: GestureDetector(
-        onSecondaryTap: onLongPress == null
-            ? null
-            : () {
-                onLongPress!();
-                FeedbackHelper.feedback(FeedbackType.selection);
-              },
+        onSecondaryTap:
+            onLongPress == null
+                ? null
+                : () {
+                  onLongPress!();
+                  FeedbackHelper.feedback(FeedbackType.selection);
+                },
         child: IconTheme(
           data: IconThemeData(color: color ?? IconTheme.of(context).color, size: iconSize ?? 24.0, weight: strokeWidth),
           child: IconButton(
             tooltip: label,
             icon: Icon(icon),
             visualDensity: visualDensity ?? VisualDensity.compact,
-            onPressed: onPressed == null
-                ? null
-                : () {
-                    onPressed!();
-                    FeedbackHelper.feedback(FeedbackType.selection);
-                  },
-            onLongPress: onLongPress == null
-                ? null
-                : () {
-                    onLongPress!();
-                    FeedbackHelper.feedback(FeedbackType.selection);
-                  },
+            onPressed:
+                onPressed == null
+                    ? null
+                    : () {
+                      onPressed!();
+                      FeedbackHelper.feedback(FeedbackType.selection);
+                    },
+            onLongPress:
+                onLongPress == null
+                    ? null
+                    : () {
+                      onLongPress!();
+                      FeedbackHelper.feedback(FeedbackType.selection);
+                    },
             padding: padding,
           ),
         ),

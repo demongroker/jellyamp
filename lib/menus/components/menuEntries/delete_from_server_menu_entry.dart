@@ -26,9 +26,10 @@ class DeleteFromServerMenuEntry extends ConsumerWidget implements HideableMenuEn
         title: AppLocalizations.of(context)!.deleteFromTargetConfirmButton("server"),
         onTap: () async {
           var item = DownloadStub.fromItem(
-            type: BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.track
-                ? DownloadItemType.track
-                : DownloadItemType.collection,
+            type:
+                BaseItemDtoType.fromItem(baseItem) == BaseItemDtoType.track
+                    ? DownloadItemType.track
+                    : DownloadItemType.collection,
             item: baseItem,
           );
           await askBeforeDeleteFromServerAndDevice(context, item, refresh: () => musicScreenRefreshStream.add(null));

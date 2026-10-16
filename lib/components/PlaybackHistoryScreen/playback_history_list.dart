@@ -25,52 +25,53 @@ class PlaybackHistoryList extends StatelessWidget {
 
           return PaddedCustomScrollview(
             // use nested SliverList.builder()s to show history items grouped by date
-            slivers: groupedHistory.indexed.map((indexedGroup) {
-              final groupIndex = indexedGroup.$1;
-              final group = indexedGroup.$2;
-              return SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  final actualIndex = group.value.length - index - 1;
+            slivers:
+                groupedHistory.indexed.map((indexedGroup) {
+                  final groupIndex = indexedGroup.$1;
+                  final group = indexedGroup.$2;
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final actualIndex = group.value.length - index - 1;
 
-                  final historyItem = TrackListTile(
-                    key: ValueKey(group.value[actualIndex].item.id),
-                    index: actualIndex,
-                    item: group.value[actualIndex].item.baseItem,
-                    highlightCurrentTrack: groupIndex == 0 && index == 0, // only highlight first track
-                    playbackProgress: group.value[actualIndex].playPercentage,
-                    // TODO better queue source
-                    parentPlayable: PrecalculatedPlayable(
-                      source: QueueItemSource.rawId(
-                        type: QueueItemSourceType.unknown,
-                        name: QueueItemSourceName(
-                          type: QueueItemSourceNameType.preTranslated,
-                          pretranslatedName: context.l10n.playbackHistory,
-                        ),
-                        id: "playback-history",
-                      ),
-                      tracks: group.value.map((x) => x.item.baseItem).toList().reversed.toList(),
-                    ),
-                  );
-
-                  return index == 0
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 4.0),
-                              child: RelativeDateTimeText(
-                                dateTime: group.key,
-                                style: const TextStyle(fontSize: 16.0),
-                                includeStaticDateTime: true,
-                              ),
+                      final historyItem = TrackListTile(
+                        key: ValueKey(group.value[actualIndex].item.id),
+                        index: actualIndex,
+                        item: group.value[actualIndex].item.baseItem,
+                        highlightCurrentTrack: groupIndex == 0 && index == 0, // only highlight first track
+                        playbackProgress: group.value[actualIndex].playPercentage,
+                        // TODO better queue source
+                        parentPlayable: PrecalculatedPlayable(
+                          source: QueueItemSource.rawId(
+                            type: QueueItemSourceType.unknown,
+                            name: QueueItemSourceName(
+                              type: QueueItemSourceNameType.preTranslated,
+                              pretranslatedName: context.l10n.playbackHistory,
                             ),
-                            historyItem,
-                          ],
-                        )
-                      : historyItem;
-                }, childCount: group.value.length),
-              );
-            }).toList(),
+                            id: "playback-history",
+                          ),
+                          tracks: group.value.map((x) => x.item.baseItem).toList().reversed.toList(),
+                        ),
+                      );
+
+                      return index == 0
+                          ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 16.0, top: 16.0, bottom: 4.0),
+                                child: RelativeDateTimeText(
+                                  dateTime: group.key,
+                                  style: const TextStyle(fontSize: 16.0),
+                                  includeStaticDateTime: true,
+                                ),
+                              ),
+                              historyItem,
+                            ],
+                          )
+                          : historyItem;
+                    }, childCount: group.value.length),
+                  );
+                }).toList(),
           );
         } else {
           return const Center(child: CircularProgressIndicator());

@@ -31,9 +31,10 @@ class ArtistTypeSelectionRow extends StatelessWidget {
         top: false,
         bottom: false,
         child: Padding(
-          padding: (Platform.isWindows || Platform.isLinux || Platform.isMacOS)
-              ? const EdgeInsets.symmetric(horizontal: 4)
-              : EdgeInsets.zero,
+          padding:
+              (Platform.isWindows || Platform.isLinux || Platform.isMacOS)
+                  ? const EdgeInsets.symmetric(horizontal: 4)
+                  : EdgeInsets.zero,
           child: SizedBox(
             height: 48,
             width: double.infinity,
@@ -41,9 +42,10 @@ class ArtistTypeSelectionRow extends StatelessWidget {
               mainAxisAlignment: alignLeft ? MainAxisAlignment.start : MainAxisAlignment.center,
               children: [
                 FilterChip(
-                  label: isArtistTrackList
-                      ? Text(AppLocalizations.of(context)!.albumArtist)
-                      : Text(AppLocalizations.of(context)!.albumArtists),
+                  label:
+                      isArtistTrackList
+                          ? Text(AppLocalizations.of(context)!.albumArtist)
+                          : Text(AppLocalizations.of(context)!.albumArtists),
                   onSelected: (_) {
                     FinampSetters.setDefaultArtistType(ArtistType.albumArtist);
                     refreshTab(tabType);
@@ -53,17 +55,19 @@ class ArtistTypeSelectionRow extends StatelessWidget {
                   selectedColor: Theme.of(context).colorScheme.primary,
                   backgroundColor: Theme.of(context).colorScheme.surface,
                   labelStyle: TextStyle(
-                    color: defaultArtistType == ArtistType.albumArtist
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : Theme.of(context).colorScheme.onSurface,
+                    color:
+                        defaultArtistType == ArtistType.albumArtist
+                            ? Theme.of(context).colorScheme.onPrimary
+                            : Theme.of(context).colorScheme.onSurface,
                   ),
                   shape: StadiumBorder(),
                 ),
                 SizedBox(width: 8),
                 FilterChip(
-                  label: isArtistTrackList
-                      ? Text(AppLocalizations.of(context)!.performingArtist)
-                      : Text(AppLocalizations.of(context)!.performingArtists),
+                  label:
+                      isArtistTrackList
+                          ? Text(AppLocalizations.of(context)!.performingArtist)
+                          : Text(AppLocalizations.of(context)!.performingArtists),
                   onSelected: (_) {
                     FinampSetters.setDefaultArtistType(ArtistType.artist);
                     refreshTab(tabType);
@@ -73,9 +77,10 @@ class ArtistTypeSelectionRow extends StatelessWidget {
                   selectedColor: Theme.of(context).colorScheme.primary,
                   backgroundColor: Theme.of(context).colorScheme.surface,
                   labelStyle: TextStyle(
-                    color: defaultArtistType == ArtistType.artist
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : Theme.of(context).colorScheme.onSurface,
+                    color:
+                        defaultArtistType == ArtistType.artist
+                            ? Theme.of(context).colorScheme.onPrimary
+                            : Theme.of(context).colorScheme.onSurface,
                   ),
                   shape: StadiumBorder(),
                 ),

@@ -18,20 +18,19 @@ class ActiveDownloadsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final downloadsService = GetIt.instance<DownloadsService>();
-    var stream =
-        Rx.combineLatest4<
-          List<DownloadStub>,
-          List<DownloadStub>,
-          List<DownloadStub>,
-          List<DownloadStub>,
-          List<List<DownloadStub>>
-        >(
-          downloadsService.getDownloadList(DownloadItemState.syncFailed),
-          downloadsService.getDownloadList(DownloadItemState.failed),
-          downloadsService.getDownloadList(DownloadItemState.downloading),
-          downloadsService.getDownloadList(DownloadItemState.enqueued),
-          (l1, l2, l3, l4) => [l1, l2, l3, l4],
-        );
+    var stream = Rx.combineLatest4<
+      List<DownloadStub>,
+      List<DownloadStub>,
+      List<DownloadStub>,
+      List<DownloadStub>,
+      List<List<DownloadStub>>
+    >(
+      downloadsService.getDownloadList(DownloadItemState.syncFailed),
+      downloadsService.getDownloadList(DownloadItemState.failed),
+      downloadsService.getDownloadList(DownloadItemState.downloading),
+      downloadsService.getDownloadList(DownloadItemState.enqueued),
+      (l1, l2, l3, l4) => [l1, l2, l3, l4],
+    );
 
     return Scaffold(
       appBar: AppBar(

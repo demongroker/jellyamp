@@ -114,8 +114,7 @@ ColorScheme getColorScheme(Color? color, Brightness brightness, bool amoledTheme
     ).copyWith(
       background: brightness == Brightness.dark ? emberBgColor : const Color(0xFFFFF6F0),
       surface: brightness == Brightness.dark ? emberBgColor : const Color(0xFFFFF6F0),
-      surfaceContainerHighest:
-          brightness == Brightness.dark ? emberSurfaceColor : const Color(0xFFFFE5D8),
+      surfaceContainerHighest: brightness == Brightness.dark ? emberSurfaceColor : const Color(0xFFFFE5D8),
     );
   } else {
     // Curated liquid ice glass (hand-tuned charcoal surfaces, kept intact).

@@ -229,19 +229,21 @@ class GlobalSnackbar {
         ),
         action: SnackBarAction(
           label: MaterialLocalizations.of(context).moreButtonTooltip,
-          onPressed: () => showDialog<void>(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text(AppLocalizations.of(context)!.error),
-              content: Text(errorText),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).maybePop(),
-                  child: Text(MaterialLocalizations.of(context).closeButtonLabel),
-                ),
-              ],
-            ),
-          ),
+          onPressed:
+              () => showDialog<void>(
+                context: context,
+                builder:
+                    (context) => AlertDialog(
+                      title: Text(AppLocalizations.of(context)!.error),
+                      content: Text(errorText),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).maybePop(),
+                          child: Text(MaterialLocalizations.of(context).closeButtonLabel),
+                        ),
+                      ],
+                    ),
+              ),
         ),
         duration: const Duration(seconds: 4),
         persist: false,
@@ -274,16 +276,17 @@ class GlobalSnackbar {
     _logger.info("Displaying message: $text");
     showDialog<void>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(text.$1),
-        content: Text(text.$2),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).maybePop(),
-            child: Text(MaterialLocalizations.of(context).closeButtonLabel),
+      builder:
+          (context) => AlertDialog(
+            title: Text(text.$1),
+            content: Text(text.$2),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).maybePop(),
+                child: Text(MaterialLocalizations.of(context).closeButtonLabel),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 

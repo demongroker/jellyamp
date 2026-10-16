@@ -85,12 +85,15 @@ void _startInterfaceListening() {
     _interfaceController.add(results);
     _connectivityLogger.fine("Network interface changed: $results");
   });
-  Connectivity().checkConnectivity().then((results) {
-    _lastInterfaceResults = results;
-    _interfaceController.add(results);
-  }).catchError((Object e) {
-    _connectivityLogger.warning("connectivity_plus checkConnectivity failed", e);
-  });
+  Connectivity()
+      .checkConnectivity()
+      .then((results) {
+        _lastInterfaceResults = results;
+        _interfaceController.add(results);
+      })
+      .catchError((Object e) {
+        _connectivityLogger.warning("connectivity_plus checkConnectivity failed", e);
+      });
 }
 
 /// Stream of network-interface changes. Watching this rebuilds dependents.
@@ -258,11 +261,7 @@ class ConnectivityStateNotifier extends Notifier<ConnectivityState> {
     // recover automatically.
     final manualOffline = isOfflineSetting && !_autoEngagedOffline;
 
-    return classifyConnectivity(
-      signals,
-      networkInterfaceDown: networkInterfaceDown,
-      manualOffline: manualOffline,
-    );
+    return classifyConnectivity(signals, networkInterfaceDown: networkInterfaceDown, manualOffline: manualOffline);
   }
 
   /// Drives the Offline Mode setting so the rest of the app actually falls
@@ -273,12 +272,10 @@ class ConnectivityStateNotifier extends Notifier<ConnectivityState> {
     // the isOffline setting (it already confirms and flips it).
     final autoOfflineEnabled =
         FinampSettingsHelper.finampSettings.autoOffline != AutoOfflineOption.disabled &&
-            FinampSettingsHelper.finampSettings.autoOfflineListenerActive;
+        FinampSettingsHelper.finampSettings.autoOfflineListenerActive;
     if (autoOfflineEnabled) return;
 
-    if (next == ConnectivityState.offline &&
-        !_autoEngagedOffline &&
-        !FinampSettingsHelper.finampSettings.isOffline) {
+    if (next == ConnectivityState.offline && !_autoEngagedOffline && !FinampSettingsHelper.finampSettings.isOffline) {
       // Server unreachable (not a manual offline choice) -> auto fall back to
       // local state. The rest of the app already reads isOffline to switch to
       // the downloaded library.
@@ -294,5 +291,6 @@ class ConnectivityStateNotifier extends Notifier<ConnectivityState> {
   }
 }
 
-final connectivityStateProvider =
-    NotifierProvider<ConnectivityStateNotifier, ConnectivityState>(ConnectivityStateNotifier.new);
+final connectivityStateProvider = NotifierProvider<ConnectivityStateNotifier, ConnectivityState>(
+  ConnectivityStateNotifier.new,
+);

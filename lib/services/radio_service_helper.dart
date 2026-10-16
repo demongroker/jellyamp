@@ -120,9 +120,8 @@ Future<void> maybeAddRadioTracks() async {
       } else {
         if (localResult.isStillValid()) {
           localResult = localResult.copyWith(
-            seedItem: localResult.radioMode == RadioMode.continuous
-                ? tracksToAdd.lastOrNull ?? localResult.seedItem
-                : null,
+            seedItem:
+                localResult.radioMode == RadioMode.continuous ? tracksToAdd.lastOrNull ?? localResult.seedItem : null,
             generating: false,
             queueing: true,
             failed: false,
@@ -314,16 +313,15 @@ Future<List<BaseItemDto>> generateRadioTracks(
         "Reshuffle radio mode selected but the provided item '${overrideSeedItem?.name}' not downloaded or the queue is empty. Availability status: $reshuffleModeAvailabilityStatus. Returning empty track list.",
       );
     }
-    final queueWithoutRadioTracks = currentQueue.fullQueue
-        .whereNot((e) => e.source.type == QueueItemSourceType.radio)
-        .toList();
+    final queueWithoutRadioTracks =
+        currentQueue.fullQueue.whereNot((e) => e.source.type == QueueItemSourceType.radio).toList();
     // Items originally in the currently playing source (or manually added)
     final originalQueue =
         (actualSeed != null
                 ? (await loadChildTracksFromBaseItem(
-                    item: actualSeed,
-                    sortConfig: SortAndFilterConfiguration.defaultForItem(actualSeed),
-                  )).map((item) => item).toList()
+                  item: actualSeed,
+                  sortConfig: SortAndFilterConfiguration.defaultForItem(actualSeed),
+                )).map((item) => item).toList()
                 : <BaseItemDto>[])
             // if the queue is purely made up of radio modes (i.e. after using the "Start Radio" option in the menu), we don't filter out radio tracks
             .followedBy(
@@ -413,10 +411,11 @@ Future<List<BaseItemDto>> generateRadioTracks(
     if (forNewQueue) {
       queueTracks = [];
     } else {
-      queueTracks = currentQueue.fullQueue
-          .where((x) => x.source != source && x.source.type != QueueItemSourceType.radio)
-          .map((x) => x.baseItem)
-          .toList();
+      queueTracks =
+          currentQueue.fullQueue
+              .where((x) => x.source != source && x.source.type != QueueItemSourceType.radio)
+              .map((x) => x.baseItem)
+              .toList();
     }
 
     if (source != null) {
@@ -444,10 +443,11 @@ Future<List<BaseItemDto>> generateRadioTracks(
         // sourceTracks is expected to be randomized, but this might load in order.
         // however, this will also load all tracks, so they will be immediately copied into queueTracks and drawn
         // from randomly regardkless.
-        sourceTracks = (await loadChildTracksFromBaseItem(
-          item: actualSeed!,
-          sortConfig: SortAndFilterConfiguration.defaultForItem(actualSeed),
-        )).map((item) => item).toList();
+        sourceTracks =
+            (await loadChildTracksFromBaseItem(
+              item: actualSeed!,
+              sortConfig: SortAndFilterConfiguration.defaultForItem(actualSeed),
+            )).map((item) => item).toList();
         sourceTracksLength = sourceTracks.length;
       }
     }
@@ -579,10 +579,11 @@ Future<List<BaseItemDto>> generateRadioTracks(
       final randomnessExtraAlbums = 5;
 
       // filter out any albums where tracks with that album as the (radio) source are already in the queue
-      final existingAlbumIds = currentQueue.fullQueue
-          .where((queueItem) => queueItem.baseItem.albumId != null)
-          .map((queueItem) => queueItem.baseItem.albumId)
-          .toSet();
+      final existingAlbumIds =
+          currentQueue.fullQueue
+              .where((queueItem) => queueItem.baseItem.albumId != null)
+              .map((queueItem) => queueItem.baseItem.albumId)
+              .toSet();
       List<BaseItemDto> filteredSimilarAlbums = [];
 
       while (filteredSimilarAlbums.isEmpty) {
@@ -634,12 +635,13 @@ Future<List<BaseItemDto>> generateRadioTracks(
           case AlbumMixFallbackModes.libraryAlbumsOrSingles:
             // just fetch a random album from the library
             if (FinampSettingsHelper.finampSettings.isOffline) {
-              similarAlbums = (await downloadsService.getAllCollections(
-                includeItemTypes: [BaseItemDtoType.album],
-                fullyDownloaded: false,
-                viewFilter: finampUserHelper.currentUser?.currentViewId,
-                nullableViewFilters: FinampSettingsHelper.finampSettings.showDownloadsWithUnknownLibrary,
-              )).map((e) => e.baseItem).nonNulls.toList();
+              similarAlbums =
+                  (await downloadsService.getAllCollections(
+                    includeItemTypes: [BaseItemDtoType.album],
+                    fullyDownloaded: false,
+                    viewFilter: finampUserHelper.currentUser?.currentViewId,
+                    nullableViewFilters: FinampSettingsHelper.finampSettings.showDownloadsWithUnknownLibrary,
+                  )).map((e) => e.baseItem).nonNulls.toList();
             } else {
               similarAlbums =
                   (await jellyfinApiHelper.getItems(
@@ -676,19 +678,20 @@ Future<List<BaseItemDto>> generateRadioTracks(
           continue;
         }
 
-        filteredSimilarAlbums = similarAlbums
-            .where((album) => !existingAlbumIds.contains(album.id))
-            // don't include singles unless we're falling back to them
-            .where(
-              (album) =>
-                  ([
-                    AlbumMixFallbackModes.similarSingles,
-                    AlbumMixFallbackModes.artistSingles,
-                    AlbumMixFallbackModes.libraryAlbumsOrSingles,
-                  ].contains(fallbackMode) ||
-                  (album.songCount ?? album.childCount ?? 0) > 1),
-            )
-            .toList();
+        filteredSimilarAlbums =
+            similarAlbums
+                .where((album) => !existingAlbumIds.contains(album.id))
+                // don't include singles unless we're falling back to them
+                .where(
+                  (album) =>
+                      ([
+                            AlbumMixFallbackModes.similarSingles,
+                            AlbumMixFallbackModes.artistSingles,
+                            AlbumMixFallbackModes.libraryAlbumsOrSingles,
+                          ].contains(fallbackMode) ||
+                          (album.songCount ?? album.childCount ?? 0) > 1),
+                )
+                .toList();
 
         if (filteredSimilarAlbums.isEmpty) {
           switch (fallbackMode) {
@@ -819,11 +822,11 @@ Future<List<BaseItemDto>> _getSimilarTracks({
           (disableDuplicateFiltering
                   ? <BaseItemDto>[]
                   : queueService
-                        .getQueue()
-                        .fullQueue
-                        .reversed
-                        .take(repetitionThresholdTracks)
-                        .map((item) => item.baseItem))
+                      .getQueue()
+                      .fullQueue
+                      .reversed
+                      .take(repetitionThresholdTracks)
+                      .map((item) => item.baseItem))
               .followedBy(additionalExistingTracks)
               .map((item) => item.id)
               .toSet();
@@ -876,29 +879,26 @@ final currentRadioAvailabilityStatusProvider = Provider<RadioModeAvailabilitySta
   return !radioEnabled ? RadioModeAvailabilityStatus.disabled : radioModeAvailable;
 });
 
-final radioModeAvailabilityStatusProvider =
-    AutoDisposeProviderFamily<RadioModeAvailabilityStatus, (RadioMode, BaseItemDto?)>((
-      ref,
-      (RadioMode radioMode, BaseItemDto? source) arguments,
-    ) {
-      final radioMode = arguments.$1;
-      final source = arguments.$2;
+final radioModeAvailabilityStatusProvider = AutoDisposeProviderFamily<
+  RadioModeAvailabilityStatus,
+  (RadioMode, BaseItemDto?)
+>((ref, (RadioMode radioMode, BaseItemDto? source) arguments) {
+  final radioMode = arguments.$1;
+  final source = arguments.$2;
 
-      final randomAndReshuffleModeAvailability = ref.watch(
-        _randomAndReshuffleRadioModeAvailabilityStatusProvider(source),
-      );
-      final similarAndContinuousModeAvailability = ref.watch(
-        _similarAndContinuousRadioModeAvailabilityStatusProvider(source),
-      );
-      final albumMixModeAvailable = ref.watch(_albumMixRadioModeAvailabilityStatusProvider(source));
+  final randomAndReshuffleModeAvailability = ref.watch(_randomAndReshuffleRadioModeAvailabilityStatusProvider(source));
+  final similarAndContinuousModeAvailability = ref.watch(
+    _similarAndContinuousRadioModeAvailabilityStatusProvider(source),
+  );
+  final albumMixModeAvailable = ref.watch(_albumMixRadioModeAvailabilityStatusProvider(source));
 
-      final currentModeAvailable = switch (radioMode) {
-        RadioMode.random || RadioMode.reshuffle => randomAndReshuffleModeAvailability,
-        RadioMode.similar || RadioMode.continuous => similarAndContinuousModeAvailability,
-        RadioMode.albumMix => albumMixModeAvailable,
-      };
-      return currentModeAvailable;
-    });
+  final currentModeAvailable = switch (radioMode) {
+    RadioMode.random || RadioMode.reshuffle => randomAndReshuffleModeAvailability,
+    RadioMode.similar || RadioMode.continuous => similarAndContinuousModeAvailability,
+    RadioMode.albumMix => albumMixModeAvailable,
+  };
+  return currentModeAvailable;
+});
 
 final _randomAndReshuffleRadioModeAvailabilityStatusProvider =
     ProviderFamily<RadioModeAvailabilityStatus, BaseItemDto?>((ref, BaseItemDto? baseItem) {
@@ -937,10 +937,10 @@ final _similarAndContinuousRadioModeAvailabilityStatusProvider =
 BaseItemId? getAlbumMixRadioModeSeedId(BaseItemDto? baseItem) {
   return baseItem != null
       ? switch (BaseItemDtoType.fromItem(baseItem)) {
-          BaseItemDtoType.album => baseItem.id,
-          BaseItemDtoType.track => baseItem.albumId,
-          _ => null,
-        }
+        BaseItemDtoType.album => baseItem.id,
+        BaseItemDtoType.track => baseItem.albumId,
+        _ => null,
+      }
       : null;
 }
 

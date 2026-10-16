@@ -26,102 +26,105 @@ Future<void> showRadioMenu(
 
   assert(startNewQueue == (seedItem != null), "A new queue must be started by (and when) overriding the seed item.");
 
-  final List<Widget> menuItems = RadioMode.values
-      .map<Widget>((radioModeOption) {
-        return Consumer(
-          builder: (context, ref, child) {
-            final currentRadioMode = ref.watch(finampSettingsProvider.radioMode);
-            final modeSeedItem = seedItem ?? ref.watch(getActiveRadioSeedProvider(radioModeOption));
-            final radioModeOptionAvailabilityStatus = ref.watch(
-              radioModeAvailabilityStatusProvider((radioModeOption, modeSeedItem)),
-            );
-            return ChoiceMenuOption(
-              title: AppLocalizations.of(context)!.radioModeOptionName(radioModeOption.name),
-              description: switch (radioModeOptionAvailabilityStatus) {
-                RadioModeAvailabilityStatus.available || RadioModeAvailabilityStatus.disabled => AppLocalizations.of(
-                  context,
-                )!.radioModeDescription(radioModeOption.name),
-                RadioModeAvailabilityStatus.unavailableSourceTypeNotSupported ||
-                RadioModeAvailabilityStatus.unavailableSourceNull => AppLocalizations.of(
-                  context,
-                )!.radioModeUnavailableForSourceItemDescription,
-                RadioModeAvailabilityStatus.unavailableOffline => AppLocalizations.of(
-                  context,
-                )!.radioModeUnavailableWhileOfflineDescription,
-                RadioModeAvailabilityStatus.unavailableNotDownloaded =>
-                  modeSeedItem?.name != null
-                      ? AppLocalizations.of(
-                          context,
-                        )!.radioModeRandomUnavailableNotDownloadedDescription(modeSeedItem!.name!)
-                      : AppLocalizations.of(context)!.radioModeRandomUnavailableNotDownloadedGenericDescription,
-                RadioModeAvailabilityStatus.unavailableQueueEmpty => AppLocalizations.of(
-                  context,
-                )!.radioModeUnavailableQueueEmptyDescription,
-              },
-              badges: [
-                // similar mode is recommended
-                if (radioModeOption == RadioMode.similar && radioModeOptionAvailabilityStatus.isAvailable)
-                  Icon(TablerIcons.star, size: 14.0),
-              ],
-              enabled: radioModeOptionAvailabilityStatus.isAvailable,
-              icon: getRadioModeIcon(radioModeOption),
-              isInactive:
-                  startNewQueue ||
-                  ref.watch(currentRadioAvailabilityStatusProvider) != RadioModeAvailabilityStatus.available,
-              isSelected: currentRadioMode == radioModeOption,
-              onSelect: () async {
-                final radioTracksWillChange = currentRadioMode != radioModeOption || startNewQueue;
-                FeedbackHelper.feedback(FeedbackType.selection);
-                if (currentRadioMode != radioModeOption) {
-                  FinampSetters.setRadioMode(radioModeOption);
-                }
-                if (seedItem != null && startNewQueue) {
-                  unawaited(startRadioPlayback(seedItem));
-                } else {
-                  // clear tracks after updating mode to ensure any later request for radio tracks use the correct settings
-                  if (radioTracksWillChange) {
-                    await queueService.clearRadioTracks();
-                  }
-                  toggleRadio(true);
-                }
-                if (radioTracksWillChange) {
-                  await Future<void>.delayed(const Duration(milliseconds: 400));
-                }
-                if (context.mounted) {
-                  Navigator.of(context).pop();
-                }
-              },
-            );
-          },
-        );
-      })
-      .followedBy(
-        startNewQueue
-            ? []
-            : <Widget>[
-                Divider(height: 8.0, thickness: 1.5, indent: 20.0, endIndent: 20.0, radius: BorderRadius.circular(2.0)),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return ChoiceMenuOption(
-                      title: AppLocalizations.of(context)!.radioModeDisableButtonTitle,
-                      description: AppLocalizations.of(context)!.radioModeDisableButtonSubtitle,
-                      icon: TablerIcons.radio_off,
-                      isSelected: !ref.watch(currentRadioAvailabilityStatusProvider).isAvailable,
-                      enabled: true,
-                      onSelect: () async {
-                        toggleRadio(false);
-                        FeedbackHelper.feedback(FeedbackType.selection);
-                        await Future<void>.delayed(const Duration(milliseconds: 400));
-                        if (context.mounted) {
-                          Navigator.of(context).pop();
-                        }
-                      },
-                    );
+  final List<Widget> menuItems =
+      RadioMode.values
+          .map<Widget>((radioModeOption) {
+            return Consumer(
+              builder: (context, ref, child) {
+                final currentRadioMode = ref.watch(finampSettingsProvider.radioMode);
+                final modeSeedItem = seedItem ?? ref.watch(getActiveRadioSeedProvider(radioModeOption));
+                final radioModeOptionAvailabilityStatus = ref.watch(
+                  radioModeAvailabilityStatusProvider((radioModeOption, modeSeedItem)),
+                );
+                return ChoiceMenuOption(
+                  title: AppLocalizations.of(context)!.radioModeOptionName(radioModeOption.name),
+                  description: switch (radioModeOptionAvailabilityStatus) {
+                    RadioModeAvailabilityStatus.available || RadioModeAvailabilityStatus.disabled =>
+                      AppLocalizations.of(context)!.radioModeDescription(radioModeOption.name),
+                    RadioModeAvailabilityStatus.unavailableSourceTypeNotSupported ||
+                    RadioModeAvailabilityStatus.unavailableSourceNull =>
+                      AppLocalizations.of(context)!.radioModeUnavailableForSourceItemDescription,
+                    RadioModeAvailabilityStatus.unavailableOffline =>
+                      AppLocalizations.of(context)!.radioModeUnavailableWhileOfflineDescription,
+                    RadioModeAvailabilityStatus.unavailableNotDownloaded =>
+                      modeSeedItem?.name != null
+                          ? AppLocalizations.of(
+                            context,
+                          )!.radioModeRandomUnavailableNotDownloadedDescription(modeSeedItem!.name!)
+                          : AppLocalizations.of(context)!.radioModeRandomUnavailableNotDownloadedGenericDescription,
+                    RadioModeAvailabilityStatus.unavailableQueueEmpty =>
+                      AppLocalizations.of(context)!.radioModeUnavailableQueueEmptyDescription,
                   },
-                ),
-              ],
-      )
-      .toList();
+                  badges: [
+                    // similar mode is recommended
+                    if (radioModeOption == RadioMode.similar && radioModeOptionAvailabilityStatus.isAvailable)
+                      Icon(TablerIcons.star, size: 14.0),
+                  ],
+                  enabled: radioModeOptionAvailabilityStatus.isAvailable,
+                  icon: getRadioModeIcon(radioModeOption),
+                  isInactive:
+                      startNewQueue ||
+                      ref.watch(currentRadioAvailabilityStatusProvider) != RadioModeAvailabilityStatus.available,
+                  isSelected: currentRadioMode == radioModeOption,
+                  onSelect: () async {
+                    final radioTracksWillChange = currentRadioMode != radioModeOption || startNewQueue;
+                    FeedbackHelper.feedback(FeedbackType.selection);
+                    if (currentRadioMode != radioModeOption) {
+                      FinampSetters.setRadioMode(radioModeOption);
+                    }
+                    if (seedItem != null && startNewQueue) {
+                      unawaited(startRadioPlayback(seedItem));
+                    } else {
+                      // clear tracks after updating mode to ensure any later request for radio tracks use the correct settings
+                      if (radioTracksWillChange) {
+                        await queueService.clearRadioTracks();
+                      }
+                      toggleRadio(true);
+                    }
+                    if (radioTracksWillChange) {
+                      await Future<void>.delayed(const Duration(milliseconds: 400));
+                    }
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                );
+              },
+            );
+          })
+          .followedBy(
+            startNewQueue
+                ? []
+                : <Widget>[
+                  Divider(
+                    height: 8.0,
+                    thickness: 1.5,
+                    indent: 20.0,
+                    endIndent: 20.0,
+                    radius: BorderRadius.circular(2.0),
+                  ),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ChoiceMenuOption(
+                        title: AppLocalizations.of(context)!.radioModeDisableButtonTitle,
+                        description: AppLocalizations.of(context)!.radioModeDisableButtonSubtitle,
+                        icon: TablerIcons.radio_off,
+                        isSelected: !ref.watch(currentRadioAvailabilityStatusProvider).isAvailable,
+                        enabled: true,
+                        onSelect: () async {
+                          toggleRadio(false);
+                          FeedbackHelper.feedback(FeedbackType.selection);
+                          await Future<void>.delayed(const Duration(milliseconds: 400));
+                          if (context.mounted) {
+                            Navigator.of(context).pop();
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ],
+          )
+          .toList();
 
   await showThemedBottomSheet(
     context: context,
@@ -142,10 +145,7 @@ Future<void> showRadioMenu(
               ],
             ),
           ),
-          sliver: MenuMask(
-            height: MenuMaskHeight(36.0),
-            child: SliverList.list(children: menuItems),
-          ),
+          sliver: MenuMask(height: MenuMaskHeight(36.0), child: SliverList.list(children: menuItems)),
         ),
       ];
       // header + menu entries

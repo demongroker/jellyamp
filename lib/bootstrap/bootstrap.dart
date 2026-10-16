@@ -113,10 +113,7 @@ class FinampProviderObserver extends ProviderObserver {
 ///
 /// P0.4: extracted from `main.dart`. The step order, the intermediate log
 /// lines, and the fatal-error behavior are unchanged.
-Future<JellyampDependencies> bootstrap({
-  required List<String> commandLineArgs,
-  bool integrationTesting = false,
-}) async {
+Future<JellyampDependencies> bootstrap({required List<String> commandLineArgs, bool integrationTesting = false}) async {
   startTime = DateTime.now();
   await setupLogging();
   await setupEdgeToEdgeOverlayStyle();

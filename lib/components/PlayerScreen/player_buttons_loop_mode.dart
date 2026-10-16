@@ -85,12 +85,14 @@ class PlayerButtonsLoopMode extends ConsumerWidget {
               queueService.toggleLoopMode();
             }
           },
-          onLongPress: () => showRadioMenu(
-            context,
-            subtitle: radioFailed
-                ? AppLocalizations.of(context)!.radioFailedSubtitle
-                : AppLocalizations.of(context)!.loopingOverriddenByRadioSubtitle,
-          ),
+          onLongPress:
+              () => showRadioMenu(
+                context,
+                subtitle:
+                    radioFailed
+                        ? AppLocalizations.of(context)!.radioFailedSubtitle
+                        : AppLocalizations.of(context)!.loopingOverriddenByRadioSubtitle,
+              ),
           icon: Icon(getRepeatingIcon(snapshot.data!)),
         );
       },

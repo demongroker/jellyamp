@@ -248,9 +248,8 @@ class _PlayerScreenContent extends ConsumerWidget {
                   // this is needed to ensure the player screen stays in full screen mode WITHOUT having contrast issues in the status bar
                   systemNavigationBarColor: Colors.transparent,
                   systemStatusBarContrastEnforced: false,
-                  statusBarIconBrightness: Theme.brightnessOf(context) == Brightness.dark
-                      ? Brightness.light
-                      : Brightness.dark,
+                  statusBarIconBrightness:
+                      Theme.brightnessOf(context) == Brightness.dark ? Brightness.light : Brightness.dark,
                 ),
                 elevation: 0,
                 scrolledUnderElevation: 0.0, // disable tint/shadow when content is scrolled under the app bar

@@ -46,43 +46,48 @@ class FeatureState {
   bool get isDownloaded => metadata?.isDownloaded ?? false;
   bool get isTranscodingAndStreaming =>
       !isDownloaded && (currentTrack?.item.extras?["shouldTranscode"] as bool? ?? false);
-  String get container => isTranscodingAndStreaming
-      ? ref.watch(finampSettingsProvider.transcodingStreamingFormat).container
-      : metadata?.mediaSourceInfo.container ?? AppLocalizations.of(context)!.unknown;
-  String get codec => isTranscodingAndStreaming
-      ? ref.watch(finampSettingsProvider.transcodingStreamingFormat).codec
-      : audioStream?.codec ?? AppLocalizations.of(context)!.unknown;
+  String get container =>
+      isTranscodingAndStreaming
+          ? ref.watch(finampSettingsProvider.transcodingStreamingFormat).container
+          : metadata?.mediaSourceInfo.container ?? AppLocalizations.of(context)!.unknown;
+  String get codec =>
+      isTranscodingAndStreaming
+          ? ref.watch(finampSettingsProvider.transcodingStreamingFormat).codec
+          : audioStream?.codec ?? AppLocalizations.of(context)!.unknown;
   int? get size => isTranscodingAndStreaming ? null : metadata?.mediaSourceInfo.size;
-  MediaStream? get audioStream => isTranscodingAndStreaming
-      ? MediaStream(
-          index: 0,
-          type: "Audio",
-          codec: ref.watch(finampSettingsProvider.transcodingStreamingFormat).codec,
-          bitRate: ref.watch(finampSettingsProvider.transcodeBitrate),
-          sampleRate: ref.watch(finampSettingsProvider.transcodingStreamingFormat).sampleRate,
-          channels: null,
-          bitDepth: ref.watch(finampSettingsProvider.transcodingStreamingFormat).lossless
-              ? metadata?.mediaSourceInfo.mediaStreams.firstOrNull?.bitDepth
-              : null,
-          isInterlaced: false,
-          isDefault: true,
-          isForced: false,
-          isExternal: false,
-          isTextSubtitleStream: false,
-          supportsExternalStream: false,
-        )
-      : metadata?.mediaSourceInfo.mediaStreams.firstWhereOrNull((stream) => stream.type == "Audio") ??
-            metadata?.mediaSourceInfo.mediaStreams.firstOrNull;
+  MediaStream? get audioStream =>
+      isTranscodingAndStreaming
+          ? MediaStream(
+            index: 0,
+            type: "Audio",
+            codec: ref.watch(finampSettingsProvider.transcodingStreamingFormat).codec,
+            bitRate: ref.watch(finampSettingsProvider.transcodeBitrate),
+            sampleRate: ref.watch(finampSettingsProvider.transcodingStreamingFormat).sampleRate,
+            channels: null,
+            bitDepth:
+                ref.watch(finampSettingsProvider.transcodingStreamingFormat).lossless
+                    ? metadata?.mediaSourceInfo.mediaStreams.firstOrNull?.bitDepth
+                    : null,
+            isInterlaced: false,
+            isDefault: true,
+            isForced: false,
+            isExternal: false,
+            isTextSubtitleStream: false,
+            supportsExternalStream: false,
+          )
+          : metadata?.mediaSourceInfo.mediaStreams.firstWhereOrNull((stream) => stream.type == "Audio") ??
+              metadata?.mediaSourceInfo.mediaStreams.firstOrNull;
   // Transcoded downloads will not have a valid MediaStream, but will have
   // the target transcode bitrate set for the mediasource bitrate.  Other items
   // should have a valid mediaStream, so use that audio-only bitrate instead of the
   // whole-file bitrate.
-  int? get bitrate => isTranscodingAndStreaming
-      ? (ref.watch(finampSettingsProvider.transcodingStreamingFormat) ==
-                FinampTranscodingStreamingFormat.flacFragmentedMp4
-            ? null
-            : ref.watch(finampSettingsProvider.transcodeBitrate))
-      : audioStream?.bitRate ?? metadata?.mediaSourceInfo.bitrate;
+  int? get bitrate =>
+      isTranscodingAndStreaming
+          ? (ref.watch(finampSettingsProvider.transcodingStreamingFormat) ==
+                  FinampTranscodingStreamingFormat.flacFragmentedMp4
+              ? null
+              : ref.watch(finampSettingsProvider.transcodeBitrate))
+          : audioStream?.bitRate ?? metadata?.mediaSourceInfo.bitrate;
   int? get sampleRate => audioStream?.sampleRate;
   int? get bitDepth => audioStream?.bitDepth;
 
@@ -143,9 +148,10 @@ class FeatureState {
             features.add(
               FeatureProperties(
                 type: feature,
-                text: supportsDirectPlay
-                    ? AppLocalizations.of(context)!.playbackModeDirectPlaying
-                    : supportsDirectStream
+                text:
+                    supportsDirectPlay
+                        ? AppLocalizations.of(context)!.playbackModeDirectPlaying
+                        : supportsDirectStream
                         ? AppLocalizations.of(context)!.playbackModeDirectStreaming
                         : AppLocalizations.of(context)!.playbackModeDirectPlaying,
               ),

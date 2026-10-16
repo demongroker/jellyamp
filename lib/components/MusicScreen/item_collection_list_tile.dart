@@ -49,14 +49,15 @@ class ItemCollectionListTile extends ConsumerWidget {
     final library = finampUserHelper.currentUser?.currentView;
     final itemType = BaseItemDtoType.fromItem(item);
     final isOnDesktop = Platform.isMacOS || Platform.isWindows || Platform.isLinux;
-    final subtitle = (itemType != BaseItemDtoType.album || !albumShowsYearAndDurationInstead)
-        ? generateSubtitle(
-            item: item,
-            parentType: parentType,
-            context: context,
-            artistType: ref.watch(finampSettingsProvider.defaultArtistType),
-          )
-        : null;
+    final subtitle =
+        (itemType != BaseItemDtoType.album || !albumShowsYearAndDurationInstead)
+            ? generateSubtitle(
+              item: item,
+              parentType: parentType,
+              context: context,
+              artistType: ref.watch(finampSettingsProvider.defaultArtistType),
+            )
+            : null;
     final itemDownloadStub = switch (itemType) {
       BaseItemDtoType.artist || BaseItemDtoType.genre => DownloadStub.fromFinampCollection(
         FinampCollection(type: FinampCollectionType.collectionWithLibraryFilter, library: library, item: item),
@@ -122,12 +123,14 @@ class ItemCollectionListTile extends ConsumerWidget {
       associatedTabContentType = null;
     }
 
-    final tileAdditionalInfoSetting = associatedTabContentType != null
-        ? ref.watch(finampSettingsProvider.tileAdditionalInfoType(associatedTabContentType))
-        : null;
-    final tileAdditionalInfoType = (associatedTabContentType == ContentType.albums && albumShowsYearAndDurationInstead)
-        ? TileAdditionalInfoType.none
-        : (tileAdditionalInfoSetting ?? TileAdditionalInfoType.adaptive);
+    final tileAdditionalInfoSetting =
+        associatedTabContentType != null
+            ? ref.watch(finampSettingsProvider.tileAdditionalInfoType(associatedTabContentType))
+            : null;
+    final tileAdditionalInfoType =
+        (associatedTabContentType == ContentType.albums && albumShowsYearAndDurationInstead)
+            ? TileAdditionalInfoType.none
+            : (tileAdditionalInfoSetting ?? TileAdditionalInfoType.adaptive);
 
     SortBy? additionalInfoSortBy = switch (tileAdditionalInfoType) {
       TileAdditionalInfoType.dateReleased => SortBy.premiereDate,
@@ -139,47 +142,48 @@ class ItemCollectionListTile extends ConsumerWidget {
 
     final additionalInfoIcon = buildAdditionalInfoIcon(additionalInfoSortBy);
 
-    final additionalInfo = (() {
-      final l10n = AppLocalizations.of(context)!;
-      if ((itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) ||
-          additionalInfoSortBy == SortBy.premiereDate) {
-        return TextSpan(
-          text: ReleaseDateHelper.autoFormat(item) ?? l10n.noReleaseDate,
-          style: TextStyle(
-            color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.75),
-            fontSize: 13,
-            fontWeight: FontWeight.w400,
-          ),
-        );
-      }
-      switch (additionalInfoSortBy) {
-        case SortBy.runtime:
-          return TextSpan(
-            text: printDuration(item.runTimeTicksDuration()),
-            style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7)),
-          );
-        case SortBy.dateCreated:
-          return WidgetSpan(
-            alignment: PlaceholderAlignment.baseline,
-            baseline: TextBaseline.alphabetic,
-            child: RelativeDateTimeTextFromString(
-              dateString: item.dateCreated,
-              fallback: l10n.noDateAdded,
-              style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7)),
-              disableTextScaling: true,
-            ),
-          );
-        default:
-          return null;
-      }
-    })();
+    final additionalInfo =
+        (() {
+          final l10n = AppLocalizations.of(context)!;
+          if ((itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) ||
+              additionalInfoSortBy == SortBy.premiereDate) {
+            return TextSpan(
+              text: ReleaseDateHelper.autoFormat(item) ?? l10n.noReleaseDate,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.75),
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+              ),
+            );
+          }
+          switch (additionalInfoSortBy) {
+            case SortBy.runtime:
+              return TextSpan(
+                text: printDuration(item.runTimeTicksDuration()),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7)),
+              );
+            case SortBy.dateCreated:
+              return WidgetSpan(
+                alignment: PlaceholderAlignment.baseline,
+                baseline: TextBaseline.alphabetic,
+                child: RelativeDateTimeTextFromString(
+                  dateString: item.dateCreated,
+                  fallback: l10n.noDateAdded,
+                  style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7)),
+                  disableTextScaling: true,
+                ),
+              );
+            default:
+              return null;
+          }
+        })();
 
     final showSubtitle =
         (subtitle != null ||
-        (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) ||
-        (additionalInfo != null) ||
-        downloadedIndicator.isVisible(ref) ||
-        item.isExplicit);
+            (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) ||
+            (additionalInfo != null) ||
+            downloadedIndicator.isVisible(ref) ||
+            item.isExplicit);
     final subtitleText = Text.rich(
       overflow: TextOverflow.clip,
       softWrap: false,
@@ -217,9 +221,10 @@ class ItemCollectionListTile extends ConsumerWidget {
             if ((itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead) || subtitle != null) ...[
               const WidgetSpan(child: SizedBox(width: 10.0)),
               TextSpan(
-                text: (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead)
-                    ? printDuration(item.runTimeTicksDuration())
-                    : subtitle,
+                text:
+                    (itemType == BaseItemDtoType.album && albumShowsYearAndDurationInstead)
+                        ? printDuration(item.runTimeTicksDuration())
+                        : subtitle,
                 style: TextStyle(
                   color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.6),
                   fontSize: 13,
@@ -303,30 +308,30 @@ class ItemCollectionListTile extends ConsumerWidget {
 
     return isCurrentlyPlaying && highlightCurrentItem
         ? ItemTheme(
-            item: item,
-            themeTransitionDuration: const Duration(milliseconds: 500),
-            themeOverride: (imageTheme) {
-              return imageTheme.copyWith(
-                colorScheme: imageTheme.colorScheme.copyWith(
-                  surfaceContainer: imageTheme.colorScheme.primary.withOpacity(
-                    imageTheme.brightness == Brightness.dark ? 0.35 : 0.3,
+          item: item,
+          themeTransitionDuration: const Duration(milliseconds: 500),
+          themeOverride: (imageTheme) {
+            return imageTheme.copyWith(
+              colorScheme: imageTheme.colorScheme.copyWith(
+                surfaceContainer: imageTheme.colorScheme.primary.withOpacity(
+                  imageTheme.brightness == Brightness.dark ? 0.35 : 0.3,
+                ),
+              ),
+              textTheme: imageTheme.textTheme.copyWith(
+                bodyLarge: imageTheme.textTheme.bodyLarge?.copyWith(
+                  color: Color.alphaBlend(
+                    (imageTheme.colorScheme.secondary.withOpacity(
+                      imageTheme.brightness == Brightness.light ? 0.5 : 0.1,
+                    )),
+                    imageTheme.textTheme.bodyLarge?.color ??
+                        (imageTheme.brightness == Brightness.light ? Colors.black : Colors.white),
                   ),
                 ),
-                textTheme: imageTheme.textTheme.copyWith(
-                  bodyLarge: imageTheme.textTheme.bodyLarge?.copyWith(
-                    color: Color.alphaBlend(
-                      (imageTheme.colorScheme.secondary.withOpacity(
-                        imageTheme.brightness == Brightness.light ? 0.5 : 0.1,
-                      )),
-                      imageTheme.textTheme.bodyLarge?.color ??
-                          (imageTheme.brightness == Brightness.light ? Colors.black : Colors.white),
-                    ),
-                  ),
-                ),
-              );
-            },
-            child: unthemedListTile,
-          )
+              ),
+            );
+          },
+          child: unthemedListTile,
+        )
         : unthemedListTile;
   }
 }

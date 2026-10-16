@@ -92,15 +92,16 @@ class DataSourceService {
                     return reloadPrompt;
                   }
                 },
-                action: (context) => SnackBarAction(
-                  label: AppLocalizations.of(context)!.autoReloadPromptReloadButton,
-                  onPressed: () {
-                    // archived queues are not overwritten and can always be restored again
-                    bool archivalNeeded = event == SourceChangeType.toOffline;
-                    queueService.reloadQueue(archiveQueue: archivalNeeded);
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  },
-                ),
+                action:
+                    (context) => SnackBarAction(
+                      label: AppLocalizations.of(context)!.autoReloadPromptReloadButton,
+                      onPressed: () {
+                        // archived queues are not overwritten and can always be restored again
+                        bool archivalNeeded = event == SourceChangeType.toOffline;
+                        queueService.reloadQueue(archiveQueue: archivalNeeded);
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      },
+                    ),
                 isConfirmation: false,
               );
             }
@@ -119,13 +120,14 @@ class DataSourceService {
             } else {
               GlobalSnackbar.message(
                 (context) => AppLocalizations.of(context)!.autoReloadPrompt(SourceChangeGenericType.transcoding.name),
-                action: (context) => SnackBarAction(
-                  label: AppLocalizations.of(context)!.autoReloadPromptReloadButton,
-                  onPressed: () {
-                    queueService.reloadQueue(archiveQueue: false);
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  },
-                ),
+                action:
+                    (context) => SnackBarAction(
+                      label: AppLocalizations.of(context)!.autoReloadPromptReloadButton,
+                      onPressed: () {
+                        queueService.reloadQueue(archiveQueue: false);
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      },
+                    ),
                 isConfirmation: false,
               );
             }

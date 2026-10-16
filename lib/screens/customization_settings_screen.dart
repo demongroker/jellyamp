@@ -167,9 +167,12 @@ class ReleaseDateFormatDropdownListTile extends ConsumerWidget {
         children: [
           Text(AppLocalizations.of(context)!.releaseDateFormatSubtitle),
           FinampSettingsDropdown<ReleaseDateFormat>(
-            dropdownItems: ReleaseDateFormat.values
-                .map((e) => DropdownMenuEntry<ReleaseDateFormat>(value: e, label: e.toLocalisedString(context.l10n)))
-                .toList(),
+            dropdownItems:
+                ReleaseDateFormat.values
+                    .map(
+                      (e) => DropdownMenuEntry<ReleaseDateFormat>(value: e, label: e.toLocalisedString(context.l10n)),
+                    )
+                    .toList(),
             selectedValue: ref.watch(finampSettingsProvider.releaseDateFormat),
             onSelected: FinampSetters.setReleaseDateFormat.ifNonNull,
           ),

@@ -75,19 +75,21 @@ class AndroidAutoHelper {
       if (itemId.contentType == ContentType.genres) {
         final genreBaseItem = await getParentFromId(itemId.itemId!);
 
-        final List<BaseItemDto> genreAlbums = (await _downloadsService.getAllCollections(
-          includeItemTypes: [BaseItemDtoType.album],
-          relatedTo: genreBaseItem,
-        )).toList().map((e) => e.baseItem).whereNotNull().toList();
+        final List<BaseItemDto> genreAlbums =
+            (await _downloadsService.getAllCollections(
+              includeItemTypes: [BaseItemDtoType.album],
+              relatedTo: genreBaseItem,
+            )).toList().map((e) => e.baseItem).whereNotNull().toList();
         genreAlbums.sort((a, b) => (a.premiereDate ?? "").compareTo(b.premiereDate ?? ""));
         return genreAlbums;
       } else if (itemId.contentType.isArtist) {
         final artistBaseItem = await getParentFromId(itemId.itemId!);
 
-        final List<BaseItemDto> artistAlbums = (await _downloadsService.getAllCollections(
-          includeItemTypes: [BaseItemDtoType.album],
-          relatedTo: artistBaseItem,
-        )).toList().map((e) => e.baseItem).whereNotNull().toList();
+        final List<BaseItemDto> artistAlbums =
+            (await _downloadsService.getAllCollections(
+              includeItemTypes: [BaseItemDtoType.album],
+              relatedTo: artistBaseItem,
+            )).toList().map((e) => e.baseItem).whereNotNull().toList();
         artistAlbums.sort((a, b) => (a.premiereDate ?? "").compareTo(b.premiereDate ?? ""));
 
         final List<BaseItemDto> allTracks = [];
@@ -148,15 +150,17 @@ class AndroidAutoHelper {
 
     // if parent id is defined, use that to get items.
     // otherwise, use the current view as fallback to ensure we get the correct items.
-    final parentItem = itemId.parentType == MediaItemParentType.collection
-        ? BaseItemDto(id: itemId.itemId!, type: itemId.contentType.itemType?.jellyfinName)
-        : (itemId.contentType == ContentType.playlists ? null : _finampUserHelper.currentUser?.currentView);
+    final parentItem =
+        itemId.parentType == MediaItemParentType.collection
+            ? BaseItemDto(id: itemId.itemId!, type: itemId.contentType.itemType?.jellyfinName)
+            : (itemId.contentType == ContentType.playlists ? null : _finampUserHelper.currentUser?.currentView);
 
     final items = await _jellyfinApiHelper.getItems(
       parentItem: parentItem,
-      sortBy: includeItemTypes == BaseItemDtoType.track
-          ? "ParentIndexNumber,IndexNumber,${sortBy.jellyfinName(itemId.contentType)}"
-          : sortBy.jellyfinName(itemId.contentType),
+      sortBy:
+          includeItemTypes == BaseItemDtoType.track
+              ? "ParentIndexNumber,IndexNumber,${sortBy.jellyfinName(itemId.contentType)}"
+              : sortBy.jellyfinName(itemId.contentType),
       sortOrder: includeItemTypes == BaseItemDtoType.track ? null : sortOrder.toString(),
       includeItemTypes: includeItemTypes.jellyfinName,
       limit: onlineModeLimit,
@@ -199,12 +203,13 @@ class AndroidAutoHelper {
 
       final [playlistResults, trackResults, albumResults, artistResults, genreResults] = await searchFuture;
 
-      final List<BaseItemDto> allSearchResults = playlistResults
-          .followedBy(trackResults)
-          .followedBy(albumResults)
-          .followedBy(artistResults)
-          .followedBy(genreResults)
-          .toList();
+      final List<BaseItemDto> allSearchResults =
+          playlistResults
+              .followedBy(trackResults)
+              .followedBy(albumResults)
+              .followedBy(artistResults)
+              .followedBy(genreResults)
+              .toList();
 
       final List<MediaItem> mediaItems = [];
 
@@ -290,10 +295,11 @@ class AndroidAutoHelper {
       "Searching for: $itemType that matches query '${enhancedQuery ?? searchQuery.rawQuery}'${searchForPlaylists ? ", including (and preferring) playlists" : ""}",
     );
 
-    final searchTerm = searchForPlaylists
-        ? searchQuery.rawQuery.trim()
-        : // always use the raw query for searching playlists
-          enhancedQuery?.trim() ?? searchQuery.rawQuery.trim();
+    final searchTerm =
+        searchForPlaylists
+            ? searchQuery.rawQuery.trim()
+            : // always use the raw query for searching playlists
+            enhancedQuery?.trim() ?? searchQuery.rawQuery.trim();
 
     if (searchForPlaylists) {
       try {
@@ -348,8 +354,9 @@ class AndroidAutoHelper {
               id: playlist.id,
               item: playlist,
             ),
-            order: FinampPlaybackOrder
-                .linear, //TODO add a setting that sets the default (because Android Auto doesn't give use the prompt as an extra), or use the current order?
+            order:
+                FinampPlaybackOrder
+                    .linear, //TODO add a setting that sets the default (because Android Auto doesn't give use the prompt as an extra), or use the current order?
           );
         } else {
           _androidAutoHelperLogger.warning("No playlists found for query: ${enhancedQuery ?? searchQuery.rawQuery}");
@@ -440,8 +447,9 @@ class AndroidAutoHelper {
             id: album.id,
             item: album,
           ),
-          order: FinampPlaybackOrder
-              .linear, //TODO add a setting that sets the default (because Android Auto doesn't give use the prompt as an extra), or use the current order?
+          order:
+              FinampPlaybackOrder
+                  .linear, //TODO add a setting that sets the default (because Android Auto doesn't give use the prompt as an extra), or use the current order?
         );
       } else if (itemType == ContentType.performingArtists.itemType) {
         if (FinampSettingsHelper.finampSettings.isOffline) {
@@ -1042,13 +1050,12 @@ class AndroidAutoHelper {
           nameFilter: searchTerm,
           includeItemTypes: itemTypes,
           fullyDownloaded: false,
-          viewFilter: itemTypes.first == ContentType.albums.itemType
-              ? finampUserHelper.currentUser?.currentView?.id
-              : null,
+          viewFilter:
+              itemTypes.first == ContentType.albums.itemType ? finampUserHelper.currentUser?.currentView?.id : null,
           childViewFilter:
               (itemTypes.contains(ContentType.albums.itemType) && itemTypes.contains(ContentType.playlists.itemType))
-              ? finampUserHelper.currentUser?.currentView?.id
-              : null,
+                  ? finampUserHelper.currentUser?.currentView?.id
+                  : null,
           nullableViewFilters:
               itemTypes.first == ContentType.albums.itemType &&
               FinampSettingsHelper.finampSettings.showDownloadsWithUnknownLibrary,

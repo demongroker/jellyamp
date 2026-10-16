@@ -27,18 +27,18 @@ Future<(List<BaseItemDto>, int, CuratedItemSelectionType, Set<CuratedItemSelecti
   final genreCuratedItemSectionFilterOrder = ref.watch(finampSettingsProvider.genreItemSectionFilterChipOrder);
   CuratedItemSelectionType currentSelectionType = handleOfflineFallbackOption(
     isOffline: isOffline,
-    currentFilter: (baseItemType == BaseItemDtoType.artist)
-        ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeArtists)
-        : (baseItemType == BaseItemDtoType.album)
-        ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeAlbums)
-        : ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeTracks),
+    currentFilter:
+        (baseItemType == BaseItemDtoType.artist)
+            ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeArtists)
+            : (baseItemType == BaseItemDtoType.album)
+            ? ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeAlbums)
+            : ref.watch(finampSettingsProvider.genreCuratedItemSelectionTypeTracks),
     filterListFor: baseItemType,
     customFilterOrder: genreCuratedItemSectionFilterOrder,
   );
   final defaultArtistType = ref.watch(finampSettingsProvider.defaultArtistType);
-  final artistInfoForType = (defaultArtistType == ArtistType.albumArtist)
-      ? BaseItemDtoType.album
-      : BaseItemDtoType.track;
+  final artistInfoForType =
+      (defaultArtistType == ArtistType.albumArtist) ? BaseItemDtoType.album : BaseItemDtoType.track;
 
   Future<(List<BaseItemDto>, int)> fetchItems(CuratedItemSelectionType selectionType) async {
     if (isOffline) {
@@ -165,31 +165,35 @@ Future<(List<BaseItemDto>, int)> getCuratedItemsOffline({
   final listener = GetIt.instance<DownloadsService>().offlineDeletesStream.listen((_) => ref.invalidateSelf());
   ref.onDispose(() => listener.cancel());
 
-  final List<DownloadStub> fetchedItems = (baseItemType == BaseItemDtoType.track)
-      ? await downloadsService.getAllTracks(
-          viewFilter: library?.id,
-          nullableViewFilters: ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
-          onlyFavorites: (genreCuratedItemSelectionType == CuratedItemSelectionType.favorites)
-              ? ref.watch(finampSettingsProvider.trackOfflineFavorites)
-              : false,
-          genreFilter: parent.id,
-        )
-      : await downloadsService.getAllCollections(
-          includeItemTypes: [baseItemType],
-          fullyDownloaded: ref.watch(finampSettingsProvider.onlyShowFullyDownloaded),
-          viewFilter: (baseItemType == BaseItemDtoType.album) ? library?.id : null,
-          childViewFilter: (baseItemType != BaseItemDtoType.album && baseItemType != BaseItemDtoType.playlist)
-              ? library?.id
-              : null,
-          nullableViewFilters:
-              (baseItemType == BaseItemDtoType.album) &&
-              ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
-          onlyFavorites: (genreCuratedItemSelectionType == CuratedItemSelectionType.favorites)
-              ? ref.watch(finampSettingsProvider.trackOfflineFavorites)
-              : false,
-          infoForType: (baseItemType == BaseItemDtoType.artist) ? artistInfoForType : null,
-          genreFilter: parent.id,
-        );
+  final List<DownloadStub> fetchedItems =
+      (baseItemType == BaseItemDtoType.track)
+          ? await downloadsService.getAllTracks(
+            viewFilter: library?.id,
+            nullableViewFilters: ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
+            onlyFavorites:
+                (genreCuratedItemSelectionType == CuratedItemSelectionType.favorites)
+                    ? ref.watch(finampSettingsProvider.trackOfflineFavorites)
+                    : false,
+            genreFilter: parent.id,
+          )
+          : await downloadsService.getAllCollections(
+            includeItemTypes: [baseItemType],
+            fullyDownloaded: ref.watch(finampSettingsProvider.onlyShowFullyDownloaded),
+            viewFilter: (baseItemType == BaseItemDtoType.album) ? library?.id : null,
+            childViewFilter:
+                (baseItemType != BaseItemDtoType.album && baseItemType != BaseItemDtoType.playlist)
+                    ? library?.id
+                    : null,
+            nullableViewFilters:
+                (baseItemType == BaseItemDtoType.album) &&
+                ref.watch(finampSettingsProvider.showDownloadsWithUnknownLibrary),
+            onlyFavorites:
+                (genreCuratedItemSelectionType == CuratedItemSelectionType.favorites)
+                    ? ref.watch(finampSettingsProvider.trackOfflineFavorites)
+                    : false,
+            infoForType: (baseItemType == BaseItemDtoType.artist) ? artistInfoForType : null,
+            genreFilter: parent.id,
+          );
   var items = fetchedItems.map((e) => e.baseItem).nonNulls.toList();
   var itemCount = items.length;
   items = sortItems(items, sortBy, SortOrder.descending);
@@ -197,17 +201,18 @@ Future<(List<BaseItemDto>, int)> getCuratedItemsOffline({
   // When we filter the favorites, we have to make an additional request to get the correct number
   // otherwise we would only get the count of Favorites of that genre
   if (genreCuratedItemSelectionType == CuratedItemSelectionType.favorites) {
-    final List<DownloadStub> allFetchedItems = (baseItemType == BaseItemDtoType.track)
-        ? await downloadsService.getAllTracks(
-            nullableViewFilters: ref.read(finampSettingsProvider.showDownloadsWithUnknownLibrary),
-            genreFilter: parent.id,
-          )
-        : await downloadsService.getAllCollections(
-            includeItemTypes: [baseItemType],
-            fullyDownloaded: ref.read(finampSettingsProvider.onlyShowFullyDownloaded),
-            infoForType: (baseItemType == BaseItemDtoType.artist) ? artistInfoForType : null,
-            genreFilter: parent.id,
-          );
+    final List<DownloadStub> allFetchedItems =
+        (baseItemType == BaseItemDtoType.track)
+            ? await downloadsService.getAllTracks(
+              nullableViewFilters: ref.read(finampSettingsProvider.showDownloadsWithUnknownLibrary),
+              genreFilter: parent.id,
+            )
+            : await downloadsService.getAllCollections(
+              includeItemTypes: [baseItemType],
+              fullyDownloaded: ref.read(finampSettingsProvider.onlyShowFullyDownloaded),
+              infoForType: (baseItemType == BaseItemDtoType.artist) ? artistInfoForType : null,
+              genreFilter: parent.id,
+            );
     var allItems = allFetchedItems.map((e) => e.baseItem).nonNulls.toList();
     itemCount = allItems.length;
   }

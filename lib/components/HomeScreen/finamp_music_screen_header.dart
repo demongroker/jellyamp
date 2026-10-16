@@ -78,11 +78,12 @@ class FinampMusicScreenHeader extends ConsumerWidget implements PreferredSizeWid
     Color activeTabTextColor = AtContrast.getContrastiveTintedTextColor(onBackground: activeTabBackgroundColor);
     Color inactiveTabTextColor = AtContrast.getContrastiveTintedTextColor(onBackground: inactiveTabBackgroundColor);
 
-    final statusIcon = ref.watch(finampSettingsProvider.isOffline)
-        ? TablerIcons.cloud_off
-        : ref.watch(FinampUserHelper.finampCurrentUserProvider)?.isLocal ?? false
-        ? TablerIcons.wifi
-        : null; // hide icon by default (remote connection)
+    final statusIcon =
+        ref.watch(finampSettingsProvider.isOffline)
+            ? TablerIcons.cloud_off
+            : ref.watch(FinampUserHelper.finampCurrentUserProvider)?.isLocal ?? false
+            ? TablerIcons.wifi
+            : null; // hide icon by default (remote connection)
 
     void openMenu() async {
       final config = singleTabConfig;
@@ -130,9 +131,7 @@ class FinampMusicScreenHeader extends ConsumerWidget implements PreferredSizeWid
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(14.0),
                         border: Border.all(
-                          color: Colors.white.withOpacity(
-                            Theme.brightnessOf(context) == Brightness.dark ? 0.16 : 0.40,
-                          ),
+                          color: Colors.white.withOpacity(Theme.brightnessOf(context) == Brightness.dark ? 0.16 : 0.40),
                           width: 0.9,
                         ),
                         gradient: LinearGradient(
@@ -158,29 +157,32 @@ class FinampMusicScreenHeader extends ConsumerWidget implements PreferredSizeWid
                         padding: const EdgeInsets.only(left: 5.0, right: 3.0, top: 5.0, bottom: 3.0),
                         child: GestureDetector(
                           onTap: openMenu,
-                          onSecondaryTap: ref.watch(isDownloadingOrSyncingPollingProvider)
-                              ? () {
-                                  if (ref.read(isDownloadingOrSyncingPollingProvider)) {
-                                    Navigator.of(context).pushNamed(DownloadsScreen.routeName);
+                          onSecondaryTap:
+                              ref.watch(isDownloadingOrSyncingPollingProvider)
+                                  ? () {
+                                    if (ref.read(isDownloadingOrSyncingPollingProvider)) {
+                                      Navigator.of(context).pushNamed(DownloadsScreen.routeName);
+                                    }
                                   }
-                                }
-                              : null,
-                          onLongPress: ref.watch(isDownloadingOrSyncingPollingProvider)
-                              ? () {
-                                  if (ref.read(isDownloadingOrSyncingPollingProvider)) {
-                                    Navigator.of(context).pushNamed(DownloadsScreen.routeName);
+                                  : null,
+                          onLongPress:
+                              ref.watch(isDownloadingOrSyncingPollingProvider)
+                                  ? () {
+                                    if (ref.read(isDownloadingOrSyncingPollingProvider)) {
+                                      Navigator.of(context).pushNamed(DownloadsScreen.routeName);
+                                    }
                                   }
-                                }
-                              : null,
+                                  : null,
                           child: Stack(
                             clipBehavior: Clip.none,
                             children: [
                               FinampIcon(
                                 35,
                                 35,
-                                overrideColor: ref.watch(finampSettingsProvider.isOffline)
-                                    ? TextTheme.of(context).bodyMedium?.color?.withOpacity(0.6)
-                                    : null,
+                                overrideColor:
+                                    ref.watch(finampSettingsProvider.isOffline)
+                                        ? TextTheme.of(context).bodyMedium?.color?.withOpacity(0.6)
+                                        : null,
                               ),
                               Positioned(bottom: -4, right: -2, child: Icon(statusIcon, size: 16)),
                               if (ref.watch(isDownloadingOrSyncingPollingProvider))
@@ -191,8 +193,9 @@ class FinampMusicScreenHeader extends ConsumerWidget implements PreferredSizeWid
                                     dimension: statusIcon != null ? 20.0 : 10.0,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 1,
-                                      valueColor:
-                                          AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.onSurface),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Theme.of(context).colorScheme.onSurface,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -300,14 +303,16 @@ class FinampMusicScreenHeader extends ConsumerWidget implements PreferredSizeWid
                     ),
                 ],
                 Builder(
-                  builder: (context) => MediaQuery.widthOf(context) > 600
-                      ? IconButtonWithSemantics(
-                          label: context.l10n.settings,
-                          icon: TablerIcons.settings,
-                          iconSize: 28.0,
-                          onPressed: () => Navigator.pushNamed(context, SettingsScreen.routeName),
-                        )
-                      : SizedBox.shrink(),
+                  builder:
+                      (context) =>
+                          MediaQuery.widthOf(context) > 600
+                              ? IconButtonWithSemantics(
+                                label: context.l10n.settings,
+                                icon: TablerIcons.settings,
+                                iconSize: 28.0,
+                                onPressed: () => Navigator.pushNamed(context, SettingsScreen.routeName),
+                              )
+                              : SizedBox.shrink(),
                 ),
                 if (singleTabConfig != null)
                   IconButtonWithSemantics(
@@ -315,11 +320,12 @@ class FinampMusicScreenHeader extends ConsumerWidget implements PreferredSizeWid
                     icon: TablerIcons.dots,
                     iconSize: 28.0,
                     onPressed: openMenu,
-                    onLongPress: singleTabConfig != null
-                        ? null
-                        : () {
-                            Navigator.pushNamed(context, SettingsScreen.routeName);
-                          },
+                    onLongPress:
+                        singleTabConfig != null
+                            ? null
+                            : () {
+                              Navigator.pushNamed(context, SettingsScreen.routeName);
+                            },
                   ),
               ],
             ),
@@ -337,21 +343,23 @@ class FinampMusicScreenHeader extends ConsumerWidget implements PreferredSizeWid
             dividerHeight: 0.0,
             dividerColor: Colors.transparent,
             padding: EdgeInsets.only(top: 4.0, bottom: 0.0, left: 10.0, right: 6.0),
-            tabs: sortedTabs.map((tabType) {
-              final textStyle = tabController?.index == sortedTabs.indexOf(tabType)
-                  ? null
-                  : TextTheme.of(context).bodyMedium!.copyWith(color: inactiveTabTextColor);
-              return Tab(
-                height: 32.0,
-                child: GestureDetector(
-                  onLongPress: () {
-                    Navigator.pushNamed(context, TabsSettingsScreen.routeName);
-                  },
-                  onSecondaryTap: () {
-                    Navigator.pushNamed(context, TabsSettingsScreen.routeName);
-                  },
-                  child: Container(
-                    /*decoration: ShapeDecoration(
+            tabs:
+                sortedTabs.map((tabType) {
+                  final textStyle =
+                      tabController?.index == sortedTabs.indexOf(tabType)
+                          ? null
+                          : TextTheme.of(context).bodyMedium!.copyWith(color: inactiveTabTextColor);
+                  return Tab(
+                    height: 32.0,
+                    child: GestureDetector(
+                      onLongPress: () {
+                        Navigator.pushNamed(context, TabsSettingsScreen.routeName);
+                      },
+                      onSecondaryTap: () {
+                        Navigator.pushNamed(context, TabsSettingsScreen.routeName);
+                      },
+                      child: Container(
+                        /*decoration: ShapeDecoration(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                           side: BorderSide(
@@ -363,54 +371,57 @@ class FinampMusicScreenHeader extends ConsumerWidget implements PreferredSizeWid
                           ),
                         ),
                       ),*/
-                    padding: tabType == ContentType.home
-                        ? EdgeInsets.only(left: 4, right: 8, top: 3, bottom: 3)
-                        : EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    constraints: const BoxConstraints(minWidth: 50),
-                    alignment: Alignment.center,
-                    child: tabType == ContentType.home
-                        ? Row(
-                            spacing: 4.0,
-                            children: [
-                              Consumer(
-                                builder: (context, ref, _) {
-                                  if (ref.watch(finampSettingsProvider.isOffline)) return SizedBox.shrink();
-                                  final userInfo = ref.watch(UserInfoProviders.currentUserInfoProvider);
-                                  if (userInfo.value != null && userInfo.value!.jellyfinUser?.primaryImageTag != null) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(1.5),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(9999),
-                                        child: Image.network(
-                                          GetIt.instance<JellyfinApiHelper>()
-                                              .getUserImageUrl(
-                                                baseUrl: Uri.parse(finampUserHelper.currentUser!.baseURL),
-                                                user: userInfo.value!.jellyfinUser!,
-                                              )
-                                              .toString(),
-                                          fit: BoxFit.fitHeight,
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                  if (userInfo.value == null && userInfo.isLoading) {
-                                    return SizedBox(
-                                      width: 24,
-                                      height: 24,
-                                      child: CircularProgressIndicator(strokeWidth: 2, color: activeTabTextColor),
-                                    );
-                                  }
-                                  return SizedBox.shrink();
-                                },
-                              ),
-                              Text(tabType.toLocalisedString(context.l10n), style: textStyle),
-                            ],
-                          )
-                        : Text(tabType.toLocalisedString(context.l10n), style: textStyle),
-                  ),
-                ),
-              );
-            }).toList(),
+                        padding:
+                            tabType == ContentType.home
+                                ? EdgeInsets.only(left: 4, right: 8, top: 3, bottom: 3)
+                                : EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        constraints: const BoxConstraints(minWidth: 50),
+                        alignment: Alignment.center,
+                        child:
+                            tabType == ContentType.home
+                                ? Row(
+                                  spacing: 4.0,
+                                  children: [
+                                    Consumer(
+                                      builder: (context, ref, _) {
+                                        if (ref.watch(finampSettingsProvider.isOffline)) return SizedBox.shrink();
+                                        final userInfo = ref.watch(UserInfoProviders.currentUserInfoProvider);
+                                        if (userInfo.value != null &&
+                                            userInfo.value!.jellyfinUser?.primaryImageTag != null) {
+                                          return Padding(
+                                            padding: const EdgeInsets.all(1.5),
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(9999),
+                                              child: Image.network(
+                                                GetIt.instance<JellyfinApiHelper>()
+                                                    .getUserImageUrl(
+                                                      baseUrl: Uri.parse(finampUserHelper.currentUser!.baseURL),
+                                                      user: userInfo.value!.jellyfinUser!,
+                                                    )
+                                                    .toString(),
+                                                fit: BoxFit.fitHeight,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                        if (userInfo.value == null && userInfo.isLoading) {
+                                          return SizedBox(
+                                            width: 24,
+                                            height: 24,
+                                            child: CircularProgressIndicator(strokeWidth: 2, color: activeTabTextColor),
+                                          );
+                                        }
+                                        return SizedBox.shrink();
+                                      },
+                                    ),
+                                    Text(tabType.toLocalisedString(context.l10n), style: textStyle),
+                                  ],
+                                )
+                                : Text(tabType.toLocalisedString(context.l10n), style: textStyle),
+                      ),
+                    ),
+                  );
+                }).toList(),
             isScrollable: true,
             tabAlignment: TabAlignment.start,
           ),

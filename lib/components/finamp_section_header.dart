@@ -57,23 +57,26 @@ class FinampSectionHeader extends ConsumerWidget {
           padding: correctedHeaderPadding,
           child: Dismissible(
             key: Key("$key-dismissible"),
-            direction: ref.watch(finampSettingsProvider.disableGesture) || onDismiss == null
-                ? DismissDirection.none
-                : getAllowedDismissDirection(
-                    swipeLeftEnabled:
-                        ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight) != ItemSwipeActions.nothing,
-                    swipeRightEnabled:
-                        ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft) != ItemSwipeActions.nothing,
-                  ),
+            direction:
+                ref.watch(finampSettingsProvider.disableGesture) || onDismiss == null
+                    ? DismissDirection.none
+                    : getAllowedDismissDirection(
+                      swipeLeftEnabled:
+                          ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight) != ItemSwipeActions.nothing,
+                      swipeRightEnabled:
+                          ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft) != ItemSwipeActions.nothing,
+                    ),
             dismissThresholds: const {DismissDirection.startToEnd: 0.65, DismissDirection.endToStart: 0.65},
-            confirmDismiss: onDismiss != null
-                ? (direction) async {
-                    var followUpAction = (direction == DismissDirection.startToEnd)
-                        ? FinampSettingsHelper.finampSettings.itemSwipeActionLeftToRight
-                        : FinampSettingsHelper.finampSettings.itemSwipeActionRightToLeft;
-                    return await onDismiss!(followUpAction);
-                  }
-                : null,
+            confirmDismiss:
+                onDismiss != null
+                    ? (direction) async {
+                      var followUpAction =
+                          (direction == DismissDirection.startToEnd)
+                              ? FinampSettingsHelper.finampSettings.itemSwipeActionLeftToRight
+                              : FinampSettingsHelper.finampSettings.itemSwipeActionRightToLeft;
+                      return await onDismiss!(followUpAction);
+                    }
+                    : null,
             background: buildSwipeActionBackground(
               context: context,
               direction: DismissDirection.startToEnd,
@@ -109,10 +112,9 @@ class FinampSectionHeader extends ConsumerWidget {
                                 child: Text(
                                   title,
                                   semanticsLabel: label,
-                                  style: TextTheme.of(context).titleMedium?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: -0.2,
-                                  ),
+                                  style: TextTheme.of(
+                                    context,
+                                  ).titleMedium?.copyWith(fontWeight: FontWeight.w600, letterSpacing: -0.2),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),

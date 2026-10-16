@@ -51,9 +51,8 @@ class JellyfinApiHelper {
     ReceivePort startupPort = ReceivePort();
     var rootToken = RootIsolateToken.instance!;
     // Pass client certificate to background isolates, since Hive isn't accessible from them.
-    var clientCertificate = ClientCertificateInstaller.isSupported
-        ? FinampSettingsHelper.finampSettings.clientCertificate
-        : null;
+    var clientCertificate =
+        ClientCertificateInstaller.isSupported ? FinampSettingsHelper.finampSettings.clientCertificate : null;
     Isolate.spawn(_processRequestsBackground, (
       startupPort.sendPort,
       rootToken,
@@ -85,9 +84,10 @@ class JellyfinApiHelper {
     }
 
     input.$1.send(requestPort.sendPort);
-    final dir = (Platform.isAndroid || Platform.isIOS)
-        ? await getApplicationDocumentsDirectory()
-        : await getApplicationSupportDirectory();
+    final dir =
+        (Platform.isAndroid || Platform.isIOS)
+            ? await getApplicationDocumentsDirectory()
+            : await getApplicationSupportDirectory();
     final isar = await Isar.open(
       [DownloadItemSchema, IsarTaskDataSchema, FinampUserSchema],
       directory: dir.path,
@@ -1150,9 +1150,10 @@ class JellyfinApiHelper {
       return null;
     }
 
-    final parsedBaseUrl = forcePublicAddress
-        ? Uri.parse(_finampUserHelper.currentUser!.publicAddress)
-        : Uri.parse(_finampUserHelper.currentUser!.baseURL);
+    final parsedBaseUrl =
+        forcePublicAddress
+            ? Uri.parse(_finampUserHelper.currentUser!.publicAddress)
+            : Uri.parse(_finampUserHelper.currentUser!.baseURL);
 
     List<String> builtPath = List<String>.from(parsedBaseUrl.pathSegments);
     builtPath.addAll(["Items", item.imageId!, "Images", "Primary"]);

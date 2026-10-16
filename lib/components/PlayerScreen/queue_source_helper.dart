@@ -46,14 +46,16 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
     case QueueItemSourceType.favorites:
       Navigator.of(context).push(
         MaterialPageRoute<MusicScreen>(
-          builder: (context) => MusicScreen(
-            singleTabConfig: HomeScreenSectionConfiguration(
-              base: TabsHomeSection(libraryId: currentLibraryPlaceholder, contentType: ContentType.tracks),
-              sortConfig: source.type == QueueItemSourceType.favorites
-                  ? SortAndFilterConfiguration.defaultSort.copyWith(favoriteFilter: true)
-                  : SortAndFilterConfiguration.defaultSort,
-            ),
-          ),
+          builder:
+              (context) => MusicScreen(
+                singleTabConfig: HomeScreenSectionConfiguration(
+                  base: TabsHomeSection(libraryId: currentLibraryPlaceholder, contentType: ContentType.tracks),
+                  sortConfig:
+                      source.type == QueueItemSourceType.favorites
+                          ? SortAndFilterConfiguration.defaultSort.copyWith(favoriteFilter: true)
+                          : SortAndFilterConfiguration.defaultSort,
+                ),
+              ),
         ),
       );
       break;
@@ -68,17 +70,18 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
         // showModalCollectionMenu(context: context, item: source.item!);
         Navigator.of(context).push(
           MaterialPageRoute<MusicScreen>(
-            builder: (context) => MusicScreen(
-              singleTabConfig: HomeScreenSectionConfiguration(
-                base: CollectionHomeSection(
-                  itemId: source.item!.id,
-                  libraryId: GetIt.instance<FinampUserHelper>().currentUser!.currentViewId!,
-                  contentType: ContentType.mixed,
+            builder:
+                (context) => MusicScreen(
+                  singleTabConfig: HomeScreenSectionConfiguration(
+                    base: CollectionHomeSection(
+                      itemId: source.item!.id,
+                      libraryId: GetIt.instance<FinampUserHelper>().currentUser!.currentViewId!,
+                      contentType: ContentType.mixed,
+                    ),
+                    customSectionTitle: source.item!.name ?? AppLocalizations.of(context)!.unknownName,
+                    sortConfig: SortAndFilterConfiguration.defaultSort,
+                  ),
                 ),
-                customSectionTitle: source.item!.name ?? AppLocalizations.of(context)!.unknownName,
-                sortConfig: SortAndFilterConfiguration.defaultSort,
-              ),
-            ),
           ),
         );
       }
@@ -103,17 +106,18 @@ void navigateToSource(BuildContext context, QueueItemSource source) {
         case BaseItemDtoType.collection:
           Navigator.of(context).push(
             MaterialPageRoute<MusicScreen>(
-              builder: (context) => MusicScreen(
-                singleTabConfig: HomeScreenSectionConfiguration(
-                  base: CollectionHomeSection(
-                    itemId: source.item!.id,
-                    libraryId: GetIt.instance<FinampUserHelper>().currentUser!.currentViewId!,
-                    contentType: ContentType.mixed,
+              builder:
+                  (context) => MusicScreen(
+                    singleTabConfig: HomeScreenSectionConfiguration(
+                      base: CollectionHomeSection(
+                        itemId: source.item!.id,
+                        libraryId: GetIt.instance<FinampUserHelper>().currentUser!.currentViewId!,
+                        contentType: ContentType.mixed,
+                      ),
+                      customSectionTitle: source.item!.name ?? AppLocalizations.of(context)!.unknownName,
+                      sortConfig: SortAndFilterConfiguration.defaultSort,
+                    ),
                   ),
-                  customSectionTitle: source.item!.name ?? AppLocalizations.of(context)!.unknownName,
-                  sortConfig: SortAndFilterConfiguration.defaultSort,
-                ),
-              ),
             ),
           );
         case BaseItemDtoType.noItem:
@@ -163,15 +167,16 @@ Future<bool> removeFromPlaylist(
   if (confirm) {
     await showDialog(
       context: context,
-      builder: (context) => ConfirmationPromptDialog(
-        promptText: AppLocalizations.of(
-          context,
-        )!.removeFromPlaylistPrompt(item.name ?? "item", parent.name ?? "playlist"),
-        confirmButtonText: AppLocalizations.of(context)!.removeFromPlaylistConfirm,
-        onConfirmed: () {
-          isConfirmed = true;
-        },
-      ),
+      builder:
+          (context) => ConfirmationPromptDialog(
+            promptText: AppLocalizations.of(
+              context,
+            )!.removeFromPlaylistPrompt(item.name ?? "item", parent.name ?? "playlist"),
+            confirmButtonText: AppLocalizations.of(context)!.removeFromPlaylistConfirm,
+            onConfirmed: () {
+              isConfirmed = true;
+            },
+          ),
     );
   }
   if (isConfirmed) {
@@ -217,9 +222,10 @@ Future<bool> addItemsToPlaylist(BuildContext context, List<BaseItemDto> items, B
   //TODO request server to return the new playlist item id
   await GetIt.instance<JellyfinApiHelper>().addItemstoPlaylist(
     playlistId: parent.id,
-    ids: items.map((item) {
-      return item.id;
-    }).toList(),
+    ids:
+        items.map((item) {
+          return item.id;
+        }).toList(),
   );
 
   // re-sync playlist to download added item if needed

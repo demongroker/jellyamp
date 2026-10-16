@@ -421,9 +421,9 @@ class ShufflePlaybackAction extends ConsumerWidget {
       icon: TablerIcons.arrows_shuffle,
       label:
           (itemType == BaseItemDtoType.genre &&
-              ref.watch(finampSettingsProvider.trackShuffleItemCount) < (trackCount ?? 0))
-          ? AppLocalizations.of(context)!.shuffleSome
-          : AppLocalizations.of(context)!.shuffleButtonLabel,
+                  ref.watch(finampSettingsProvider.trackShuffleItemCount) < (trackCount ?? 0))
+              ? AppLocalizations.of(context)!.shuffleSome
+              : AppLocalizations.of(context)!.shuffleButtonLabel,
       compactLayout: compactLayout,
       onPressed: () async {
         if (popContext) {
@@ -464,9 +464,9 @@ class ShuffleNextPlaybackAction extends ConsumerWidget {
       addShuffleIcon: true,
       label:
           (itemType == BaseItemDtoType.genre &&
-              ref.watch(finampSettingsProvider.trackShuffleItemCount) < (trackCount ?? 0))
-          ? AppLocalizations.of(context)!.shuffleSomeNext
-          : AppLocalizations.of(context)!.shuffleNext,
+                  ref.watch(finampSettingsProvider.trackShuffleItemCount) < (trackCount ?? 0))
+              ? AppLocalizations.of(context)!.shuffleSomeNext
+              : AppLocalizations.of(context)!.shuffleNext,
       compactLayout: compactLayout,
       onPressed: () async {
         if (popContext) {
@@ -509,9 +509,9 @@ class ShuffleToNextUpPlaybackAction extends ConsumerWidget {
       addShuffleIcon: true,
       label:
           (itemType == BaseItemDtoType.genre &&
-              ref.watch(finampSettingsProvider.trackShuffleItemCount) < (trackCount ?? 0))
-          ? AppLocalizations.of(context)!.shuffleSomeToNextUp
-          : AppLocalizations.of(context)!.shuffleToNextUp,
+                  ref.watch(finampSettingsProvider.trackShuffleItemCount) < (trackCount ?? 0))
+              ? AppLocalizations.of(context)!.shuffleSomeToNextUp
+              : AppLocalizations.of(context)!.shuffleToNextUp,
       compactLayout: compactLayout,
       onPressed: () async {
         if (popContext) {
@@ -557,9 +557,9 @@ class ShuffleToQueuePlaybackAction extends ConsumerWidget {
       addShuffleIcon: true,
       label:
           (itemType == BaseItemDtoType.genre &&
-              ref.watch(finampSettingsProvider.trackShuffleItemCount) < (trackCount ?? 0))
-          ? AppLocalizations.of(context)!.shuffleSomeToQueue
-          : AppLocalizations.of(context)!.shuffleToQueue,
+                  ref.watch(finampSettingsProvider.trackShuffleItemCount) < (trackCount ?? 0))
+              ? AppLocalizations.of(context)!.shuffleSomeToQueue
+              : AppLocalizations.of(context)!.shuffleToQueue,
       compactLayout: compactLayout,
       onPressed: () async {
         if (popContext) {
@@ -605,9 +605,9 @@ class ShuffleAlbumsPlaybackAction extends ConsumerWidget {
       icon: TablerIcons.arrows_shuffle,
       label:
           (itemType == BaseItemDtoType.genre &&
-              ref.watch(finampSettingsProvider.trackShuffleItemCount) < (trackCount ?? 0))
-          ? AppLocalizations.of(context)!.shuffleSomeAlbums
-          : AppLocalizations.of(context)!.shuffleAlbums,
+                  ref.watch(finampSettingsProvider.trackShuffleItemCount) < (trackCount ?? 0))
+              ? AppLocalizations.of(context)!.shuffleSomeAlbums
+              : AppLocalizations.of(context)!.shuffleAlbums,
       compactLayout: compactLayout,
       onPressed: () async {
         if (popContext) {
@@ -647,9 +647,9 @@ class ShuffleAlbumsNextPlaybackAction extends ConsumerWidget {
       addShuffleIcon: true,
       label:
           (itemType == BaseItemDtoType.genre &&
-              ref.watch(finampSettingsProvider.trackShuffleItemCount) < (trackCount ?? 0))
-          ? AppLocalizations.of(context)!.shuffleSomeAlbumsNext
-          : AppLocalizations.of(context)!.shuffleAlbumsNext,
+                  ref.watch(finampSettingsProvider.trackShuffleItemCount) < (trackCount ?? 0))
+              ? AppLocalizations.of(context)!.shuffleSomeAlbumsNext
+              : AppLocalizations.of(context)!.shuffleAlbumsNext,
       compactLayout: compactLayout,
       onPressed: () async {
         if (popContext) {
@@ -691,9 +691,9 @@ class ShuffleAlbumsToNextUpPlaybackAction extends ConsumerWidget {
       addShuffleIcon: true,
       label:
           (itemType == BaseItemDtoType.genre &&
-              ref.watch(finampSettingsProvider.trackShuffleItemCount) < (trackCount ?? 0))
-          ? AppLocalizations.of(context)!.shuffleSomeAlbumsToNextUp
-          : AppLocalizations.of(context)!.shuffleAlbumsToNextUp,
+                  ref.watch(finampSettingsProvider.trackShuffleItemCount) < (trackCount ?? 0))
+              ? AppLocalizations.of(context)!.shuffleSomeAlbumsToNextUp
+              : AppLocalizations.of(context)!.shuffleAlbumsToNextUp,
       compactLayout: compactLayout,
       onPressed: () async {
         if (popContext) {
@@ -738,9 +738,9 @@ class ShuffleAlbumsToQueuePlaybackAction extends ConsumerWidget {
       addShuffleIcon: true,
       label:
           (itemType == BaseItemDtoType.genre &&
-              ref.watch(finampSettingsProvider.trackShuffleItemCount) < (trackCount ?? 0))
-          ? AppLocalizations.of(context)!.shuffleSomeAlbumsToQueue
-          : AppLocalizations.of(context)!.shuffleAlbumsToQueue,
+                  ref.watch(finampSettingsProvider.trackShuffleItemCount) < (trackCount ?? 0))
+              ? AppLocalizations.of(context)!.shuffleSomeAlbumsToQueue
+              : AppLocalizations.of(context)!.shuffleAlbumsToQueue,
       compactLayout: compactLayout,
       onPressed: () async {
         if (popContext) {

@@ -59,8 +59,7 @@ class _FinampSettingsGenerator extends Generator {
             final mapType = typeArg as ParameterizedType;
             final keyType = _typeName(mapType.typeArguments[0]);
             final valueType = _typeName(mapType.typeArguments[1]);
-            settersCode +=
-                '''static void set$paramName($keyType ${mapAnnotation.keyName}, $valueType newValue){
+            settersCode += '''static void set$paramName($keyType ${mapAnnotation.keyName}, $valueType newValue){
               FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
               try {
                 finampSettingsTemp.${property.displayName}[${mapAnnotation.keyName}]=newValue;
@@ -81,8 +80,7 @@ class _FinampSettingsGenerator extends Generator {
               ''';
             // Make sure we use a new list instance so that getter fires.
             if (typeArg.isDartCoreList) {
-              settersCode +=
-                  '''if(finampSettingsTemp.${property.displayName}==new$paramName){
+              settersCode += '''if(finampSettingsTemp.${property.displayName}==new$paramName){
                 new$paramName=new$paramName.toList();
               }
               ''';
@@ -109,8 +107,7 @@ class _FinampSettingsGenerator extends Generator {
               finampSettingsProvider.select((value) => value.requireValue.${property.displayName}[${mapAnnotation.keyName}]);
               ''';
             if (mapAnnotation.keyGetter) {
-              selectorsCode +=
-                  '''ProviderListenable<Iterable<$keyType>> get ${property.displayName}Keys => 
+              selectorsCode += '''ProviderListenable<Iterable<$keyType>> get ${property.displayName}Keys => 
               finampSettingsProvider.select((value) => _LengthEqualsIterable(value.requireValue.${property.displayName}.keys));
               ''';
             }
@@ -118,8 +115,7 @@ class _FinampSettingsGenerator extends Generator {
             if (property.returnType.isDartCoreMap) {
               throw "Error on FinampSettings.${property.displayName} - Maps must have either a SettingsHelperMap or SettingsHelperIgnore annotation.";
             }
-            selectorsCode +=
-                '''ProviderListenable<${_typeName(property.returnType)}> get ${property.displayName} => 
+            selectorsCode += '''ProviderListenable<${_typeName(property.returnType)}> get ${property.displayName} => 
               finampSettingsProvider.select((value) => value.requireValue.${property.displayName});
         ''';
           }

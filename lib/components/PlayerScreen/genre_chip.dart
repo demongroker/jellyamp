@@ -42,15 +42,16 @@ class GenreIconAndText extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           Expanded(
-            child: genres.isNotEmpty
-                ? GenreChips(
-                    parentType: BaseItemDtoType.fromItem(parent),
-                    genres: genres,
-                    backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
-                    sortConfig: sortConfig,
-                    sortConfigController: sortConfigController,
-                  )
-                : Text(AppLocalizations.of(context)!.noGenres),
+            child:
+                genres.isNotEmpty
+                    ? GenreChips(
+                      parentType: BaseItemDtoType.fromItem(parent),
+                      genres: genres,
+                      backgroundColor: IconTheme.of(context).color!.withOpacity(0.1),
+                      sortConfig: sortConfig,
+                      sortConfigController: sortConfigController,
+                    )
+                    : Text(AppLocalizations.of(context)!.noGenres),
           ),
         ],
       ),

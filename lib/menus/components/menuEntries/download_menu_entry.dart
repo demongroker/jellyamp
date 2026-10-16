@@ -32,10 +32,11 @@ class DownloadMenuEntry extends ConsumerWidget implements HideableMenuEntry {
           if (warningMessage != null) {
             final confirmed = await showDialog<bool?>(
               context: context,
-              builder: (context) => ConfirmationPromptDialog(
-                promptText: warningMessage!,
-                confirmButtonText: AppLocalizations.of(context)!.addButtonLabel,
-              ),
+              builder:
+                  (context) => ConfirmationPromptDialog(
+                    promptText: warningMessage!,
+                    confirmButtonText: AppLocalizations.of(context)!.addButtonLabel,
+                  ),
             );
             if ((confirmed ?? false) && context.mounted) {
               await DownloadDialog.show(context, downloadStub, null);

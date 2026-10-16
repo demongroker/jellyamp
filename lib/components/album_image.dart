@@ -160,13 +160,11 @@ class _AlbumImageState extends ConsumerState<AlbumImage> {
         item: imageScaled ? widget.item : null,
         imageListenable: imageScaled ? null : listenable,
         borderRadius: BorderRadius.zero,
-        placeholderBuilder: (_) => Stack(
-          fit: StackFit.passthrough,
-          children: [
-            image,
-            const Center(child: CircularProgressIndicator.adaptive()),
-          ],
-        ),
+        placeholderBuilder:
+            (_) => Stack(
+              fit: StackFit.passthrough,
+              children: [image, const Center(child: CircularProgressIndicator.adaptive())],
+            ),
         autoScale: false,
         tapToZoom: false,
         onZoomRoute: true,
@@ -175,18 +173,18 @@ class _AlbumImageState extends ConsumerState<AlbumImage> {
       return MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
-          onTap: () => Navigator.of(context).push(
-            PageRouteBuilder<_ZoomedImage>(
-              opaque: false,
-              barrierDismissible: true,
-              transitionDuration: MediaQuery.disableAnimationsOf(context)
-                  ? Duration.zero
-                  : const Duration(milliseconds: 500),
-              pageBuilder: (BuildContext context, Animation<double> animation1, Animation<double> animation2) {
-                return _ZoomedImage(albumImage: largeImage, id: zoomID);
-              },
-            ),
-          ),
+          onTap:
+              () => Navigator.of(context).push(
+                PageRouteBuilder<_ZoomedImage>(
+                  opaque: false,
+                  barrierDismissible: true,
+                  transitionDuration:
+                      MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 500),
+                  pageBuilder: (BuildContext context, Animation<double> animation1, Animation<double> animation2) {
+                    return _ZoomedImage(albumImage: largeImage, id: zoomID);
+                  },
+                ),
+              ),
           child: Hero(
             tag: zoomID,
             createRectTween: (begin, end) => RectTween(begin: begin, end: end),
@@ -200,9 +198,9 @@ class _AlbumImageState extends ConsumerState<AlbumImage> {
 
     return widget.disabled
         ? Opacity(
-            opacity: 0.75,
-            child: ColorFiltered(colorFilter: const ColorFilter.mode(Colors.black, BlendMode.color), child: image),
-          )
+          opacity: 0.75,
+          child: ColorFiltered(colorFilter: const ColorFilter.mode(Colors.black, BlendMode.color), child: image),
+        )
         : image;
   }
 }
@@ -230,31 +228,32 @@ class BareAlbumImage extends ConsumerWidget {
     final image = imageInfo.image;
     var localPlaceholder = placeholderBuilder;
     if (blurHash != null) {
-      localPlaceholder ??= (_) => Image(
-        fit: BoxFit.contain,
-        image: BlurHashImage(
-          blurHash,
-          // Allow scaling blurhashes up to 3200 pixels wide by setting scale
-          scale: 0.01,
-        ),
-      );
+      localPlaceholder ??=
+          (_) => Image(
+            fit: BoxFit.contain,
+            image: BlurHashImage(
+              blurHash,
+              // Allow scaling blurhashes up to 3200 pixels wide by setting scale
+              scale: 0.01,
+            ),
+          );
     }
     localPlaceholder ??= defaultPlaceholderBuilder;
 
     if (image != null) {
-      final fadeTime = MediaQuery.disableAnimationsOf(context) || onZoomRoute
-          ? Duration.zero
-          : const Duration(milliseconds: 700);
+      final fadeTime =
+          MediaQuery.disableAnimationsOf(context) || onZoomRoute ? Duration.zero : const Duration(milliseconds: 700);
 
       return Image(
         key: ValueKey(image),
         image: image,
-        frameBuilder: (_, child, frame, _) => ImageFader(
-          key: ValueKey(image),
-          fadeTime: fadeTime,
-          placeholder: localPlaceholder!(context),
-          image: frame != null ? child : null,
-        ),
+        frameBuilder:
+            (_, child, frame, _) => ImageFader(
+              key: ValueKey(image),
+              fadeTime: fadeTime,
+              placeholder: localPlaceholder!(context),
+              image: frame != null ? child : null,
+            ),
         fit: BoxFit.contain,
         alignment: Alignment.center,
         repeat: ImageRepeat.noRepeat,
@@ -353,11 +352,7 @@ class _ZoomedImage extends StatelessWidget {
             constrained: true,
             panEnabled: true,
             clipBehavior: Clip.none,
-            child: Hero(
-              tag: id,
-              createRectTween: (begin, end) => RectTween(begin: begin, end: end),
-              child: albumImage,
-            ),
+            child: Hero(tag: id, createRectTween: (begin, end) => RectTween(begin: begin, end: end), child: albumImage),
           ),
         ),
         Positioned(

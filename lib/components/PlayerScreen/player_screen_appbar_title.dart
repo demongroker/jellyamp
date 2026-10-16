@@ -46,9 +46,10 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w300,
-                    color: Theme.brightnessOf(context) == Brightness.dark
-                        ? Colors.white.withOpacity(0.7)
-                        : Colors.black.withOpacity(0.8),
+                    color:
+                        Theme.brightnessOf(context) == Brightness.dark
+                            ? Colors.white.withOpacity(0.7)
+                            : Colors.black.withOpacity(0.8),
                   ),
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
@@ -58,9 +59,8 @@ class _PlayerScreenAppBarTitleState extends State<PlayerScreenAppBarTitle> {
                   queueItem.source.name.getLocalized(context.l10n),
                   style: TextStyle(
                     fontSize: 14,
-                    color: Theme.brightnessOf(context) == Brightness.dark
-                        ? Colors.white
-                        : Colors.black.withOpacity(0.9),
+                    color:
+                        Theme.brightnessOf(context) == Brightness.dark ? Colors.white : Colors.black.withOpacity(0.9),
                   ),
                   maxLines: widget.maxLines,
                   textAlign: TextAlign.center,

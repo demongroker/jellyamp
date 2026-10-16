@@ -138,15 +138,12 @@ class _QuickConnectInputState extends State<QuickConnectInput> {
                 Center(child: _feedbackIcon),
                 Text(
                   switch (_state) {
-                    QuickConnectAuthorizationState.processing => AppLocalizations.of(
-                      context,
-                    )!.quickConnectAuthorizationMenuStateTitleProcessing,
-                    QuickConnectAuthorizationState.success => AppLocalizations.of(
-                      context,
-                    )!.quickConnectAuthorizationMenuStateTitleSuccess,
-                    QuickConnectAuthorizationState.failed => AppLocalizations.of(
-                      context,
-                    )!.quickConnectAuthorizationMenuStateTitleFailed,
+                    QuickConnectAuthorizationState.processing =>
+                      AppLocalizations.of(context)!.quickConnectAuthorizationMenuStateTitleProcessing,
+                    QuickConnectAuthorizationState.success =>
+                      AppLocalizations.of(context)!.quickConnectAuthorizationMenuStateTitleSuccess,
+                    QuickConnectAuthorizationState.failed =>
+                      AppLocalizations.of(context)!.quickConnectAuthorizationMenuStateTitleFailed,
                     _ => "",
                   },
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
@@ -157,12 +154,10 @@ class _QuickConnectInputState extends State<QuickConnectInput> {
           if ([QuickConnectAuthorizationState.failed, QuickConnectAuthorizationState.waitingForInput].contains(_state))
             Text(
               switch (_state) {
-                QuickConnectAuthorizationState.waitingForInput => AppLocalizations.of(
-                  context,
-                )!.quickConnectAuthorizationMenuStateSubtitleIdle,
-                QuickConnectAuthorizationState.failed => AppLocalizations.of(
-                  context,
-                )!.quickConnectAuthorizationMenuStateSubtitleFailed,
+                QuickConnectAuthorizationState.waitingForInput =>
+                  AppLocalizations.of(context)!.quickConnectAuthorizationMenuStateSubtitleIdle,
+                QuickConnectAuthorizationState.failed =>
+                  AppLocalizations.of(context)!.quickConnectAuthorizationMenuStateSubtitleFailed,
                 _ => "",
               },
               style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w400),
@@ -260,9 +255,10 @@ class _QuickConnectInputFieldState extends State<QuickConnectInputField> {
                     color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12.0),
                     border: Border.all(
-                      color: index == text.length && _focusNode.hasFocus
-                          ? Theme.of(context).colorScheme.primary
-                          : Colors.transparent,
+                      color:
+                          index == text.length && _focusNode.hasFocus
+                              ? Theme.of(context).colorScheme.primary
+                              : Colors.transparent,
                       width: 2.0,
                     ),
                   ),
@@ -272,9 +268,10 @@ class _QuickConnectInputFieldState extends State<QuickConnectInputField> {
                       style: Theme.of(context).textTheme.displayMedium?.copyWith(
                         fontSize: 32,
                         fontWeight: hasDigit ? FontWeight.w600 : FontWeight.w200,
-                        color: hasDigit
-                            ? Theme.of(context).textTheme.bodyLarge?.color
-                            : Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.4),
+                        color:
+                            hasDigit
+                                ? Theme.of(context).textTheme.bodyLarge?.color
+                                : Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.4),
                       ),
                     ),
                   ),

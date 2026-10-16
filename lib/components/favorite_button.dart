@@ -59,11 +59,12 @@ class _FavoriteButtonState extends ConsumerState<FavoriteButton> {
         disabledColor: (widget.color ?? IconTheme.of(context).color)!.withOpacity(0.3),
         visualDensity: widget.visualDensity ?? VisualDensity.compact,
         tooltip: AppLocalizations.of(context)!.favorite,
-        onPressed: isOffline
-            ? null
-            : () {
-                ref.read(isFavoriteProvider(widget.item).notifier).updateFavorite(!isFav);
-              },
+        onPressed:
+            isOffline
+                ? null
+                : () {
+                  ref.read(isFavoriteProvider(widget.item).notifier).updateFavorite(!isFav);
+                },
       );
     }
   }

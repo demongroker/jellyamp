@@ -41,9 +41,7 @@ class _LoginServerSelectionPageState extends ConsumerState<LoginServerSelectionP
   void initState() {
     super.initState();
 
-    _serverUrlController = TextEditingController(
-      text: Hive.box<String>("LastServerUrl").get("lastServerUrl") ?? "",
-    );
+    _serverUrlController = TextEditingController(text: Hive.box<String>("LastServerUrl").get("lastServerUrl") ?? "");
 
     widget.serverState.updateCallback = () {
       if (mounted) {
@@ -200,16 +198,17 @@ class _LoginServerSelectionPageState extends ConsumerState<LoginServerSelectionP
                             CTAMedium(
                               text: AppLocalizations.of(context)!.importClientCertificate,
                               icon: TablerIcons.certificate,
-                              onPressed: () => showClientCertificateMenu(
-                                context: context,
-                                onImported: () {
-                                  _restartDiscovery();
-                                  final baseUrl = widget.serverState.baseUrl;
-                                  if (baseUrl != null) {
-                                    widget.serverState.onBaseUrlChanged(baseUrl);
-                                  }
-                                },
-                              ),
+                              onPressed:
+                                  () => showClientCertificateMenu(
+                                    context: context,
+                                    onImported: () {
+                                      _restartDiscovery();
+                                      final baseUrl = widget.serverState.baseUrl;
+                                      if (baseUrl != null) {
+                                        widget.serverState.onBaseUrlChanged(baseUrl);
+                                      }
+                                    },
+                                  ),
                               minWidth: 0,
                             ),
                           ],
@@ -315,18 +314,20 @@ class _LoginServerSelectionPageState extends ConsumerState<LoginServerSelectionP
           color: Theme.of(context).iconTheme.color,
           icon: const Icon(Icons.info),
           tooltip: AppLocalizations.of(context)!.serverUrlInfoButtonTooltip,
-          onPressed: () => showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              content: Text(AppLocalizations.of(context)!.internalExternalIpExplanation),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(MaterialLocalizations.of(context).okButtonLabel),
-                ),
-              ],
-            ),
-          ),
+          onPressed:
+              () => showDialog(
+                context: context,
+                builder:
+                    (context) => AlertDialog(
+                      content: Text(AppLocalizations.of(context)!.internalExternalIpExplanation),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text(MaterialLocalizations.of(context).okButtonLabel),
+                        ),
+                      ],
+                    ),
+              ),
         ),
       );
     }
@@ -420,21 +421,21 @@ class JellyfinServerSelectionWidget extends StatelessWidget {
 
     return onPressed != null
         ? ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.surface,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
-            ),
-            onPressed: onPressed,
-            child: buildContent(),
-          )
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+          ),
+          onPressed: onPressed,
+          child: buildContent(),
+        )
         : Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-            child: buildContent(),
-          );
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primaryContainer,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+          child: buildContent(),
+        );
   }
 }

@@ -109,9 +109,10 @@ sealed class _SortableItem<ChildType extends FinampPlayableDto> extends FinampPl
     implements FinampSortable<ChildType>, FinampUnpagedDisplayable<ChildType>, FinampUnpagedPlayable<ChildType> {
   _SortableItem(super.item, {required super.source, required this.sortConfig})
     : assert(() {
-        ContentType type = [BaseItemDtoType.album, BaseItemDtoType.playlist].contains(BaseItemDtoType.fromItem(item))
-            ? ContentType.inPlaylist
-            : ContentType.tracks;
+        ContentType type =
+            [BaseItemDtoType.album, BaseItemDtoType.playlist].contains(BaseItemDtoType.fromItem(item))
+                ? ContentType.inPlaylist
+                : ContentType.tracks;
         final controller = SortAndFilterController(startingConfig: sortConfig, contentType: type);
         final resolvedConfig = GetIt.instance<ProviderContainer>().read(resolveSortProvider(controller));
         return sortConfig == resolvedConfig;
@@ -133,9 +134,10 @@ sealed class _SortablePagedItem<ChildType extends FinampPlayableDto> extends Fin
     implements FinampSortable<ChildType>, FinampPagedPlayable<ChildType> {
   _SortablePagedItem(super.item, {required super.source, required this.sortConfig})
     : assert(() {
-        ContentType type = [BaseItemDtoType.album, BaseItemDtoType.playlist].contains(BaseItemDtoType.fromItem(item))
-            ? ContentType.inPlaylist
-            : ContentType.tracks;
+        ContentType type =
+            [BaseItemDtoType.album, BaseItemDtoType.playlist].contains(BaseItemDtoType.fromItem(item))
+                ? ContentType.inPlaylist
+                : ContentType.tracks;
         final controller = SortAndFilterController(startingConfig: sortConfig, contentType: type);
         final resolvedConfig = GetIt.instance<ProviderContainer>().read(resolveSortProvider(controller));
         return sortConfig == resolvedConfig;

@@ -62,12 +62,13 @@ class _AlphabetListState extends ConsumerState<AlphabetList> {
   Widget build(BuildContext context) {
     final alphabetList = Container(
       margin: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + _bottomPadding / 2),
-      decoration: ref.watch(finampSettingsProvider.contentViewType) == ContentViewType.grid
-          ? BoxDecoration(
-              borderRadius: BorderRadius.circular(12.0),
-              color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.75),
-            )
-          : null,
+      decoration:
+          ref.watch(finampSettingsProvider.contentViewType) == ContentViewType.grid
+              ? BoxDecoration(
+                borderRadius: BorderRadius.circular(12.0),
+                color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.75),
+              )
+              : null,
       padding: EdgeInsets.only(top: 10, bottom: _bottomPadding / 2, right: 3 + MediaQuery.paddingOf(context).right),
       child: LayoutBuilder(
         builder: (context, constraints) {

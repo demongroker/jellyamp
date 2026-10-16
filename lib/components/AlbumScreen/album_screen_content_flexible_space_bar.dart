@@ -60,9 +60,10 @@ class AlbumScreenContentFlexibleSpaceBar extends ConsumerWidget {
                 SizedBox(height: 10),
                 PlaybackActionRow(
                   compactLayout: true,
-                  item: BaseItemDtoType.fromItem(parentItem) == BaseItemDtoType.playlist
-                      ? Playlist(parentItem, sortConfig: sortConfig)
-                      : Album.fromItem(parentItem),
+                  item:
+                      BaseItemDtoType.fromItem(parentItem) == BaseItemDtoType.playlist
+                          ? Playlist(parentItem, sortConfig: sortConfig)
+                          : Album.fromItem(parentItem),
                   popContext: false,
                 ),
                 if (BaseItemDtoType.fromItem(parentItem) == BaseItemDtoType.playlist) ...[

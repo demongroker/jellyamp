@@ -48,11 +48,12 @@ class _CustomDownloadLocationFormState extends State<CustomDownloadLocationForm>
                                     : selectedDirectory!.path.replaceFirst("${selectedDirectory!.parent.path}/", ""),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
-                                style: selectedDirectory == null
-                                    ? Theme.of(
-                                        context,
-                                      ).textTheme.titleMedium?.copyWith(color: Theme.of(context).hintColor)
-                                    : Theme.of(context).textTheme.titleMedium,
+                                style:
+                                    selectedDirectory == null
+                                        ? Theme.of(
+                                          context,
+                                        ).textTheme.titleMedium?.copyWith(color: Theme.of(context).hintColor)
+                                        : Theme.of(context).textTheme.titleMedium,
                               ),
                             ),
                             IconButton(

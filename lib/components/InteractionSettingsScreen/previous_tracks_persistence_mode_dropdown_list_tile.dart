@@ -34,12 +34,15 @@ class PreviousTracksPersistenceModeSelector extends ConsumerWidget {
         children: [
           Text(AppLocalizations.of(context)!.previousTracksPersistenceModeSelectorSubtitle),
           FinampSettingsDropdown<PreviousTracksPersistenceMode>(
-            dropdownItems: PreviousTracksPersistenceMode.values
-                .map(
-                  (e) =>
-                      DropdownMenuEntry<PreviousTracksPersistenceMode>(value: e, label: e.toLocalizedString(context)),
-                )
-                .toList(),
+            dropdownItems:
+                PreviousTracksPersistenceMode.values
+                    .map(
+                      (e) => DropdownMenuEntry<PreviousTracksPersistenceMode>(
+                        value: e,
+                        label: e.toLocalizedString(context),
+                      ),
+                    )
+                    .toList(),
             selectedValue: previousTracksPersistenceMode,
             onSelected: FinampSetters.setPreviousTracksPersistenceMode.ifNonNull,
           ),

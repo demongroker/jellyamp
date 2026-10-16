@@ -24,8 +24,7 @@ class TrackInfoSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final serverName =
-        ref.watch(currentServerInfoProvider).value?.publicServerInfo.serverName;
+    final serverName = ref.watch(currentServerInfoProvider).value?.publicServerInfo.serverName;
 
     final audioStream = featureState.audioStream;
     final mediaSource = featureState.metadata?.mediaSourceInfo;
@@ -45,22 +44,18 @@ class TrackInfoSheet extends ConsumerWidget {
 
     final rows = <(IconData, String, String)>[
       (TablerIcons.player_play, l10n.playbackMode, playbackModeLabel()),
-      if (featureState.isTranscodingAndStreaming)
-        ..._transcodingRows(featureState, mediaSource, l10n),
+      if (featureState.isTranscodingAndStreaming) ..._transcodingRows(featureState, mediaSource, l10n),
       (TablerIcons.music, l10n.codec, featureState.codec.toUpperCase()),
       if (featureState.bitrate != null)
         (TablerIcons.gauge, l10n.bitRate, l10n.kiloBitsPerSecondLabel(featureState.bitrate! ~/ 1000)),
-      if (featureState.bitDepth != null)
-        (TablerIcons.binary, l10n.bitDepth, l10n.numberAsBit(featureState.bitDepth!)),
+      if (featureState.bitDepth != null) (TablerIcons.binary, l10n.bitDepth, l10n.numberAsBit(featureState.bitDepth!)),
       if (featureState.sampleRate != null)
         (TablerIcons.wave_sine, l10n.sampleRate, l10n.numberAsKiloHertz(featureState.sampleRate! / 1000.0)),
       if (audioStream?.channels != null)
         (TablerIcons.adjustments_horizontal, l10n.channels, '${audioStream?.channels}'),
       (TablerIcons.box, l10n.container, featureState.container.toUpperCase()),
-      if (featureState.size != null)
-        (TablerIcons.database, l10n.fileSize, FileSize.getSize(featureState.size!)),
-      if (mediaSource?.path != null)
-        (TablerIcons.folder, l10n.path, mediaSource!.path!),
+      if (featureState.size != null) (TablerIcons.database, l10n.fileSize, FileSize.getSize(featureState.size!)),
+      if (mediaSource?.path != null) (TablerIcons.folder, l10n.path, mediaSource!.path!),
       if (serverName != null) (TablerIcons.server, l10n.server, serverName),
     ];
 
@@ -92,9 +87,7 @@ class TrackInfoSheet extends ConsumerWidget {
                   children: [
                     Icon(row.$1, size: 18, color: Theme.of(context).colorScheme.primary),
                     const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(row.$2, style: Theme.of(context).textTheme.bodyMedium),
-                    ),
+                    Expanded(child: Text(row.$2, style: Theme.of(context).textTheme.bodyMedium)),
                     Text(
                       row.$3,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
@@ -122,11 +115,7 @@ class TrackInfoSheet extends ConsumerWidget {
       if (fs.bitrate != null) l10n.kiloBitsPerSecondLabel(fs.bitrate! ~/ 1000),
     ].join(' · ');
     return [
-      (
-        TablerIcons.music,
-        l10n.transcodingSource,
-        source == null ? l10n.unknown : _describeStream(source, l10n),
-      ),
+      (TablerIcons.music, l10n.transcodingSource, source == null ? l10n.unknown : _describeStream(source, l10n)),
       (TablerIcons.arrow_right, l10n.transcodingOutput, output),
       (TablerIcons.help, l10n.transcodingReason, l10n.transcodingReasonStreamingQuality),
     ];

@@ -26,9 +26,10 @@ class ShareTrackFileMenuEntry extends ConsumerWidget implements HideableMenuEntr
       child: MenuEntry(
         icon: TablerIcons.file_music,
         title: AppLocalizations.of(context)!.shareAudioFile,
-        tooltip: offline
-            ? AppLocalizations.of(context)!.shareAudioFileTooltipOffline
-            : AppLocalizations.of(context)!.shareAudioFileTooltip,
+        tooltip:
+            offline
+                ? AppLocalizations.of(context)!.shareAudioFileTooltipOffline
+                : AppLocalizations.of(context)!.shareAudioFileTooltip,
         onTap: () async {
           Navigator.pop(context);
           await MediaShareHelper.shareOriginalAudioFile(baseItem);

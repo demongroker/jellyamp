@@ -25,17 +25,17 @@ class CTAMedium extends StatelessWidget {
     final minWidth = this.minWidth ?? screenSize.width * 0.25;
     final paddingHorizontal = screenSize.width * 0.015;
     final paddingVertical = screenSize.height * 0.015;
-    final accentColor = disabled
-        ? Theme.of(context).colorScheme.primary.withOpacity(0.5)
-        : Theme.of(context).colorScheme.primary;
+    final accentColor =
+        disabled ? Theme.of(context).colorScheme.primary.withOpacity(0.5) : Theme.of(context).colorScheme.primary;
 
     return FilledButton(
-      onPressed: disabled
-          ? null
-          : () {
-              FeedbackHelper.feedback(FeedbackType.selection);
-              onPressed();
-            },
+      onPressed:
+          disabled
+              ? null
+              : () {
+                FeedbackHelper.feedback(FeedbackType.selection);
+                onPressed();
+              },
       style: ButtonStyle(
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -61,11 +61,10 @@ class CTAMedium extends StatelessWidget {
             Text(
               text,
               style: TextStyle(
-                color:
-                    (Theme.brightnessOf(context) == Brightness.light
-                            ? Color.alphaBlend(accentColor.withOpacity(0.33), Colors.black)
-                            : Colors.white)
-                        .withOpacity(disabled ? 0.5 : 1.0),
+                color: (Theme.brightnessOf(context) == Brightness.light
+                        ? Color.alphaBlend(accentColor.withOpacity(0.33), Colors.black)
+                        : Colors.white)
+                    .withOpacity(disabled ? 0.5 : 1.0),
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),

@@ -134,12 +134,12 @@ class CarPlayHelper {
       grouped[letter]!.add(itemBuilder(item, i));
     }
 
-    final sortedKeys = grouped.keys.toList()
-      ..sort((a, b) {
-        if (a == "#") return 1;
-        if (b == "#") return -1;
-        return a.compareTo(b);
-      });
+    final sortedKeys =
+        grouped.keys.toList()..sort((a, b) {
+          if (a == "#") return 1;
+          if (b == "#") return -1;
+          return a.compareTo(b);
+        });
 
     return sortedKeys.map((letter) => CPListSection(header: letter, items: grouped[letter]!)).toList();
   }
@@ -170,9 +170,8 @@ class CarPlayHelper {
         ),
         id: "carplay-${tab.name}",
       ),
-      sortConfig: _tabSortControllers
-          .putIfAbsent(tab, () => SortAndFilterController.trackSettings(tab))
-          .resolveConfig(),
+      sortConfig:
+          _tabSortControllers.putIfAbsent(tab, () => SortAndFilterController.trackSettings(tab)).resolveConfig(),
     );
   }
 
@@ -682,9 +681,10 @@ class CarPlayHelper {
         type: ArtistChildType.albumsFromArtist,
         library: currentLibraryPlaceholder,
       );
-      final artistAlbumsList = (await providerRef.read(
-        getChildrenProvider(item: artist).future,
-      )).map((x) => (x as FinampPlayableDto).item).toList();
+      final artistAlbumsList =
+          (await providerRef.read(
+            getChildrenProvider(item: artist).future,
+          )).map((x) => (x as FinampPlayableDto).item).toList();
       _carPlayLogger.fine("Got ${artistAlbumsList.length} albums");
 
       artistAlbums.items.add(

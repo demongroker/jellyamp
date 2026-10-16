@@ -26,12 +26,14 @@ class ItemInfo extends ConsumerWidget {
     final isOffline = ref.watch(finampSettingsProvider.isOffline);
     final tracks = itemTracks ?? [];
     final itemTracksCount = tracks.length;
-    final trackCountString = (tracks.length == item.childCount || !isOffline)
-        ? AppLocalizations.of(context)!.trackCount(itemTracksCount)
-        : AppLocalizations.of(context)!.offlineTrackCount(item.childCount!, itemTracksCount);
-    final trackDurationString = tracks.length == item.childCount
-        ? "$trackCountString (${printDuration(item.runTimeTicksDuration())})"
-        : "$trackCountString (${printDuration(tracks.map((t) => t.runTimeTicksDuration()).whereType<Duration>().fold<Duration>(Duration.zero, (sum, dur) => sum + dur))})";
+    final trackCountString =
+        (tracks.length == item.childCount || !isOffline)
+            ? AppLocalizations.of(context)!.trackCount(itemTracksCount)
+            : AppLocalizations.of(context)!.offlineTrackCount(item.childCount!, itemTracksCount);
+    final trackDurationString =
+        tracks.length == item.childCount
+            ? "$trackCountString (${printDuration(item.runTimeTicksDuration())})"
+            : "$trackCountString (${printDuration(tracks.map((t) => t.runTimeTicksDuration()).whereType<Duration>().fold<Duration>(Duration.zero, (sum, dur) => sum + dur))})";
 
     final isPlaylist = BaseItemDtoType.fromItem(item) == BaseItemDtoType.playlist;
 
@@ -63,13 +65,7 @@ class ItemInfo extends ConsumerWidget {
             iconData: Icons.event,
             textSpan: TextSpan(text: ReleaseDateHelper.autoFormat(item) ?? AppLocalizations.of(context)!.noReleaseDate),
           ),
-        Row(
-          children: [
-            Expanded(
-              child: GenreIconAndText(parent: item, sortConfigController: sortConfigController),
-            ),
-          ],
-        ),
+        Row(children: [Expanded(child: GenreIconAndText(parent: item, sortConfigController: sortConfigController))]),
       ],
     );
   }

@@ -216,11 +216,12 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
               autoScrollController.scrollToIndex(
                 -1,
                 preferPosition: AutoScrollPosition.middle,
-                duration: MediaQuery.disableAnimationsOf(context)
-                    ? const Duration(
-                        milliseconds: 1,
-                      ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
-                    : const Duration(milliseconds: 300),
+                duration:
+                    MediaQuery.disableAnimationsOf(context)
+                        ? const Duration(
+                          milliseconds: 1,
+                        ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
+                        : const Duration(milliseconds: 300),
               ),
             );
           } else {
@@ -228,11 +229,12 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
               autoScrollController.scrollToIndex(
                 closestLineIndex,
                 preferPosition: AutoScrollPosition.middle,
-                duration: MediaQuery.disableAnimationsOf(context)
-                    ? const Duration(
-                        milliseconds: 1,
-                      ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
-                    : const Duration(milliseconds: 300),
+                duration:
+                    MediaQuery.disableAnimationsOf(context)
+                        ? const Duration(
+                          milliseconds: 1,
+                        ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
+                        : const Duration(milliseconds: 300),
               ),
             );
           }
@@ -268,9 +270,10 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
             children: [
               ConstrainedBox(
                 constraints: BoxConstraints(maxHeight: constraints.maxHeight - 180),
-                child: ref.watch(finampSettingsProvider.showLyricsScreenAlbumPrelude)
-                    ? const PlayerScreenAlbumImage()
-                    : SizedBox(),
+                child:
+                    ref.watch(finampSettingsProvider.showLyricsScreenAlbumPrelude)
+                        ? const PlayerScreenAlbumImage()
+                        : SizedBox(),
               ),
               const SizedBox(height: 24),
               Icon(icon, size: 32, color: Theme.of(context).textTheme.headlineMedium!.color),
@@ -347,17 +350,18 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                               key: const ValueKey(-1),
                               controller: autoScrollController,
                               index: -1,
-                              child: ref.watch(finampSettingsProvider.showLyricsScreenAlbumPrelude)
-                                  ? SizedBox(
-                                      height: constraints.maxHeight * 0.65,
-                                      child: Center(
-                                        child: SizedBox(
-                                          height: constraints.maxHeight * 0.55,
-                                          child: const PlayerScreenAlbumImage(),
+                              child:
+                                  ref.watch(finampSettingsProvider.showLyricsScreenAlbumPrelude)
+                                      ? SizedBox(
+                                        height: constraints.maxHeight * 0.65,
+                                        child: Center(
+                                          child: SizedBox(
+                                            height: constraints.maxHeight * 0.55,
+                                            child: const PlayerScreenAlbumImage(),
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  : SizedBox(height: constraints.maxHeight * 0.2),
+                                      )
+                                      : SizedBox(height: constraints.maxHeight * 0.2),
                             );
                           } else if (rawIndex == lyricLines.length + 1) {
                             // build footer
@@ -385,11 +389,12 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                                     autoScrollController.scrollToIndex(
                                       index,
                                       preferPosition: AutoScrollPosition.middle,
-                                      duration: MediaQuery.disableAnimationsOf(context)
-                                          ? const Duration(
-                                              milliseconds: 1,
-                                            ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
-                                          : const Duration(milliseconds: 500),
+                                      duration:
+                                          MediaQuery.disableAnimationsOf(context)
+                                              ? const Duration(
+                                                milliseconds: 1,
+                                              ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
+                                              : const Duration(milliseconds: 500),
                                     ),
                                   );
                                 },
@@ -417,11 +422,12 @@ class _LyricsViewState extends ConsumerState<LyricsView> with WidgetsBindingObse
                             autoScrollController.scrollToIndex(
                               currentLineNotifier.value!,
                               preferPosition: AutoScrollPosition.middle,
-                              duration: MediaQuery.disableAnimationsOf(context)
-                                  ? const Duration(
-                                      milliseconds: 1,
-                                    ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
-                                  : const Duration(milliseconds: 500),
+                              duration:
+                                  MediaQuery.disableAnimationsOf(context)
+                                      ? const Duration(
+                                        milliseconds: 1,
+                                      ) // there's an assertion in the library forbidding a duration of 0, so we use 1ms instead to get instant scrolling
+                                      : const Duration(milliseconds: 500),
                             ),
                           );
                         }
@@ -462,9 +468,10 @@ class _LyricLine extends ConsumerWidget {
     final currentLineStyle = unSyncedStyle;
     final lowlightStyle = unSyncedStyle.copyWith(color: Colors.grey);
     // ensure we use a highlight color that has decent contrast against the non-cue current line text color
-    final highlightColor = Theme.of(context).colorScheme.primary.contrastAgainst(currentLineStyle.color!) < 1.25
-        ? jellyfinBlueColor
-        : Theme.of(context).colorScheme.primary;
+    final highlightColor =
+        Theme.of(context).colorScheme.primary.contrastAgainst(currentLineStyle.color!) < 1.25
+            ? jellyfinBlueColor
+            : Theme.of(context).colorScheme.primary;
     // final cueHighlightStyle = currentLineStyle.copyWith(color: Theme.of(context).colorScheme.primary);
     final cueHighlightStyle = currentLineStyle.copyWith(color: highlightColor);
     final cueGreyStyle = currentLineStyle.copyWith(color: Colors.white);
@@ -757,13 +764,13 @@ class EnableAutoScrollButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return !autoScrollEnabled
         ? FinampExtendedFloatingActionButton(
-            onTap: () {
-              FeedbackHelper.feedback(FeedbackType.heavy);
-              onEnableAutoScroll?.call();
-            },
-            icon: TablerIcons.arrow_bar_to_up,
-            label: AppLocalizations.of(context)!.enableAutoScroll,
-          )
+          onTap: () {
+            FeedbackHelper.feedback(FeedbackType.heavy);
+            onEnableAutoScroll?.call();
+          },
+          icon: TablerIcons.arrow_bar_to_up,
+          label: AppLocalizations.of(context)!.enableAutoScroll,
+        )
         : const SizedBox.shrink();
   }
 }

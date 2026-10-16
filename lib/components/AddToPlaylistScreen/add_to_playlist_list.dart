@@ -105,11 +105,13 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
               }
               var dialogResult = await showDialog<(Future<BaseItemId>, String?)?>(
                 context: context,
-                builder: (context) => NewPlaylistDialog(
-                  itemsToAdd: itemsToAdd.map((item) {
-                    return item.id;
-                  }).toList(),
-                ),
+                builder:
+                    (context) => NewPlaylistDialog(
+                      itemsToAdd:
+                          itemsToAdd.map((item) {
+                            return item.id;
+                          }).toList(),
+                    ),
               );
               if (dialogResult != null) {
                 var oldFuture = playlistsFuture;
@@ -130,9 +132,8 @@ class _AddToPlaylistListState extends State<AddToPlaylistList> {
                   if (widget.itemsToAdd.length == 1 &&
                       BaseItemDtoType.fromItem(widget.itemsToAdd.first) == BaseItemDtoType.track) {
                     var playlistItems = await jellyfinApiHelper.getItems(parentItem: playlist, fields: "");
-                    trackId = playlistItems
-                        ?.firstWhere((element) => element.id == widget.itemsToAdd.first.id)
-                        .playlistItemId;
+                    trackId =
+                        playlistItems?.firstWhere((element) => element.id == widget.itemsToAdd.first.id).playlistItemId;
                   } else {
                     // Provide a fake playlist id for playlists created with a non-track initial item.
                     // It will not be used as non-tracks cannot be removed.
@@ -222,10 +223,11 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
       subtitle: AppLocalizations.of(context)!.trackCount(childCount ?? 0),
       leading: AlbumImage(item: widget.playlist),
       positiveIcon: TablerIcons.circle_check_filled,
-      negativeIcon: itemIsIncluded == null
-          // we don't actually know if the track is part of the playlist
-          ? TablerIcons.circle_dashed_plus
-          : TablerIcons.circle_plus,
+      negativeIcon:
+          itemIsIncluded == null
+              // we don't actually know if the track is part of the playlist
+              ? TablerIcons.circle_dashed_plus
+              : TablerIcons.circle_plus,
       initialState: itemIsIncluded ?? false,
       onToggle: (bool alreadyInPlaylist) async {
         if (alreadyInPlaylist) {
@@ -289,11 +291,12 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
             }
             await showDialog<void>(
               context: context,
-              builder: (context) => ConfirmationPromptDialog(
-                promptText: promptText,
-                confirmButtonText: AppLocalizations.of(context)!.addButtonLabel,
-                onConfirmed: () => confirmed = true,
-              ),
+              builder:
+                  (context) => ConfirmationPromptDialog(
+                    promptText: promptText,
+                    confirmButtonText: AppLocalizations.of(context)!.addButtonLabel,
+                    onConfirmed: () => confirmed = true,
+                  ),
             );
             if (!confirmed || !context.mounted) return false;
           }
@@ -303,9 +306,8 @@ class _AddToPlaylistTileState extends ConsumerState<AddToPlaylistTile> {
             var newItems = await jellyfinApiHelper.getItems(parentItem: widget.playlist, fields: "");
             setState(() {
               childCount = newItems?.length ?? 0;
-              playlistItemId = newItems
-                  ?.firstWhereOrNull((x) => x.id == widget.itemsToBeAdded.first.id)
-                  ?.playlistItemId;
+              playlistItemId =
+                  newItems?.firstWhereOrNull((x) => x.id == widget.itemsToBeAdded.first.id)?.playlistItemId;
               itemIsIncluded = true;
             });
             return true; // this is called before the state is updated

@@ -147,9 +147,10 @@ class TrackListTile extends ConsumerWidget {
           final List<DownloadStub> fetchedItems = await downloadsService.getAllTracks(
             viewFilter: library?.id,
             nullableViewFilters: ref.read(finampSettingsProvider.showDownloadsWithUnknownLibrary),
-            onlyFavorites: (selectedFilter == CuratedItemSelectionType.favorites)
-                ? ref.read(finampSettingsProvider.trackOfflineFavorites)
-                : false,
+            onlyFavorites:
+                (selectedFilter == CuratedItemSelectionType.favorites)
+                    ? ref.read(finampSettingsProvider.trackOfflineFavorites)
+                    : false,
             genreFilter: parentItem?.id,
           );
           allTracks = fetchedItems.map((e) => e.baseItem).nonNulls.toList();
@@ -264,9 +265,10 @@ class TrackListTile extends ConsumerWidget {
       onRemoveFromList: onRemoveFromList,
       onTap: trackListTileOnTap,
       confirmDismiss: (direction) async {
-        var followUpAction = (direction == DismissDirection.startToEnd)
-            ? FinampSettingsHelper.finampSettings.itemSwipeActionLeftToRight
-            : FinampSettingsHelper.finampSettings.itemSwipeActionRightToLeft;
+        var followUpAction =
+            (direction == DismissDirection.startToEnd)
+                ? FinampSettingsHelper.finampSettings.itemSwipeActionLeftToRight
+                : FinampSettingsHelper.finampSettings.itemSwipeActionRightToLeft;
         return await onConfirmPlayableDismiss(
           followUpAction: followUpAction,
           item: Track(item, source: QueueItemSource.fromBaseItem(parentItem ?? item)),
@@ -285,13 +287,14 @@ class TrackListTile extends ConsumerWidget {
         iconSize: 40.0,
       ),
       playbackProgress: playbackProgress,
-      features: [
-        showIndex ? TrackListItemFeatures.parentIndex : null,
-        showCover ? TrackListItemFeatures.cover : null,
-        TrackListItemFeatures.duration,
-        TrackListItemFeatures.addToPlaylistOrFavorite,
-        playable && allowDismiss ? TrackListItemFeatures.swipeableInTrackList : null,
-      ].nonNulls.toList(),
+      features:
+          [
+            showIndex ? TrackListItemFeatures.parentIndex : null,
+            showCover ? TrackListItemFeatures.cover : null,
+            TrackListItemFeatures.duration,
+            TrackListItemFeatures.addToPlaylistOrFavorite,
+            playable && allowDismiss ? TrackListItemFeatures.swipeableInTrackList : null,
+          ].nonNulls.toList(),
     );
   }
 }
@@ -427,14 +430,15 @@ class QueueListTile extends StatelessWidget {
         onRemoveFromList?.call();
         return true;
       },
-      features: [
-        TrackListItemFeatures.cover,
-        TrackListItemFeatures.duration,
-        TrackListItemFeatures.addToPlaylistOrFavorite,
-        TrackListItemFeatures.swipeableInTrackList,
-        TrackListItemFeatures.swipeableInQueue,
-        allowReorder ? TrackListItemFeatures.dragHandle : null,
-      ].nonNulls.toList(),
+      features:
+          [
+            TrackListItemFeatures.cover,
+            TrackListItemFeatures.duration,
+            TrackListItemFeatures.addToPlaylistOrFavorite,
+            TrackListItemFeatures.swipeableInTrackList,
+            TrackListItemFeatures.swipeableInQueue,
+            allowReorder ? TrackListItemFeatures.dragHandle : null,
+          ].nonNulls.toList(),
     );
   }
 }
@@ -470,14 +474,15 @@ class EditListTile extends StatelessWidget {
         onRemoveOrRestore?.call();
         return true;
       },
-      features: [
-        restoreInsteadOfRemove ? null : TrackListItemFeatures.listIndex,
-        TrackListItemFeatures.cover,
-        TrackListItemFeatures.dragHandle,
-        TrackListItemFeatures.fullyDraggable,
-        TrackListItemFeatures.swipeableInTrackList,
-        restoreInsteadOfRemove ? TrackListItemFeatures.restoreButton : TrackListItemFeatures.removeFromListButton,
-      ].nonNulls.toList(),
+      features:
+          [
+            restoreInsteadOfRemove ? null : TrackListItemFeatures.listIndex,
+            TrackListItemFeatures.cover,
+            TrackListItemFeatures.dragHandle,
+            TrackListItemFeatures.fullyDraggable,
+            TrackListItemFeatures.swipeableInTrackList,
+            restoreInsteadOfRemove ? TrackListItemFeatures.restoreButton : TrackListItemFeatures.removeFromListButton,
+          ].nonNulls.toList(),
     );
   }
 }
@@ -538,9 +543,10 @@ class TrackListItem extends ConsumerWidget {
 
     final isCurrentlyPlaying = ref.watch(
       currentTrackProvider.select(
-        (playingItem) => queueItem != null
-            ? queueItem!.id == playingItem.valueOrNull?.id
-            : playingItem.valueOrNull?.baseItemId == baseItem.id,
+        (playingItem) =>
+            queueItem != null
+                ? queueItem!.id == playingItem.valueOrNull?.id
+                : playingItem.valueOrNull?.baseItemId == baseItem.id,
       ),
     );
 
@@ -588,68 +594,70 @@ class TrackListItem extends ConsumerWidget {
             // Begin precalculating theme for song menu
             ref.listenManual(finampThemeProvider(ThemeInfo(baseItem)), (_, __) {});
           },
-          onLongPressStart: features.contains(TrackListItemFeatures.fullyDraggable)
-              ? null
-              : (details) => menuCallback(),
-          onSecondaryTapDown: features.contains(TrackListItemFeatures.fullyDraggable)
-              ? null
-              : (details) => menuCallback(),
+          onLongPressStart:
+              features.contains(TrackListItemFeatures.fullyDraggable) ? null : (details) => menuCallback(),
+          onSecondaryTapDown:
+              features.contains(TrackListItemFeatures.fullyDraggable) ? null : (details) => menuCallback(),
           child:
               (features.contains(TrackListItemFeatures.swipeableInTrackList) ||
-                      features.contains(TrackListItemFeatures.swipeableInQueue)) &&
-                  !ref.watch(finampSettingsProvider.disableGesture)
-              ? Dismissible(
-                  key: Key(listIndex.toString()),
-                  direction: features.contains(TrackListItemFeatures.swipeableInQueue)
-                      ? DismissDirection.endToStart
-                      : getAllowedDismissDirection(
-                          swipeLeftEnabled:
-                              ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight) != ItemSwipeActions.nothing,
-                          swipeRightEnabled:
-                              ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft) != ItemSwipeActions.nothing,
-                        ),
-                  dismissThresholds: const {DismissDirection.startToEnd: 0.65, DismissDirection.endToStart: 0.65},
-                  // no background, dismissing really dismisses here
-                  confirmDismiss: confirmDismiss,
-                  background: leftSwipeBackground,
-                  secondaryBackground: rightSwipeBackground,
-                  child: listItem,
-                )
-              : listItem,
+                          features.contains(TrackListItemFeatures.swipeableInQueue)) &&
+                      !ref.watch(finampSettingsProvider.disableGesture)
+                  ? Dismissible(
+                    key: Key(listIndex.toString()),
+                    direction:
+                        features.contains(TrackListItemFeatures.swipeableInQueue)
+                            ? DismissDirection.endToStart
+                            : getAllowedDismissDirection(
+                              swipeLeftEnabled:
+                                  ref.watch(finampSettingsProvider.itemSwipeActionLeftToRight) !=
+                                  ItemSwipeActions.nothing,
+                              swipeRightEnabled:
+                                  ref.watch(finampSettingsProvider.itemSwipeActionRightToLeft) !=
+                                  ItemSwipeActions.nothing,
+                            ),
+                    dismissThresholds: const {DismissDirection.startToEnd: 0.65, DismissDirection.endToStart: 0.65},
+                    // no background, dismissing really dismisses here
+                    confirmDismiss: confirmDismiss,
+                    background: leftSwipeBackground,
+                    secondaryBackground: rightSwipeBackground,
+                    child: listItem,
+                  )
+                  : listItem,
         );
       },
     );
 
-    final fullTile = isCurrentlyPlaying && highlightCurrentTrack
-        ? PlayerScreenTheme(
-            themeTransitionDuration: const Duration(milliseconds: 500),
-            themeOverride: (imageTheme) {
-              return imageTheme.copyWith(
-                colorScheme: imageTheme.colorScheme.copyWith(
-                  surfaceContainer: imageTheme.colorScheme.primary.withOpacity(
-                    imageTheme.brightness == Brightness.dark ? 0.35 : 0.3,
-                  ),
-                ),
-                textTheme: imageTheme.textTheme.copyWith(
-                  bodyLarge: imageTheme.textTheme.bodyLarge?.copyWith(
-                    color: Color.alphaBlend(
-                      (imageTheme.colorScheme.secondary.withOpacity(
-                        imageTheme.brightness == Brightness.light ? 0.5 : 0.1,
-                      )),
-                      imageTheme.textTheme.bodyLarge?.color ??
-                          (imageTheme.brightness == Brightness.light ? Colors.black : Colors.white),
+    final fullTile =
+        isCurrentlyPlaying && highlightCurrentTrack
+            ? PlayerScreenTheme(
+              themeTransitionDuration: const Duration(milliseconds: 500),
+              themeOverride: (imageTheme) {
+                return imageTheme.copyWith(
+                  colorScheme: imageTheme.colorScheme.copyWith(
+                    surfaceContainer: imageTheme.colorScheme.primary.withOpacity(
+                      imageTheme.brightness == Brightness.dark ? 0.35 : 0.3,
                     ),
                   ),
-                ),
-              );
-            },
-            child: unthemedItem,
-          )
-        : unthemedItem;
+                  textTheme: imageTheme.textTheme.copyWith(
+                    bodyLarge: imageTheme.textTheme.bodyLarge?.copyWith(
+                      color: Color.alphaBlend(
+                        (imageTheme.colorScheme.secondary.withOpacity(
+                          imageTheme.brightness == Brightness.light ? 0.5 : 0.1,
+                        )),
+                        imageTheme.textTheme.bodyLarge?.color ??
+                            (imageTheme.brightness == Brightness.light ? Colors.black : Colors.white),
+                      ),
+                    ),
+                  ),
+                );
+              },
+              child: unthemedItem,
+            )
+            : unthemedItem;
     return features.contains(TrackListItemFeatures.fullyDraggable)
         ? ((Platform.isLinux || Platform.isMacOS || Platform.isWindows)
-              ? ReorderableDragStartListener(index: listIndex ?? 0, child: fullTile)
-              : ReorderableDelayedDragStartListener(index: listIndex ?? 0, child: fullTile))
+            ? ReorderableDragStartListener(index: listIndex ?? 0, child: fullTile)
+            : ReorderableDelayedDragStartListener(index: listIndex ?? 0, child: fullTile))
         : fullTile;
   }
 }
@@ -773,57 +781,59 @@ class TrackListItemTile extends ConsumerWidget {
         if (features.contains(TrackListItemFeatures.listIndex) ||
             (features.contains(TrackListItemFeatures.parentIndex) && actualIndex != null))
           Padding(
-            padding: features.contains(TrackListItemFeatures.cover)
-                ? EdgeInsets.only(
-                    left:
-                        features.contains(TrackListItemFeatures.listIndex) ||
-                            features.contains(TrackListItemFeatures.parentIndex)
-                        ? 0.0
-                        : 2.0,
-                    right: 8.0,
-                  )
-                : const EdgeInsets.only(left: 6.0, right: 0.0),
+            padding:
+                features.contains(TrackListItemFeatures.cover)
+                    ? EdgeInsets.only(
+                      left:
+                          features.contains(TrackListItemFeatures.listIndex) ||
+                                  features.contains(TrackListItemFeatures.parentIndex)
+                              ? 0.0
+                              : 2.0,
+                      right: 8.0,
+                    )
+                    : const EdgeInsets.only(left: 6.0, right: 0.0),
             child: Container(
               constraints: const BoxConstraints(minWidth: 22.0),
-              child: isCurrentTrack && isCurrentlyPlaying && !features.contains(TrackListItemFeatures.cover)
-                  ? MiniMusicVisualizer(
-                      animate: true,
-                      color: Theme.of(context).colorScheme.secondary,
-                      width: 4,
-                      height: 15,
-                      radius: 2,
-                    )
-                  : Text(
-                      features.contains(TrackListItemFeatures.listIndex)
-                          ? ((listIndex ?? 0) + 1).toString()
-                          : actualIndex.toString(),
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      softWrap: false,
-                      overflow: TextOverflow.clip,
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyMedium?.color,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+              child:
+                  isCurrentTrack && isCurrentlyPlaying && !features.contains(TrackListItemFeatures.cover)
+                      ? MiniMusicVisualizer(
+                        animate: true,
+                        color: Theme.of(context).colorScheme.secondary,
+                        width: 4,
+                        height: 15,
+                        radius: 2,
+                      )
+                      : Text(
+                        features.contains(TrackListItemFeatures.listIndex)
+                            ? ((listIndex ?? 0) + 1).toString()
+                            : actualIndex.toString(),
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        softWrap: false,
+                        overflow: TextOverflow.clip,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium?.color,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
             ),
           ),
         if (features.contains(TrackListItemFeatures.cover))
           isCurrentTrack && isCurrentlyPlaying
               ? Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      foregroundDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(albumCoverBorderRadius),
-                        color: Colors.black.withOpacity(0.4),
-                      ),
-                      child: AlbumImage(item: baseItem, borderRadius: BorderRadius.circular(albumCoverBorderRadius)),
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    foregroundDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(albumCoverBorderRadius),
+                      color: Colors.black.withOpacity(0.4),
                     ),
-                    MiniMusicVisualizer(animate: true, color: Colors.white, width: 4, height: 15, radius: 2),
-                  ],
-                )
+                    child: AlbumImage(item: baseItem, borderRadius: BorderRadius.circular(albumCoverBorderRadius)),
+                  ),
+                  MiniMusicVisualizer(animate: true, color: Colors.white, width: 4, height: 15, radius: 2),
+                ],
+              )
               : AlbumImage(item: baseItem, borderRadius: BorderRadius.circular(albumCoverBorderRadius)),
       ],
     );
@@ -1131,27 +1141,27 @@ class TrackListItemTile extends ConsumerWidget {
 
     return showPlaybackProgress
         ? Stack(
-            children: [
-              Positioned.fill(
-                child: Container(
-                  margin: const EdgeInsets.only(left: defaultTileHeight),
-                  child: FractionallySizedBox(
-                    alignment: AlignmentDirectional.centerStart,
-                    widthFactor: playbackProgress,
-                    child: DecoratedBox(
-                      decoration: ShapeDecoration(
-                        color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.1),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(albumCoverBorderRadius)),
-                        ),
+          children: [
+            Positioned.fill(
+              child: Container(
+                margin: const EdgeInsets.only(left: defaultTileHeight),
+                child: FractionallySizedBox(
+                  alignment: AlignmentDirectional.centerStart,
+                  widthFactor: playbackProgress,
+                  child: DecoratedBox(
+                    decoration: ShapeDecoration(
+                      color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.1),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(albumCoverBorderRadius)),
                       ),
                     ),
                   ),
                 ),
               ),
-              listTile,
-            ],
-          )
+            ),
+            listTile,
+          ],
+        )
         : listTile;
   }
 }

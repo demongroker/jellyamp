@@ -54,12 +54,7 @@ class SearchQuery {
   final bool? downloadedFilter;
 
   /// Whether any type-scoping term (`artist:`, `album:`, …) was present.
-  bool get hasTypeScope =>
-      onlyShowArtists ||
-      onlyShowAlbums ||
-      onlyShowTracks ||
-      onlyShowPlaylists ||
-      onlyShowGenres;
+  bool get hasTypeScope => onlyShowArtists || onlyShowAlbums || onlyShowTracks || onlyShowPlaylists || onlyShowGenres;
 
   /// Whether any filter term (year/codec/bit/genre/favorite/downloaded) was present.
   bool get hasFilters =>
@@ -154,9 +149,7 @@ class SearchQuery {
   bool matches(BaseItemDto item) {
     if (yearMin != null && (item.productionYear ?? 0) < yearMin!) return false;
     if (yearMax != null && (item.productionYear ?? 0) > yearMax!) return false;
-    if (genreFilter != null &&
-        !(item.genres?.any((g) => g.toLowerCase() == genreFilter!.toLowerCase()) ??
-            false)) {
+    if (genreFilter != null && !(item.genres?.any((g) => g.toLowerCase() == genreFilter!.toLowerCase()) ?? false)) {
       return false;
     }
     final type = BaseItemDtoType.fromItem(item);
@@ -263,13 +256,7 @@ class SearchResults {
   final List<BaseItemDto> playlists;
   final List<BaseItemDto> genres;
 
-  bool get isEmpty =>
-      artists.isEmpty &&
-      albums.isEmpty &&
-      tracks.isEmpty &&
-      playlists.isEmpty &&
-      genres.isEmpty;
+  bool get isEmpty => artists.isEmpty && albums.isEmpty && tracks.isEmpty && playlists.isEmpty && genres.isEmpty;
 
-  int get totalCount =>
-      artists.length + albums.length + tracks.length + playlists.length + genres.length;
+  int get totalCount => artists.length + albums.length + tracks.length + playlists.length + genres.length;
 }

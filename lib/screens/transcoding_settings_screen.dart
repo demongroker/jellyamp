@@ -93,14 +93,15 @@ class DownloadTranscodeEnableDropdownListTile extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.downloadTranscodeEnableTitle),
       subtitle: FinampSettingsDropdown<TranscodeDownloadsSetting>(
-        dropdownItems: TranscodeDownloadsSetting.values
-            .map(
-              (e) => DropdownMenuEntry<TranscodeDownloadsSetting>(
-                value: e,
-                label: AppLocalizations.of(context)!.downloadTranscodeEnableOption(e.name),
-              ),
-            )
-            .toList(),
+        dropdownItems:
+            TranscodeDownloadsSetting.values
+                .map(
+                  (e) => DropdownMenuEntry<TranscodeDownloadsSetting>(
+                    value: e,
+                    label: AppLocalizations.of(context)!.downloadTranscodeEnableOption(e.name),
+                  ),
+                )
+                .toList(),
         selectedValue: ref.watch(finampSettingsProvider.shouldTranscodeDownloads),
         onSelected: FinampSetters.setShouldTranscodeDownloads.ifNonNull,
       ),
@@ -116,11 +117,12 @@ class DownloadTranscodeCodecDropdownListTile extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.downloadTranscodeCodecTitle),
       subtitle: FinampSettingsDropdown<FinampTranscodingCodec>(
-        dropdownItems: FinampTranscodingCodec.values
-            .where((element) => !Platform.isIOS || element.iosCompatible)
-            .where((element) => element != FinampTranscodingCodec.original)
-            .map((e) => DropdownMenuEntry<FinampTranscodingCodec>(value: e, label: e.name.toUpperCase()))
-            .toList(),
+        dropdownItems:
+            FinampTranscodingCodec.values
+                .where((element) => !Platform.isIOS || element.iosCompatible)
+                .where((element) => element != FinampTranscodingCodec.original)
+                .map((e) => DropdownMenuEntry<FinampTranscodingCodec>(value: e, label: e.name.toUpperCase()))
+                .toList(),
         selectedValue: ref.watch(finampSettingsProvider.downloadTranscodingProfile).codec,
         onSelected: FinampSetters.setDownloadTranscodingCodec.ifNonNull,
       ),
@@ -141,14 +143,15 @@ class StreamingTranscodingFormatDropdownListTile extends ConsumerWidget {
         children: [
           Text(AppLocalizations.of(context)!.transcodingStreamingFormatSubtitle),
           FinampSettingsDropdown<FinampTranscodingStreamingFormat>(
-            dropdownItems: FinampTranscodingStreamingFormat.values
-                .map(
-                  (e) => DropdownMenuEntry<FinampTranscodingStreamingFormat>(
-                    value: e,
-                    label: "${e.codec}+${e.container}".toUpperCase(),
-                  ),
-                )
-                .toList(),
+            dropdownItems:
+                FinampTranscodingStreamingFormat.values
+                    .map(
+                      (e) => DropdownMenuEntry<FinampTranscodingStreamingFormat>(
+                        value: e,
+                        label: "${e.codec}+${e.container}".toUpperCase(),
+                      ),
+                    )
+                    .toList(),
             selectedValue: ref.watch(finampSettingsProvider.transcodingStreamingFormat),
             onSelected: FinampSetters.setTranscodingStreamingFormat.ifNonNull,
           ),
@@ -171,14 +174,15 @@ class MultichannelHandlingSelector extends ConsumerWidget {
         children: [
           Text(AppLocalizations.of(context)!.multichannelHandlingSubtitle),
           FinampSettingsDropdown<MultichannelHandlingSetting>(
-            dropdownItems: MultichannelHandlingSetting.values
-                .map(
-                  (e) => DropdownMenuEntry<MultichannelHandlingSetting>(
-                    value: e,
-                    label: AppLocalizations.of(context)!.multichannelHandlingOption(e.name),
-                  ),
-                )
-                .toList(),
+            dropdownItems:
+                MultichannelHandlingSetting.values
+                    .map(
+                      (e) => DropdownMenuEntry<MultichannelHandlingSetting>(
+                        value: e,
+                        label: AppLocalizations.of(context)!.multichannelHandlingOption(e.name),
+                      ),
+                    )
+                    .toList(),
             selectedValue: ref.watch(finampSettingsProvider.multichannelHandlingSetting),
             onSelected: FinampSetters.setMultichannelHandlingSetting.ifNonNull,
           ),

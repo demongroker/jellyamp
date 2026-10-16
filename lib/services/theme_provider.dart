@@ -345,17 +345,18 @@ ColorScheme getGrayTheme(Brightness brightness) {
   final grayForDarkTheme = const Color.fromARGB(255, 133, 133, 133);
   final grayForLightTheme = const Color.fromARGB(255, 61, 61, 61);
 
-  Color accent = brightness == Brightness.dark
-      ? grayForDarkTheme.atContrast(
-          FinampSettingsHelper.finampSettings.useHighContrastColors ? 8.0 : 5.5,
-          Color.alphaBlend(Colors.black.withOpacity(0.675), grayForDarkTheme),
-          true,
-        )
-      : grayForLightTheme.atContrast(
-          FinampSettingsHelper.finampSettings.useHighContrastColors ? 8.0 : 5.5,
-          Color.alphaBlend(Colors.white.withOpacity(0.675), grayForLightTheme),
-          true,
-        );
+  Color accent =
+      brightness == Brightness.dark
+          ? grayForDarkTheme.atContrast(
+            FinampSettingsHelper.finampSettings.useHighContrastColors ? 8.0 : 5.5,
+            Color.alphaBlend(Colors.black.withOpacity(0.675), grayForDarkTheme),
+            true,
+          )
+          : grayForLightTheme.atContrast(
+            FinampSettingsHelper.finampSettings.useHighContrastColors ? 8.0 : 5.5,
+            Color.alphaBlend(Colors.white.withOpacity(0.675), grayForLightTheme),
+            true,
+          );
 
   return ColorScheme.fromSeed(
     seedColor: accent,
@@ -364,15 +365,9 @@ ColorScheme getGrayTheme(Brightness brightness) {
   );
 }
 
-final defaultThemeDark = ColorScheme.fromSeed(
-  seedColor: const Color(0xFF7DD3FC),
-  brightness: Brightness.dark,
-);
+final defaultThemeDark = ColorScheme.fromSeed(seedColor: const Color(0xFF7DD3FC), brightness: Brightness.dark);
 
-final defaultThemeLight = ColorScheme.fromSeed(
-  seedColor: const Color(0xFF7DD3FC),
-  brightness: Brightness.light,
-);
+final defaultThemeLight = ColorScheme.fromSeed(seedColor: const Color(0xFF7DD3FC), brightness: Brightness.light);
 
 ColorScheme getDefaultTheme(Brightness brightness) =>
     brightness == Brightness.dark ? defaultThemeDark : defaultThemeLight;

@@ -56,9 +56,8 @@ Future<void> showQueueRestoreMenu({required BuildContext context, required Finam
         delegate: GenericMenuInfoSliverHeader.condensedNoArtwork(
           child: Consumer(
             builder: (context, ref, child) {
-              BaseItemDto? currentTrack = queueInfo.currentTrack == null
-                  ? null
-                  : ref.watch(itemByIdProvider(queueInfo.currentTrack!)).value;
+              BaseItemDto? currentTrack =
+                  queueInfo.currentTrack == null ? null : ref.watch(itemByIdProvider(queueInfo.currentTrack!)).value;
 
               return Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

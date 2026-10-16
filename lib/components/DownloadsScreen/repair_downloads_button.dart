@@ -20,28 +20,29 @@ class _DownloadMissingImagesButtonState extends ConsumerState<RepairDownloadsBut
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: _enabled && !ref.watch(finampSettingsProvider.isOffline)
-          ? () async {
-              // We don't want two checks to happen at once
-              setState(() {
-                _enabled = false;
-              });
+      onPressed:
+          _enabled && !ref.watch(finampSettingsProvider.isOffline)
+              ? () async {
+                // We don't want two checks to happen at once
+                setState(() {
+                  _enabled = false;
+                });
 
-              try {
-                await GetIt.instance<DownloadsService>().repairAllDownloads();
-              } catch (e) {
-                GlobalSnackbar.error(e);
-                return;
+                try {
+                  await GetIt.instance<DownloadsService>().repairAllDownloads();
+                } catch (e) {
+                  GlobalSnackbar.error(e);
+                  return;
+                }
+
+                GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.repairComplete);
+
+                if (!mounted) return;
+                setState(() {
+                  _enabled = true;
+                });
               }
-
-              GlobalSnackbar.message((scaffold) => AppLocalizations.of(scaffold)!.repairComplete);
-
-              if (!mounted) return;
-              setState(() {
-                _enabled = true;
-              });
-            }
-          : null,
+              : null,
       icon: const Icon(Icons.handyman),
       tooltip: AppLocalizations.of(context)!.repairDownloads,
     );

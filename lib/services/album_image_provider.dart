@@ -126,7 +126,8 @@ albumImageProvider = Provider.autoDispose.family<AlbumImageInfo, AlbumImageReque
     // authoritative connectivity state (not just the Offline Mode setting) so a
     // detected-unreachable server never triggers a network art fetch, even in the
     // brief window before the isOffline setting reconciles (P0.3 step 7/8).
-    final isOffline = ref.watch(finampSettingsProvider.isOffline) ||
+    final isOffline =
+        ref.watch(finampSettingsProvider.isOffline) ||
         ref.watch(connectivityStateProvider) == ConnectivityState.offline;
     if (isOffline) {
       return AlbumImageInfo.empty(request);

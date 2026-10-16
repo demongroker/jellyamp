@@ -222,9 +222,10 @@ class SortAndFilterRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentConfig = ref.watch(resolveSortProvider(controller));
-    final activeFilters = allowFilters != null
-        ? currentConfig.filters.where((x) => allowFilters!(x)).toList()
-        : currentConfig.filters.toList();
+    final activeFilters =
+        allowFilters != null
+            ? currentConfig.filters.where((x) => allowFilters!(x)).toList()
+            : currentConfig.filters.toList();
     final int activeFilterCount = activeFilters.length;
     String statusText = context.l10n.activeFilterCount(activeFilterCount);
 
@@ -254,8 +255,8 @@ class SortAndFilterRow extends ConsumerWidget {
                     final filterButtonWidth = 52.0;
                     final minimumMaxChipWidth = 125.0;
                     final chipSpacing = 2.0;
-                    final maxChips = ((constraints.maxWidth - filterButtonWidth) / (minimumMaxChipWidth + chipSpacing))
-                        .floor();
+                    final maxChips =
+                        ((constraints.maxWidth - filterButtonWidth) / (minimumMaxChipWidth + chipSpacing)).floor();
                     final showChips = hideLeadingIcon || (maxChips >= activeFilterCount && activeFilterCount > 0);
                     return Row(
                       spacing: chipSpacing,
@@ -263,18 +264,20 @@ class SortAndFilterRow extends ConsumerWidget {
                         hideLeadingIcon
                             ? SizedBox.shrink()
                             : SimpleButton(
-                                icon: TablerIcons.filter,
-                                showText: !showChips,
-                                text: statusText,
-                                fontWeight: activeFilterCount > 0 ? FontWeight.w600 : FontWeight.normal,
-                                iconColor: activeFilterCount > 0
-                                    ? ColorScheme.of(context).primary
-                                    : TextTheme.of(context).bodyMedium?.color?.withOpacity(0.7),
-                                textColor: activeFilterCount > 0
-                                    ? ColorScheme.of(context).primary
-                                    : TextTheme.of(context).bodyMedium?.color?.withOpacity(0.7),
-                                onPressed: showMenu,
-                              ),
+                              icon: TablerIcons.filter,
+                              showText: !showChips,
+                              text: statusText,
+                              fontWeight: activeFilterCount > 0 ? FontWeight.w600 : FontWeight.normal,
+                              iconColor:
+                                  activeFilterCount > 0
+                                      ? ColorScheme.of(context).primary
+                                      : TextTheme.of(context).bodyMedium?.color?.withOpacity(0.7),
+                              textColor:
+                                  activeFilterCount > 0
+                                      ? ColorScheme.of(context).primary
+                                      : TextTheme.of(context).bodyMedium?.color?.withOpacity(0.7),
+                              onPressed: showMenu,
+                            ),
                         if (showChips)
                           ...activeFilters.map(
                             (filter) => ConstrainedBox(
@@ -285,11 +288,12 @@ class SortAndFilterRow extends ConsumerWidget {
                               ),
                               child: ActiveFilterChip(
                                 filter: filter,
-                                onRemove: () => controller._updateConfiguration(
-                                  currentConfig.copyWith(
-                                    filters: currentConfig.filters.whereNot((x) => x.type == filter.type).toSet(),
-                                  ),
-                                ),
+                                onRemove:
+                                    () => controller._updateConfiguration(
+                                      currentConfig.copyWith(
+                                        filters: currentConfig.filters.whereNot((x) => x.type == filter.type).toSet(),
+                                      ),
+                                    ),
                                 onSecondaryPress: showMenu,
                               ),
                             ),
@@ -305,13 +309,15 @@ class SortAndFilterRow extends ConsumerWidget {
                   icon: currentConfig.sortOrder.getIcon(),
                   text: currentConfig.sortBy.toLocalisedString(context.l10n),
                   onPressed: showMenu,
-                  onPressedSecondary: () => controller._updateConfiguration(
-                    currentConfig.copyWith(
-                      sortOrder: currentConfig.sortOrder == SortOrder.ascending
-                          ? SortOrder.descending
-                          : SortOrder.ascending,
-                    ),
-                  ),
+                  onPressedSecondary:
+                      () => controller._updateConfiguration(
+                        currentConfig.copyWith(
+                          sortOrder:
+                              currentConfig.sortOrder == SortOrder.ascending
+                                  ? SortOrder.descending
+                                  : SortOrder.ascending,
+                        ),
+                      ),
                 ),
             ],
           ),
@@ -420,11 +426,12 @@ mixin _SortAndFilterMenuEntriesMixin<T extends ConsumerStatefulWidget> on Consum
   bool Function(ItemFilter)? get allowFilters;
   bool get applyChangesImmediately;
 
-  Set<ItemFilter> get excessFilters => currentConfig.filters
-      .whereNot((x) => toggalableFilterTypes.contains(x.type))
-      // .whereNot((x) => hideArtistGenreFilters && x.type.isArtistGenre)
-      .where((x) => allowFilters == null || allowFilters!(x))
-      .toSet();
+  Set<ItemFilter> get excessFilters =>
+      currentConfig.filters
+          .whereNot((x) => toggalableFilterTypes.contains(x.type))
+          // .whereNot((x) => hideArtistGenreFilters && x.type.isArtistGenre)
+          .where((x) => allowFilters == null || allowFilters!(x))
+          .toSet();
 
   bool get showOfflineSortWarning => ref.watch(finampSettingsProvider.isOffline) && currentConfig.sortBy.onlineOnly;
 
@@ -443,9 +450,10 @@ mixin _SortAndFilterMenuEntriesMixin<T extends ConsumerStatefulWidget> on Consum
       type: tabType.itemType,
       includeDefaultOrder: tabType == ContentType.inPlaylist,
     );
-    final sortOptions = ref.watch(finampSettingsProvider.isOffline)
-        ? [...rawSortOptions.whereNot((s) => s.onlineOnly), ...rawSortOptions.where((s) => s.onlineOnly)]
-        : rawSortOptions;
+    final sortOptions =
+        ref.watch(finampSettingsProvider.isOffline)
+            ? [...rawSortOptions.whereNot((s) => s.onlineOnly), ...rawSortOptions.where((s) => s.onlineOnly)]
+            : rawSortOptions;
     return [
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -457,15 +465,16 @@ mixin _SortAndFilterMenuEntriesMixin<T extends ConsumerStatefulWidget> on Consum
             child: Text(context.l10n.sortBy, style: Theme.of(context).textTheme.bodyMedium),
           ),
           FinampSettingsDropdown<SortBy>(
-            dropdownItems: sortOptions
-                .map(
-                  (e) => DropdownMenuEntry<SortBy>(
-                    value: e,
-                    label: e.toLocalisedString(context.l10n),
-                    leadingIcon: Icon(e.getIcon()),
-                  ),
-                )
-                .toList(),
+            dropdownItems:
+                sortOptions
+                    .map(
+                      (e) => DropdownMenuEntry<SortBy>(
+                        value: e,
+                        label: e.toLocalisedString(context.l10n),
+                        leadingIcon: Icon(e.getIcon()),
+                      ),
+                    )
+                    .toList(),
             selectedValue: currentConfig.sortBy,
             selectedIcon: currentConfig.sortBy.getIcon(),
             onSelected: (sortBy) {
@@ -493,15 +502,16 @@ mixin _SortAndFilterMenuEntriesMixin<T extends ConsumerStatefulWidget> on Consum
             child: Text(context.l10n.sortOrder, style: Theme.of(context).textTheme.bodyMedium),
           ),
           FinampSettingsDropdown<SortOrder>(
-            dropdownItems: SortOrder.values
-                .map(
-                  (e) => DropdownMenuEntry<SortOrder>(
-                    value: e,
-                    label: e.toLocalisedString(context),
-                    leadingIcon: Icon(e.getIcon()),
-                  ),
-                )
-                .toList(),
+            dropdownItems:
+                SortOrder.values
+                    .map(
+                      (e) => DropdownMenuEntry<SortOrder>(
+                        value: e,
+                        label: e.toLocalisedString(context),
+                        leadingIcon: Icon(e.getIcon()),
+                      ),
+                    )
+                    .toList(),
             selectedValue: currentConfig.sortOrder,
             selectedIcon: currentConfig.sortOrder.getIcon(),
             onSelected: (sortOrder) {
@@ -646,18 +656,19 @@ class _SortAndFilterMenuState extends ConsumerState<SortAndFilterMenu>
       ...(widget.removeOnly ? _getRemoveOnlyMenuEntries(context) : _getMenuEntries(context)),
       SizedBox(
         height: 40.0,
-        child: currentConfig != controller._config
-            ? Align(
-                alignment: AlignmentGeometry.directional(0.0, 0.7),
-                child: Text(
-                  context.l10n.applyChangesOnClose,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontStyle: FontStyle.italic,
-                    color: TextTheme.of(context).bodyMedium?.color?.withOpacity(0.7),
+        child:
+            currentConfig != controller._config
+                ? Align(
+                  alignment: AlignmentGeometry.directional(0.0, 0.7),
+                  child: Text(
+                    context.l10n.applyChangesOnClose,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontStyle: FontStyle.italic,
+                      color: TextTheme.of(context).bodyMedium?.color?.withOpacity(0.7),
+                    ),
                   ),
-                ),
-              )
-            : null,
+                )
+                : null,
       ),
       SizedBox(height: 8.0),
       SimpleButton(

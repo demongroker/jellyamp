@@ -48,9 +48,10 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen> w
     final useAppPrivateOnly = Platform.isAndroid || Platform.isIOS;
     final tabs = [
       Tab(
-        text: useAppPrivateOnly
-            ? AppLocalizations.of(context)!.appDirectory.toUpperCase()
-            : AppLocalizations.of(context)!.customLocation.toUpperCase(),
+        text:
+            useAppPrivateOnly
+                ? AppLocalizations.of(context)!.appDirectory.toUpperCase()
+                : AppLocalizations.of(context)!.customLocation.toUpperCase(),
       ),
     ];
     return Provider<NewDownloadLocation>(
@@ -106,21 +107,22 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen> w
                 } on FileSystemException {
                   await showDialog<dynamic>(
                     context: context,
-                    builder: (_) => AlertDialog(
-                      title: Text(AppLocalizations.of(context)!.addDownloadLocationsErrorTitle),
-                      content: Text(
-                        // If song writes succeed but image writes fail, assume we are in the android Music folder.
-                        songPassed
-                            ? AppLocalizations.of(context)!.androidImageErrorPrompt
-                            : AppLocalizations.of(context)!.addDownloadLocationsErrorPrompt,
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: Text(AppLocalizations.of(context)!.close),
+                    builder:
+                        (_) => AlertDialog(
+                          title: Text(AppLocalizations.of(context)!.addDownloadLocationsErrorTitle),
+                          content: Text(
+                            // If song writes succeed but image writes fail, assume we are in the android Music folder.
+                            songPassed
+                                ? AppLocalizations.of(context)!.androidImageErrorPrompt
+                                : AppLocalizations.of(context)!.addDownloadLocationsErrorPrompt,
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Text(AppLocalizations.of(context)!.close),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
                   );
 
                   return;
@@ -145,9 +147,10 @@ class _AddDownloadLocationScreenState extends State<AddDownloadLocationScreen> w
               Center(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: useAppPrivateOnly
-                      ? AppDirectoryLocationForm(formKey: appDirectoryFormKey)
-                      : CustomDownloadLocationForm(formKey: customLocationFormKey),
+                  child:
+                      useAppPrivateOnly
+                          ? AppDirectoryLocationForm(formKey: appDirectoryFormKey)
+                          : CustomDownloadLocationForm(formKey: customLocationFormKey),
                 ),
               ),
             ],

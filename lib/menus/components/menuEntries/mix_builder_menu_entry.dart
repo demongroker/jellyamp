@@ -26,45 +26,45 @@ class MixBuilderMenuEntry extends ConsumerWidget implements HideableMenuEntry {
     }).map((e) => e.id).contains(baseItem.id);
     return alreadyInMixBuilder
         ? MenuEntry(
-            icon: TablerIcons.apps_off,
-            title: AppLocalizations.of(context)!.removeFromMix,
-            onTap: () {
-              Navigator.pop(context); // close menu
-              switch (BaseItemDtoType.fromItem(baseItem)) {
-                case BaseItemDtoType.artist:
-                  jellyfinApiHelper.removeArtistFromMixBuilderList(baseItem);
-                  break;
-                case BaseItemDtoType.album:
-                  jellyfinApiHelper.removeAlbumFromMixBuilderList(baseItem);
-                  break;
-                case BaseItemDtoType.genre:
-                  jellyfinApiHelper.removeGenreFromMixBuilderList(baseItem);
-                  break;
-                default:
-                  GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notImplementedYet);
-              }
-            },
-          )
+          icon: TablerIcons.apps_off,
+          title: AppLocalizations.of(context)!.removeFromMix,
+          onTap: () {
+            Navigator.pop(context); // close menu
+            switch (BaseItemDtoType.fromItem(baseItem)) {
+              case BaseItemDtoType.artist:
+                jellyfinApiHelper.removeArtistFromMixBuilderList(baseItem);
+                break;
+              case BaseItemDtoType.album:
+                jellyfinApiHelper.removeAlbumFromMixBuilderList(baseItem);
+                break;
+              case BaseItemDtoType.genre:
+                jellyfinApiHelper.removeGenreFromMixBuilderList(baseItem);
+                break;
+              default:
+                GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notImplementedYet);
+            }
+          },
+        )
         : MenuEntry(
-            icon: TablerIcons.apps,
-            title: AppLocalizations.of(context)!.addToMix,
-            onTap: () {
-              Navigator.pop(context); // close menu
-              switch (BaseItemDtoType.fromItem(baseItem)) {
-                case BaseItemDtoType.artist:
-                  jellyfinApiHelper.addArtistToMixBuilderList(baseItem);
-                  break;
-                case BaseItemDtoType.album:
-                  jellyfinApiHelper.addAlbumToMixBuilderList(baseItem);
-                  break;
-                case BaseItemDtoType.genre:
-                  jellyfinApiHelper.addGenreToMixBuilderList(baseItem);
-                  break;
-                default:
-                  GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notImplementedYet);
-              }
-            },
-          );
+          icon: TablerIcons.apps,
+          title: AppLocalizations.of(context)!.addToMix,
+          onTap: () {
+            Navigator.pop(context); // close menu
+            switch (BaseItemDtoType.fromItem(baseItem)) {
+              case BaseItemDtoType.artist:
+                jellyfinApiHelper.addArtistToMixBuilderList(baseItem);
+                break;
+              case BaseItemDtoType.album:
+                jellyfinApiHelper.addAlbumToMixBuilderList(baseItem);
+                break;
+              case BaseItemDtoType.genre:
+                jellyfinApiHelper.addGenreToMixBuilderList(baseItem);
+                break;
+              default:
+                GlobalSnackbar.message((context) => AppLocalizations.of(context)!.notImplementedYet);
+            }
+          },
+        );
   }
 
   @override

@@ -22,13 +22,13 @@ const double jRadiusSheet = 20;
 
 /// Formalized Material 3 typography hierarchy (system font, deliberate weights).
 TextTheme jellyAmpTextTheme(TextTheme base) => base.copyWith(
-      headlineMedium: base.headlineMedium?.copyWith(fontWeight: FontWeight.w600),
-      headlineSmall: base.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
-      titleLarge: base.titleLarge?.copyWith(fontWeight: FontWeight.w600),
-      titleMedium: base.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-      titleSmall: base.titleSmall?.copyWith(fontWeight: FontWeight.w600, letterSpacing: 0.1),
-      labelLarge: base.labelLarge?.copyWith(fontWeight: FontWeight.w600, letterSpacing: 0.2),
-    );
+  headlineMedium: base.headlineMedium?.copyWith(fontWeight: FontWeight.w600),
+  headlineSmall: base.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
+  titleLarge: base.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+  titleMedium: base.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+  titleSmall: base.titleSmall?.copyWith(fontWeight: FontWeight.w600, letterSpacing: 0.1),
+  labelLarge: base.labelLarge?.copyWith(fontWeight: FontWeight.w600, letterSpacing: 0.2),
+);
 
 /// Applies the JellyAmp component system (cards/chips/buttons/inputs/sheets).
 ThemeData applyJellyAmpTheme(ThemeData theme) {
@@ -67,19 +67,12 @@ ThemeData applyJellyAmpTheme(ThemeData theme) {
     inputDecorationTheme: InputDecorationThemeData(
       filled: true,
       fillColor: scheme.surfaceContainerHighest,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(jRadiusPanel),
-        borderSide: BorderSide.none,
-      ),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(jRadiusPanel), borderSide: BorderSide.none),
       contentPadding: const EdgeInsets.symmetric(horizontal: jSpaceLg, vertical: jSpaceMd),
     ),
-    dialogTheme: DialogThemeData(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(jRadiusPanel)),
-    ),
+    dialogTheme: DialogThemeData(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(jRadiusPanel))),
     bottomSheetTheme: theme.bottomSheetTheme.copyWith(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(jRadiusSheet)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(jRadiusSheet))),
     ),
     dividerTheme: theme.dividerTheme.copyWith(space: 1, thickness: 0.5),
   );

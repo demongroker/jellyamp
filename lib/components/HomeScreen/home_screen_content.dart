@@ -66,10 +66,7 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent>
       onRefresh: () async => _refresh(),
       child: CustomScrollView(
         slivers: [
-          const SliverPadding(
-            padding: EdgeInsets.only(top: 8.0),
-            sliver: SliverToBoxAdapter(child: UpdateBanner()),
-          ),
+          const SliverPadding(padding: EdgeInsets.only(top: 8.0), sliver: SliverToBoxAdapter(child: UpdateBanner())),
           if (hasActions) const SliverPadding(padding: EdgeInsets.only(top: 6.0)),
           SliverLayoutBuilder(
             builder: (context, constraints) {
@@ -94,42 +91,43 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent>
                     alignment: WrapAlignment.spaceBetween,
                     runAlignment: WrapAlignment.center,
                     crossAxisAlignment: WrapCrossAlignment.start,
-                    children: configuredQuickActions.indexed.map((indexedAction) {
-                      final (index, action) = indexedAction;
-                      //!!! custom adaptive grid
-                      // calculate button width based on available space and number of actions per row
-                      final double quickActionsWidth = min(
-                        usableWidth - horizontalPadding - horizontalPadding,
-                        maxWidth,
-                      );
-                      final n = configuredQuickActions.length;
-                      double verticalButtonWidth = (quickActionsWidth - 2 * actionGap) / 3;
-                      double horizontalButtonWidth = (quickActionsWidth - actionGap) / 2;
-                      double singleButtonWidth = quickActionsWidth;
-                      double buttonWidth;
-                      // always fill each row completely
-                      if (n == 1) {
-                        buttonWidth = singleButtonWidth;
-                      } else if (n % 3 == 0) {
-                        buttonWidth = verticalButtonWidth;
-                      } else if (n == 4) {
-                        buttonWidth = horizontalButtonWidth;
-                      } else if ((n % 3 == 1 && n - index <= 4) || (n % 3 == 2 && n - index < 3)) {
-                        buttonWidth = horizontalButtonWidth;
-                      } else {
-                        buttonWidth = verticalButtonWidth;
-                      }
-                      //TODO possibly use CustomMultiChildLayout instead of Wrap to allow actions to stretch in height to fill each row, in case of multi-line actions
-                      return HomeScreenQuickActionButton(
-                        width: buttonWidth,
-                        text: action.getTitle(context.l10n),
-                        label: action.action.getDescription(context),
-                        icon: action.action.getIcon(),
-                        vertical: buttonWidth == verticalButtonWidth,
-                        onPressed: () async => QuickActionsService.handleAction(action, context),
-                        onSecondaryPressed: () => editQuickAction(context, index),
-                      );
-                    }).toList(),
+                    children:
+                        configuredQuickActions.indexed.map((indexedAction) {
+                          final (index, action) = indexedAction;
+                          //!!! custom adaptive grid
+                          // calculate button width based on available space and number of actions per row
+                          final double quickActionsWidth = min(
+                            usableWidth - horizontalPadding - horizontalPadding,
+                            maxWidth,
+                          );
+                          final n = configuredQuickActions.length;
+                          double verticalButtonWidth = (quickActionsWidth - 2 * actionGap) / 3;
+                          double horizontalButtonWidth = (quickActionsWidth - actionGap) / 2;
+                          double singleButtonWidth = quickActionsWidth;
+                          double buttonWidth;
+                          // always fill each row completely
+                          if (n == 1) {
+                            buttonWidth = singleButtonWidth;
+                          } else if (n % 3 == 0) {
+                            buttonWidth = verticalButtonWidth;
+                          } else if (n == 4) {
+                            buttonWidth = horizontalButtonWidth;
+                          } else if ((n % 3 == 1 && n - index <= 4) || (n % 3 == 2 && n - index < 3)) {
+                            buttonWidth = horizontalButtonWidth;
+                          } else {
+                            buttonWidth = verticalButtonWidth;
+                          }
+                          //TODO possibly use CustomMultiChildLayout instead of Wrap to allow actions to stretch in height to fill each row, in case of multi-line actions
+                          return HomeScreenQuickActionButton(
+                            width: buttonWidth,
+                            text: action.getTitle(context.l10n),
+                            label: action.action.getDescription(context),
+                            icon: action.action.getIcon(),
+                            vertical: buttonWidth == verticalButtonWidth,
+                            onPressed: () async => QuickActionsService.handleAction(action, context),
+                            onSecondaryPressed: () => editQuickAction(context, index),
+                          );
+                        }).toList(),
                   ),
                 ),
               );
@@ -137,11 +135,12 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent>
           ),
           SliverPadding(padding: EdgeInsets.only(top: hasActions ? 10.0 : 2.0)),
           SliverMainAxisGroup(
-            slivers: ref
-                .watch(finampSettingsProvider.homeScreenConfiguration)
-                .sections
-                .map((sectionInfo) => HomeScreenSection(sectionInfo: sectionInfo))
-                .toList(),
+            slivers:
+                ref
+                    .watch(finampSettingsProvider.homeScreenConfiguration)
+                    .sections
+                    .map((sectionInfo) => HomeScreenSection(sectionInfo: sectionInfo))
+                    .toList(),
           ),
           const SliverPadding(padding: EdgeInsets.only(top: 16)),
           SliverToBoxAdapter(
@@ -151,9 +150,9 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent>
                 child: BalancedText(
                   context.l10n.lookingForSomethingElse,
                   textAlign: TextAlign.center,
-                  style: TextTheme.of(context).bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.55),
-                  ),
+                  style: TextTheme.of(
+                    context,
+                  ).bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.55)),
                 ),
               ),
             ),
@@ -217,9 +216,7 @@ class HomeScreenSection extends ConsumerWidget {
         },
         onSecondaryTap: () => showModalHomeSectionMenu(context: context, section: sectionInfo),
         onDismiss: null,
-        sectionContentSliver: SliverToBoxAdapter(
-          child: HomeScreenSectionContent(sectionInfo: sectionInfo),
-        ),
+        sectionContentSliver: SliverToBoxAdapter(child: HomeScreenSectionContent(sectionInfo: sectionInfo)),
       ),
     );
   }
@@ -336,12 +333,10 @@ class HomeScreenSectionContent extends ConsumerWidget {
   Widget _buildHorizontalSkeletonLoader(WidgetRef ref) {
     final skeletonCount = homeScreenSectionItemLimit;
 
-    final skeletonBaseColor = Theme.brightnessOf(ref.context) == Brightness.light
-        ? Colors.grey.shade300
-        : Colors.grey.shade800;
-    final skeletonOverlay = Theme.brightnessOf(ref.context) == Brightness.light
-        ? Colors.grey.shade400
-        : Colors.grey.shade700;
+    final skeletonBaseColor =
+        Theme.brightnessOf(ref.context) == Brightness.light ? Colors.grey.shade300 : Colors.grey.shade800;
+    final skeletonOverlay =
+        Theme.brightnessOf(ref.context) == Brightness.light ? Colors.grey.shade400 : Colors.grey.shade700;
     return SizedBox(
       height: calculateItemCollectionCardHeight(
         ref: ref,

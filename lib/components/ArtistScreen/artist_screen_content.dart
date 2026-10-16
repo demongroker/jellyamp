@@ -118,30 +118,32 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     }
     Navigator.of(context).push(
       MaterialPageRoute<MusicScreen>(
-        builder: (context) => MusicScreen(
-          singleTabConfig: HomeScreenSectionConfiguration(
-            base: TabsHomeSection(libraryId: currentLibraryPlaceholder, contentType: tabContentType),
-            customSectionTitle: widget.parent.name,
-            sortConfig: SortAndFilterController.trackSettings(tabContentType).resolveConfig().copyWith(
-              sortBy: sortByOverride,
-              sortOrder: sortOrderOverride,
-              favoriteFilter: isFavoriteOverride ? true : null,
-              genreFilter: genreFilter,
-              artistFilter: widget.parent,
+        builder:
+            (context) => MusicScreen(
+              singleTabConfig: HomeScreenSectionConfiguration(
+                base: TabsHomeSection(libraryId: currentLibraryPlaceholder, contentType: tabContentType),
+                customSectionTitle: widget.parent.name,
+                sortConfig: SortAndFilterController.trackSettings(tabContentType).resolveConfig().copyWith(
+                  sortBy: sortByOverride,
+                  sortOrder: sortOrderOverride,
+                  favoriteFilter: isFavoriteOverride ? true : null,
+                  genreFilter: genreFilter,
+                  artistFilter: widget.parent,
+                ),
+              ),
+              allowFilters: (filter) => filter.type != ItemFilterType.artistFilter,
             ),
-          ),
-          allowFilters: (filter) => filter.type != ItemFilterType.artistFilter,
-        ),
       ),
     );
   }
 
   List<BaseItemDto> _applySortAndFilterLocally(List<BaseItemDto> items, SortAndFilterConfiguration config) {
-    var filteredList = items.where((item) {
-      if (config.favoritesFilter == true && !(item.userData?.isFavorite ?? false)) return false;
-      // Note: the genre filter gets set globally for this artist and gets applied directly inside of the providers
-      return true;
-    }).toList();
+    var filteredList =
+        items.where((item) {
+          if (config.favoritesFilter == true && !(item.userData?.isFavorite ?? false)) return false;
+          // Note: the genre filter gets set globally for this artist and gets applied directly inside of the providers
+          return true;
+        }).toList();
 
     return sortItems(filteredList, config.sortBy, config.sortOrder);
   }
@@ -177,33 +179,36 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
             )
             .valueOrNull ??
         (null, null, null);
-    final albumArtistAlbumsAsync = ref
-        .watch(
-          getArtistAlbumsProvider(
-            artist: widget.parent,
-            libraryFilter: widget.library?.id,
-            genreFilter: sortConfig.genreFilter?.id,
-          ),
-        )
-        .valueOrNull;
-    final performingArtistAlbumsAsync = ref
-        .watch(
-          getPerformingArtistAlbumsProvider(
-            artist: widget.parent,
-            libraryFilter: widget.library?.id,
-            genreFilter: sortConfig.genreFilter?.id,
-          ),
-        )
-        .valueOrNull;
-    final allPerformingArtistTracksAsync = ref
-        .watch(
-          getPerformingArtistTracksProvider(
-            artist: widget.parent,
-            libraryFilter: widget.library?.id,
-            genreFilter: sortConfig.genreFilter?.id,
-          ),
-        )
-        .valueOrNull;
+    final albumArtistAlbumsAsync =
+        ref
+            .watch(
+              getArtistAlbumsProvider(
+                artist: widget.parent,
+                libraryFilter: widget.library?.id,
+                genreFilter: sortConfig.genreFilter?.id,
+              ),
+            )
+            .valueOrNull;
+    final performingArtistAlbumsAsync =
+        ref
+            .watch(
+              getPerformingArtistAlbumsProvider(
+                artist: widget.parent,
+                libraryFilter: widget.library?.id,
+                genreFilter: sortConfig.genreFilter?.id,
+              ),
+            )
+            .valueOrNull;
+    final allPerformingArtistTracksAsync =
+        ref
+            .watch(
+              getPerformingArtistTracksProvider(
+                artist: widget.parent,
+                libraryFilter: widget.library?.id,
+                genreFilter: sortConfig.genreFilter?.id,
+              ),
+            )
+            .valueOrNull;
 
     final allTracks = ref.watch(
       getArtistTracksProvider(
@@ -244,17 +249,18 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
     }
 
     final topTracks = topTracksAsync ?? [];
-    final albumArtistAlbums = albumArtistAlbumsAsync != null
-        ? _applySortAndFilterLocally(albumArtistAlbumsAsync, albumsSortConfig)
-        : <BaseItemDto>[];
+    final albumArtistAlbums =
+        albumArtistAlbumsAsync != null
+            ? _applySortAndFilterLocally(albumArtistAlbumsAsync, albumsSortConfig)
+            : <BaseItemDto>[];
 
     final performingArtistAlbums = performingArtistAlbumsAsync ?? [];
-    var appearsOnAlbumsList = performingArtistAlbums
-        .where((a) => !(albumArtistAlbumsAsync ?? []).any((b) => b.id == a.id))
-        .toList();
-    final appearsOnAlbums = appearsOnAlbumsList.isNotEmpty
-        ? _applySortAndFilterLocally(appearsOnAlbumsList, appearsOnSortConfig)
-        : <BaseItemDto>[];
+    var appearsOnAlbumsList =
+        performingArtistAlbums.where((a) => !(albumArtistAlbumsAsync ?? []).any((b) => b.id == a.id)).toList();
+    final appearsOnAlbums =
+        appearsOnAlbumsList.isNotEmpty
+            ? _applySortAndFilterLocally(appearsOnAlbumsList, appearsOnSortConfig)
+            : <BaseItemDto>[];
 
     final allPerformingArtistTracks = allPerformingArtistTracksAsync ?? [];
 
@@ -301,9 +307,8 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
                   ),
                   children: allChildren,
                   downloadDisabled: disableDownloads,
-                  customTooltip: disableDownloads
-                      ? AppLocalizations.of(context)!.downloadButtonDisabledGenreFilterTooltip
-                      : null,
+                  customTooltip:
+                      disableDownloads ? AppLocalizations.of(context)!.downloadButtonDisabledGenreFilterTooltip : null,
                 ),
               IconButton(
                 icon: const Icon(Icons.more_vert),
@@ -339,11 +344,12 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
                           clickedCuratedItemSelectionType = type;
                           FinampSetters.setArtistCuratedItemSelectionType(type);
                         },
-                        seeAllCallbackFunction: () => openSeeAll(
-                          ContentType.tracks,
-                          itemSelectionType: artistCuratedItemSelectionType,
-                          genreFilter: sortConfig.genreFilter,
-                        ),
+                        seeAllCallbackFunction:
+                            () => openSeeAll(
+                              ContentType.tracks,
+                              itemSelectionType: artistCuratedItemSelectionType,
+                              genreFilter: sortConfig.genreFilter,
+                            ),
                       ),
                     );
                   }
@@ -357,9 +363,10 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
                         itemsText: AppLocalizations.of(context)!.albums,
                         items: albumArtistAlbums,
                         albumsShowYearAndDurationInstead: true,
-                        sortAndFilterRow: albumArtistAlbums.length > 1
-                            ? SortAndFilterRow(controller: albumsController, tabType: ContentType.albums)
-                            : null,
+                        sortAndFilterRow:
+                            albumArtistAlbums.length > 1
+                                ? SortAndFilterRow(controller: albumsController, tabType: ContentType.albums)
+                                : null,
                       ),
                     );
                   }
@@ -373,9 +380,10 @@ class _ArtistScreenContentState extends ConsumerState<ArtistScreenContent> {
                         itemsText: AppLocalizations.of(context)!.appearsOnAlbums,
                         items: appearsOnAlbums,
                         albumsShowYearAndDurationInstead: true,
-                        sortAndFilterRow: appearsOnAlbums.length > 1
-                            ? SortAndFilterRow(controller: appearsOnController, tabType: ContentType.albums)
-                            : null,
+                        sortAndFilterRow:
+                            appearsOnAlbums.length > 1
+                                ? SortAndFilterRow(controller: appearsOnController, tabType: ContentType.albums)
+                                : null,
                       ),
                     );
                   }

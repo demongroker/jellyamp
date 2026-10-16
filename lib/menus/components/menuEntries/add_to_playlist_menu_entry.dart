@@ -22,9 +22,10 @@ class AddToPlaylistMenuEntry extends ConsumerWidget implements HideableMenuEntry
       visible: !ref.watch(finampSettingsProvider.isOffline),
       child: MenuEntry(
         icon: TablerIcons.playlist_add,
-        title: queueItemInPlaylist(queueItem)
-            ? AppLocalizations.of(context)!.addToMorePlaylistsTitle
-            : AppLocalizations.of(context)!.addToPlaylistTitle,
+        title:
+            queueItemInPlaylist(queueItem)
+                ? AppLocalizations.of(context)!.addToMorePlaylistsTitle
+                : AppLocalizations.of(context)!.addToPlaylistTitle,
         onTap: () {
           Navigator.pop(context); // close menu
           bool inPlaylist = queueItemInPlaylist(queueItem);
@@ -34,9 +35,8 @@ class AddToPlaylistMenuEntry extends ConsumerWidget implements HideableMenuEntry
               AlbumDisc() => item.tracks,
               PrecalculatedPlayable() => item.tracks,
               FinampPlayableDto() => [item.item],
-              PlayableQueue() || MusicScreenPlayable<FinampPlayableDto>() => throw UnsupportedError(
-                "Cannot add $item to playlist - invalid type",
-              ),
+              PlayableQueue() || MusicScreenPlayable<FinampPlayableDto>() =>
+                throw UnsupportedError("Cannot add $item to playlist - invalid type"),
             },
             parentPlaylist: inPlaylist ? queueItem!.source.item : null,
           );

@@ -25,18 +25,19 @@ class FinampSettingsDropdown<T> extends StatelessWidget {
       builder: (context, constraints) {
         return DropdownMenu<T>(
           width: constraints.maxWidth,
-          dropdownMenuEntries: dropdownItems
-              .map(
-                (e) => DropdownMenuEntry<T>(
-                  value: e.value,
-                  label: e.label,
-                  leadingIcon: e.leadingIcon,
-                  trailingIcon: e.trailingIcon,
-                  enabled: e.enabled,
-                  style: e.style ?? defaultEntryStyle,
-                ),
-              )
-              .toList(),
+          dropdownMenuEntries:
+              dropdownItems
+                  .map(
+                    (e) => DropdownMenuEntry<T>(
+                      value: e.value,
+                      label: e.label,
+                      leadingIcon: e.leadingIcon,
+                      trailingIcon: e.trailingIcon,
+                      enabled: e.enabled,
+                      style: e.style ?? defaultEntryStyle,
+                    ),
+                  )
+                  .toList(),
           initialSelection: selectedValue,
           enableFilter: false,
           enableSearch: false,

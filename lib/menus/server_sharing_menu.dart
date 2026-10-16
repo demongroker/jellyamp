@@ -131,12 +131,14 @@ class _ServerSharingMenuControlsState extends ConsumerState<ServerSharingMenuCon
         padding: const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
         child: const Icon(TablerIcons.access_point, size: 36.0),
       ),
-      title: serverSharingEnabled
-          ? AppLocalizations.of(context)!.serverSharingMenuControlTitleSharingEnabled
-          : AppLocalizations.of(context)!.serverSharingMenuControlTitleSharingDisabled,
-      subtitle: serverSharingEnabled
-          ? AppLocalizations.of(context)!.serverSharingMenuControlSubtitleSharingEnabled
-          : AppLocalizations.of(context)!.serverSharingMenuControlSubtitleSharingDisabled,
+      title:
+          serverSharingEnabled
+              ? AppLocalizations.of(context)!.serverSharingMenuControlTitleSharingEnabled
+              : AppLocalizations.of(context)!.serverSharingMenuControlTitleSharingDisabled,
+      subtitle:
+          serverSharingEnabled
+              ? AppLocalizations.of(context)!.serverSharingMenuControlSubtitleSharingEnabled
+              : AppLocalizations.of(context)!.serverSharingMenuControlSubtitleSharingDisabled,
       trailing: Switch.adaptive(
         value: serverSharingEnabled,
         onChanged: (value) {
@@ -149,13 +151,13 @@ class _ServerSharingMenuControlsState extends ConsumerState<ServerSharingMenuCon
         if (!currentState && isOffline) {
           await showDialog<ConfirmationPromptDialog>(
             context: context,
-            builder: (context) => ConfirmationPromptDialog(
-              promptText: AppLocalizations.of(context)!.serverSharingMenuConfirmationDialogText,
-              confirmButtonText: AppLocalizations.of(
-                context,
-              )!.serverSharingMenuConfirmationDialogConfirmationButtonLabel,
-              onConfirmed: () => setServerSharing(true),
-            ),
+            builder:
+                (context) => ConfirmationPromptDialog(
+                  promptText: AppLocalizations.of(context)!.serverSharingMenuConfirmationDialogText,
+                  confirmButtonText:
+                      AppLocalizations.of(context)!.serverSharingMenuConfirmationDialogConfirmationButtonLabel,
+                  onConfirmed: () => setServerSharing(true),
+                ),
           );
         } else {
           setServerSharing(!currentState);

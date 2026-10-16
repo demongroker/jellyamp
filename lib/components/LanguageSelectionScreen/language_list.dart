@@ -43,13 +43,14 @@ class LanguageListTile extends ConsumerWidget {
     final localeFromSettings = ref.watch(finampSettingsProvider.locale);
     return RadioListTile<Locale?>(
       title: Text(locale?.nativeDisplayLanguageScript ?? AppLocalizations.of(context)!.system),
-      subtitle: locale != null
-          ? Text(
-              localeFromSettings != null
-                  ? "${locale!.displayLanguageScriptIn(localeFromSettings)}${locale!.countryCode != null ? " (${locale!.displayCountryIn(localeFromSettings)})" : ""}"
-                  : "${locale!.defaultDisplayLanguageScript}${locale!.countryCode != null ? " (${locale!.defaultDisplayCountry})" : ""}",
-            )
-          : null,
+      subtitle:
+          locale != null
+              ? Text(
+                localeFromSettings != null
+                    ? "${locale!.displayLanguageScriptIn(localeFromSettings)}${locale!.countryCode != null ? " (${locale!.displayCountryIn(localeFromSettings)})" : ""}"
+                    : "${locale!.defaultDisplayLanguageScript}${locale!.countryCode != null ? " (${locale!.defaultDisplayCountry})" : ""}",
+              )
+              : null,
       value: locale,
       groupValue: localeFromSettings,
       onChanged: (_) => FinampSetters.setLocale(locale),

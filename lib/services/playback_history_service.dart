@@ -167,8 +167,8 @@ class PlaybackHistoryService {
             Future.delayed(const Duration(seconds: 3, milliseconds: 500), () {
               var newCurrentTrack =
                   _audioService.queueIndex != null && _audioService.sequenceState.effectiveSequence.isNotEmpty
-                  ? _audioService.sequenceState.effectiveSequence[_audioService.queueIndex!].tag as FinampQueueItem
-                  : null;
+                      ? _audioService.sequenceState.effectiveSequence[_audioService.queueIndex!].tag as FinampQueueItem
+                      : null;
               if (_lastPositionUpdate.add(const Duration(seconds: 3)).isBefore(DateTime.now()) &&
                   currentItem.item.id == newCurrentTrack?.item.id) {
                 _playbackHistoryServiceLogger.fine("Handling seek event for ${currentItem.item.title}");
@@ -318,9 +318,8 @@ class PlaybackHistoryService {
     if (_currentTrack != null) {
       // update end time of previous track
       _currentTrack!.endTime = DateTime.now();
-      previousTrackTotalPlayTimeInMilliseconds = _currentTrack!.endTime!
-          .difference(_currentTrack!.startTime)
-          .inMilliseconds;
+      previousTrackTotalPlayTimeInMilliseconds =
+          _currentTrack!.endTime!.difference(_currentTrack!.startTime).inMilliseconds;
     }
 
     if (previousTrackTotalPlayTimeInMilliseconds < 1000) {
@@ -545,9 +544,8 @@ class PlaybackHistoryService {
         isPaused: isPaused,
         isMuted: isMuted,
         positionTicks: playerPosition.inMicroseconds * 10,
-        playbackStartTimeTicks: _currentTrack != null
-            ? _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10
-            : null,
+        playbackStartTimeTicks:
+            _currentTrack != null ? _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10 : null,
         volumeLevel: (FinampSettingsHelper.finampSettings.currentVolume * 100).round(),
         repeatMode: _toJellyfinRepeatMode(_queueService.loopMode),
         playMethod: item.item.extras?["shouldTranscode"] as bool? ?? false ? "Transcode" : "DirectPlay",
@@ -585,9 +583,8 @@ class PlaybackHistoryService {
         isPaused: _audioService.paused,
         isMuted: _audioService.volume == 0.0,
         positionTicks: _audioService.playbackPosition.inMicroseconds * 10,
-        playbackStartTimeTicks: _currentTrack != null
-            ? _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10
-            : null,
+        playbackStartTimeTicks:
+            _currentTrack != null ? _currentTrack!.startTime.millisecondsSinceEpoch * 1000 * 10 : null,
         volumeLevel: (FinampSettingsHelper.finampSettings.currentVolume * 100).round(),
         playMethod: currentTrack.item.extras!["shouldTranscode"] as bool? ?? false ? "Transcode" : "DirectPlay",
         playbackOrder: _queueService.playbackOrder == FinampPlaybackOrder.shuffled ? "Shuffle" : "Default",
@@ -604,10 +601,11 @@ class PlaybackHistoryService {
   List<jellyfin_models.QueueItem>? getQueueToReport({bool? includeNowPlayingQueue}) {
     if ((includeNowPlayingQueue ?? false) &&
         (FinampSettingsHelper.finampSettings.enablePlayon || FinampSettingsHelper.finampSettings.reportQueueToServer)) {
-      final queue = _queueService
-          .peekQueue(next: _maxQueueLengthToReport)
-          .map((e) => jellyfin_models.QueueItem(id: e.baseItem.id.raw, playlistItemId: e.type.name))
-          .toList();
+      final queue =
+          _queueService
+              .peekQueue(next: _maxQueueLengthToReport)
+              .map((e) => jellyfin_models.QueueItem(id: e.baseItem.id.raw, playlistItemId: e.type.name))
+              .toList();
       return queue;
     } else {
       return null;

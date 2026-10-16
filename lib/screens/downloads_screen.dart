@@ -73,23 +73,26 @@ class DownloadsScreen extends StatelessWidget {
 void showSyncWarningSnackbar() {
   GlobalSnackbar.message(
     (scaffold) => AppLocalizations.of(scaffold)!.syncFailedWarningShort,
-    action: (context) => SnackBarAction(
-      label: MaterialLocalizations.of(context).moreButtonTooltip,
-      onPressed: () => showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(AppLocalizations.of(context)!.syncFailedWarningShort),
-          content: Text(AppLocalizations.of(context)!.syncFailedWarningLong),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).popAndPushNamed(DownloadsScreen.routeName);
-              },
-              child: Text(AppLocalizations.of(context)!.openDownloads),
-            ),
-          ],
+    action:
+        (context) => SnackBarAction(
+          label: MaterialLocalizations.of(context).moreButtonTooltip,
+          onPressed:
+              () => showDialog(
+                context: context,
+                builder:
+                    (context) => AlertDialog(
+                      title: Text(AppLocalizations.of(context)!.syncFailedWarningShort),
+                      content: Text(AppLocalizations.of(context)!.syncFailedWarningLong),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).popAndPushNamed(DownloadsScreen.routeName);
+                          },
+                          child: Text(AppLocalizations.of(context)!.openDownloads),
+                        ),
+                      ],
+                    ),
+              ),
         ),
-      ),
-    ),
   );
 }

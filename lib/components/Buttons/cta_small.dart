@@ -19,16 +19,16 @@ class CTASmall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accentColor = disabled
-        ? Theme.of(context).colorScheme.primary.withOpacity(0.5)
-        : Theme.of(context).colorScheme.primary;
+    final accentColor =
+        disabled ? Theme.of(context).colorScheme.primary.withOpacity(0.5) : Theme.of(context).colorScheme.primary;
     return FilledButton(
-      onPressed: disabled
-          ? null
-          : () {
-              FeedbackHelper.feedback(FeedbackType.selection);
-              onPressed();
-            },
+      onPressed:
+          disabled
+              ? null
+              : () {
+                FeedbackHelper.feedback(FeedbackType.selection);
+                onPressed();
+              },
       style: ButtonStyle(
         elevation: WidgetStateProperty.all(0),
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
@@ -54,11 +54,10 @@ class CTASmall extends StatelessWidget {
           Text(
             text,
             style: TextStyle(
-              color:
-                  (Theme.brightnessOf(context) == Brightness.light
-                          ? Color.alphaBlend(accentColor.withOpacity(0.33), Colors.black)
-                          : Colors.white)
-                      .withOpacity(disabled ? 0.5 : 1.0),
+              color: (Theme.brightnessOf(context) == Brightness.light
+                      ? Color.alphaBlend(accentColor.withOpacity(0.33), Colors.black)
+                      : Colors.white)
+                  .withOpacity(disabled ? 0.5 : 1.0),
               fontSize: 14,
               fontWeight: FontWeight.w500,
             ),

@@ -182,10 +182,7 @@ class MediaShareHelper {
     try {
       final response = await client.send(request).timeout(const Duration(seconds: 180));
       if (response.statusCode < 200 || response.statusCode >= 300) {
-        throw HttpException(
-          'Jellyfin file download failed (${response.statusCode}) for ${item.id.raw}',
-          uri: url,
-        );
+        throw HttpException('Jellyfin file download failed (${response.statusCode}) for ${item.id.raw}', uri: url);
       }
 
       final ext = _extensionForItem(item, response.headers);

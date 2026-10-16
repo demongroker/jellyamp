@@ -290,15 +290,18 @@ class FinampSettingsHelper {
       onPressed: () async {
         await showDialog(
           context: context,
-          builder: (context) => ConfirmationPromptDialog(
-            promptText: isGlobal
-                ? AppLocalizations.of(context)!.resetSettingsPromptGlobal
-                : AppLocalizations.of(context)!.resetSettingsPromptLocal,
-            confirmButtonText: isGlobal
-                ? AppLocalizations.of(context)!.resetSettingsPromptGlobalConfirm
-                : AppLocalizations.of(context)!.reset,
-            onConfirmed: resetFunction,
-          ),
+          builder:
+              (context) => ConfirmationPromptDialog(
+                promptText:
+                    isGlobal
+                        ? AppLocalizations.of(context)!.resetSettingsPromptGlobal
+                        : AppLocalizations.of(context)!.resetSettingsPromptLocal,
+                confirmButtonText:
+                    isGlobal
+                        ? AppLocalizations.of(context)!.resetSettingsPromptGlobalConfirm
+                        : AppLocalizations.of(context)!.reset,
+                onConfirmed: resetFunction,
+              ),
         );
       },
       icon: const Icon(Icons.refresh),

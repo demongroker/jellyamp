@@ -176,45 +176,46 @@ class _TracksSectionState extends ConsumerState<TracksSection> {
           ),
         ),
       ),
-      sliver: _showTracks
-          ? SliverMainAxisGroup(
-              slivers: [
-                if (widget.includeFilterRow)
-                  buildCuratedItemFilterRow(
-                    ref: ref,
-                    parent: widget.parent,
-                    filterListFor: BaseItemDtoType.track,
-                    customFilterOrder: widget.customFilterOrder,
-                    selectedFilter: widget.selectedFilter,
-                    disabledFilters: widget.disabledFilters,
-                    onFilterSelected: widget.onFilterSelected,
-                  ),
-                if (widget.tracks != null && widget.tracks!.isNotEmpty)
-                  TracksSliverList(
-                    childrenForList: widget.tracks!,
-                    childrenForQueue: widget.childrenForQueue!,
-                    lazyAddMoreTracksToQueue: widget.lazyAddMoreTracksToQueue,
-                    selectedFilter: widget.selectedFilter,
-                    adaptiveAdditionalInfoSortBy: widget.selectedFilter?.getSortBy(),
-                    parent: widget.parent,
-                  )
-                else
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
-                      child: Center(
-                        child: Text(
-                          emptyText,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyMedium,
+      sliver:
+          _showTracks
+              ? SliverMainAxisGroup(
+                slivers: [
+                  if (widget.includeFilterRow)
+                    buildCuratedItemFilterRow(
+                      ref: ref,
+                      parent: widget.parent,
+                      filterListFor: BaseItemDtoType.track,
+                      customFilterOrder: widget.customFilterOrder,
+                      selectedFilter: widget.selectedFilter,
+                      disabledFilters: widget.disabledFilters,
+                      onFilterSelected: widget.onFilterSelected,
+                    ),
+                  if (widget.tracks != null && widget.tracks!.isNotEmpty)
+                    TracksSliverList(
+                      childrenForList: widget.tracks!,
+                      childrenForQueue: widget.childrenForQueue!,
+                      lazyAddMoreTracksToQueue: widget.lazyAddMoreTracksToQueue,
+                      selectedFilter: widget.selectedFilter,
+                      adaptiveAdditionalInfoSortBy: widget.selectedFilter?.getSortBy(),
+                      parent: widget.parent,
+                    )
+                  else
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
+                        child: Center(
+                          child: Text(
+                            emptyText,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                SliverToBoxAdapter(child: SizedBox(height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
-              ],
-            )
-          : SliverToBoxAdapter(child: SizedBox.shrink()),
+                  SliverToBoxAdapter(child: SizedBox(height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
+                ],
+              )
+              : SliverToBoxAdapter(child: SizedBox.shrink()),
     );
   }
 }
@@ -380,45 +381,46 @@ class _ItemsSectionState extends ConsumerState<CollectionsSection> {
           ),
         ),
       ),
-      sliver: _showItems
-          ? SliverMainAxisGroup(
-              slivers: [
-                if (widget.sortAndFilterRow != null) SliverToBoxAdapter(child: widget.sortAndFilterRow),
-                if (widget.includeFilterRowFor != null)
-                  buildCuratedItemFilterRow(
-                    ref: ref,
-                    parent: widget.parent,
-                    filterListFor: widget.includeFilterRowFor!,
-                    customFilterOrder: widget.customFilterOrder,
-                    selectedFilter: widget.selectedFilter,
-                    disabledFilters: widget.disabledFilters,
-                    onFilterSelected: widget.onFilterSelected,
-                  ),
-                if (widget.items != null && widget.items!.isNotEmpty)
-                  CollectionsSliverList(
-                    childrenForList: widget.items!,
-                    parent: widget.parent,
-                    genreFilter: widget.genreFilter,
-                    albumShowsYearAndDurationInstead: widget.albumsShowYearAndDurationInstead,
-                    adaptiveAdditionalInfoSortBy: widget.selectedFilter?.getSortBy(),
-                  )
-                else
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
-                      child: Center(
-                        child: Text(
-                          emptyText,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyMedium,
+      sliver:
+          _showItems
+              ? SliverMainAxisGroup(
+                slivers: [
+                  if (widget.sortAndFilterRow != null) SliverToBoxAdapter(child: widget.sortAndFilterRow),
+                  if (widget.includeFilterRowFor != null)
+                    buildCuratedItemFilterRow(
+                      ref: ref,
+                      parent: widget.parent,
+                      filterListFor: widget.includeFilterRowFor!,
+                      customFilterOrder: widget.customFilterOrder,
+                      selectedFilter: widget.selectedFilter,
+                      disabledFilters: widget.disabledFilters,
+                      onFilterSelected: widget.onFilterSelected,
+                    ),
+                  if (widget.items != null && widget.items!.isNotEmpty)
+                    CollectionsSliverList(
+                      childrenForList: widget.items!,
+                      parent: widget.parent,
+                      genreFilter: widget.genreFilter,
+                      albumShowsYearAndDurationInstead: widget.albumsShowYearAndDurationInstead,
+                      adaptiveAdditionalInfoSortBy: widget.selectedFilter?.getSortBy(),
+                    )
+                  else
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
+                        child: Center(
+                          child: Text(
+                            emptyText,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                SliverToBoxAdapter(child: SizedBox(height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
-              ],
-            )
-          : const SliverToBoxAdapter(child: SizedBox.shrink()),
+                  SliverToBoxAdapter(child: SizedBox(height: (widget.parent.type != "MusicGenre") ? 14 : 0)),
+                ],
+              )
+              : const SliverToBoxAdapter(child: SizedBox.shrink()),
     );
   }
 }

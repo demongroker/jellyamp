@@ -518,12 +518,10 @@ List<BaseItemDto> sortItems(List<BaseItemDto> itemsToSort, SortBy? sortBy, SortO
             return a.criticRating!.compareTo(b.criticRating!);
           }
         case SortBy.datePlayed:
-          final dateA = a.userData?.lastPlayedDate == null
-              ? null
-              : DateTime.tryParse(a.userData!.lastPlayedDate!.trim());
-          final dateB = b.userData?.lastPlayedDate == null
-              ? null
-              : DateTime.tryParse(b.userData!.lastPlayedDate!.trim());
+          final dateA =
+              a.userData?.lastPlayedDate == null ? null : DateTime.tryParse(a.userData!.lastPlayedDate!.trim());
+          final dateB =
+              b.userData?.lastPlayedDate == null ? null : DateTime.tryParse(b.userData!.lastPlayedDate!.trim());
           if (dateA == null && dateB == null) return 0;
           if (dateA == null) return -1;
           if (dateB == null) return 1;

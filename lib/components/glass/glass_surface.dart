@@ -28,15 +28,10 @@ class GlassSurface extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.brightnessOf(context) == Brightness.dark;
     final scheme = ColorScheme.of(context);
-    final fill = isDark
-        ? Color.alphaBlend(
-            scheme.primary.withOpacity(0.08),
-            const Color(0xFF121820).withOpacity(opacity),
-          )
-        : Color.alphaBlend(
-            scheme.primary.withOpacity(0.06),
-            Colors.white.withOpacity(0.55 + opacity * 0.2),
-          );
+    final fill =
+        isDark
+            ? Color.alphaBlend(scheme.primary.withOpacity(0.08), const Color(0xFF121820).withOpacity(opacity))
+            : Color.alphaBlend(scheme.primary.withOpacity(0.06), Colors.white.withOpacity(0.55 + opacity * 0.2));
     final borderColor = (isDark ? Colors.white : scheme.onSurface).withOpacity(borderOpacity);
 
     return ClipRRect(
@@ -52,10 +47,7 @@ class GlassSurface extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Colors.white.withOpacity(isDark ? 0.10 : 0.35),
-                Colors.white.withOpacity(0.0),
-              ],
+              colors: [Colors.white.withOpacity(isDark ? 0.10 : 0.35), Colors.white.withOpacity(0.0)],
             ),
           ),
           child: padding != null ? Padding(padding: padding!, child: child) : child,

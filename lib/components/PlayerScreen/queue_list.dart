@@ -132,9 +132,8 @@ class _QueueListState extends ConsumerState<QueueList> {
   void _updateJumpToTop() {
     if (widget.jumpToCurrentKey.currentContext == null) return;
     final screenHeight = MediaQuery.heightOf(widget.jumpToCurrentKey.currentContext!);
-    final currentTrackOffset = FinampSettingsHelper.finampSettings.previousTracksExpanded
-        ? (_previousTrackCount * QueueListTile.height)
-        : 0;
+    final currentTrackOffset =
+        FinampSettingsHelper.finampSettings.previousTracksExpanded ? (_previousTrackCount * QueueListTile.height) : 0;
     double offset = widget.scrollController.offset - currentTrackOffset;
     int jumpDirection = 0;
     if (offset > screenHeight * 0.5) {
@@ -286,9 +285,8 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
         final halfOpened = ref.watch(halfOpenFoldableProvider);
         return DraggableScrollableSheet(
           snap: false,
-          snapAnimationDuration: MediaQuery.disableAnimationsOf(context)
-              ? Duration.zero
-              : const Duration(milliseconds: 200),
+          snapAnimationDuration:
+              MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 200),
           // Cover the whole sub screen when in half opened mode
           initialChildSize: halfOpened ? 1.0 : 0.92,
           minChildSize: halfOpened ? 1.0 : 0.25,
@@ -358,15 +356,13 @@ Future<dynamic> showQueueBottomSheet(BuildContext context, WidgetRef ref) {
     // On book-style foldables, this will anchor to the right half of the screen.
     // On flip-style foldables, this will anchor to the bottom half of the screen.
     anchorPoint: Offset(double.maxFinite, double.maxFinite),
-    builder: (context) => LayoutBuilder(
-      builder: (context, constraints) {
-        final double maxWidth = (constraints.maxWidth * 0.9).clamp(640, 900);
-        return ConstrainedBox(
-          constraints: constraints.copyWith(maxWidth: maxWidth),
-          child: menu,
-        );
-      },
-    ),
+    builder:
+        (context) => LayoutBuilder(
+          builder: (context, constraints) {
+            final double maxWidth = (constraints.maxWidth * 0.9).clamp(640, 900);
+            return ConstrainedBox(constraints: constraints.copyWith(maxWidth: maxWidth), child: menu);
+          },
+        ),
   );
 }
 
@@ -394,13 +390,13 @@ class JumpToCurrentButtonState extends State<JumpToCurrentButton> {
   Widget build(BuildContext context) {
     return _jumpToCurrentTrackDirection != 0
         ? FinampExtendedFloatingActionButton(
-            icon: _jumpToCurrentTrackDirection < 0 ? TablerIcons.arrow_bar_to_up : TablerIcons.arrow_bar_to_down,
-            label: AppLocalizations.of(context)!.scrollToCurrentTrack,
-            onTap: () {
-              FeedbackHelper.feedback(FeedbackType.heavy);
-              scrollToKey(key: widget.previousTracksHeaderKey, duration: const Duration(milliseconds: 500));
-            },
-          )
+          icon: _jumpToCurrentTrackDirection < 0 ? TablerIcons.arrow_bar_to_up : TablerIcons.arrow_bar_to_down,
+          label: AppLocalizations.of(context)!.scrollToCurrentTrack,
+          onTap: () {
+            FeedbackHelper.feedback(FeedbackType.heavy);
+            scrollToKey(key: widget.previousTracksHeaderKey, duration: const Duration(milliseconds: 500));
+          },
+        )
         : const SizedBox.shrink();
   }
 }
@@ -480,15 +476,16 @@ class _PreviousTracksListState extends State<PreviousTracksList> with TickerProv
                     GlobalSnackbar.message(
                       (scaffold) => AppLocalizations.of(scaffold)!.removedFromQueue,
                       isConfirmation: true,
-                      action: (scaffold) => SnackBarAction(
-                        label: AppLocalizations.of(scaffold)!.undo,
-                        onPressed: () {
-                          if (mounted) {
-                            setState(() => _previousTracks!.insert(index, item));
-                          }
-                          unawaited(_queueService.insertAtOffset(indexOffset, item));
-                        },
-                      ),
+                      action:
+                          (scaffold) => SnackBarAction(
+                            label: AppLocalizations.of(scaffold)!.undo,
+                            onPressed: () {
+                              if (mounted) {
+                                setState(() => _previousTracks!.insert(index, item));
+                              }
+                              unawaited(_queueService.insertAtOffset(indexOffset, item));
+                            },
+                          ),
                     );
                   },
                 );
@@ -575,15 +572,16 @@ class _NextUpTracksListState extends State<NextUpTracksList> {
                       GlobalSnackbar.message(
                         (scaffold) => AppLocalizations.of(scaffold)!.removedFromQueue,
                         isConfirmation: true,
-                        action: (scaffold) => SnackBarAction(
-                          label: AppLocalizations.of(scaffold)!.undo,
-                          onPressed: () {
-                            if (mounted) {
-                              setState(() => _nextUp!.insert(index, item));
-                            }
-                            unawaited(_queueService.insertAtOffset(indexOffset, item));
-                          },
-                        ),
+                        action:
+                            (scaffold) => SnackBarAction(
+                              label: AppLocalizations.of(scaffold)!.undo,
+                              onPressed: () {
+                                if (mounted) {
+                                  setState(() => _nextUp!.insert(index, item));
+                                }
+                                unawaited(_queueService.insertAtOffset(indexOffset, item));
+                              },
+                            ),
                       );
                     },
                     onTap: (bool playable) async {
@@ -621,9 +619,10 @@ class _QueueTracksListState extends ConsumerState<QueueTracksList> {
   @override
   Widget build(context) {
     return MenuMask(
-      height: ref.watch(finampSettingsProvider.radioEnabled)
-          ? QueueSectionHeader.radioActiveHeight
-          : QueueSectionHeader.defaultHeight,
+      height:
+          ref.watch(finampSettingsProvider.radioEnabled)
+              ? QueueSectionHeader.radioActiveHeight
+              : QueueSectionHeader.defaultHeight,
       child: StreamBuilder<FinampQueueInfo?>(
         stream: _queueService.getQueueStream(),
         initialData: _queueService.getQueue(),
@@ -679,15 +678,16 @@ class _QueueTracksListState extends ConsumerState<QueueTracksList> {
                     GlobalSnackbar.message(
                       (scaffold) => AppLocalizations.of(scaffold)!.removedFromQueue,
                       isConfirmation: true,
-                      action: (scaffold) => SnackBarAction(
-                        label: AppLocalizations.of(scaffold)!.undo,
-                        onPressed: () {
-                          if (mounted) {
-                            setState(() => _queue!.insert(index, item));
-                          }
-                          unawaited(_queueService.insertAtOffset(indexOffset, item));
-                        },
-                      ),
+                      action:
+                          (scaffold) => SnackBarAction(
+                            label: AppLocalizations.of(scaffold)!.undo,
+                            onPressed: () {
+                              if (mounted) {
+                                setState(() => _queue!.insert(index, item));
+                              }
+                              unawaited(_queueService.insertAtOffset(indexOffset, item));
+                            },
+                          ),
                     );
                   },
                   onTap: (bool playable) async {
@@ -814,17 +814,18 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                               FeedbackHelper.feedback(FeedbackType.selection);
                               _audioHandler.togglePlayback();
                             },
-                            icon: mediaState!.playbackState.playing
-                                ? const Icon(
-                                    TablerIcons.player_pause,
-                                    size: 32,
-                                    shadows: <Shadow>[Shadow(color: Colors.black, blurRadius: 10.0)],
-                                  )
-                                : const Icon(
-                                    TablerIcons.player_play,
-                                    size: 32,
-                                    shadows: <Shadow>[Shadow(color: Colors.black, blurRadius: 10.0)],
-                                  ),
+                            icon:
+                                mediaState!.playbackState.playing
+                                    ? const Icon(
+                                      TablerIcons.player_pause,
+                                      size: 32,
+                                      shadows: <Shadow>[Shadow(color: Colors.black, blurRadius: 10.0)],
+                                    )
+                                    : const Icon(
+                                      TablerIcons.player_play,
+                                      size: 32,
+                                      shadows: <Shadow>[Shadow(color: Colors.black, blurRadius: 10.0)],
+                                    ),
                             color: Colors.white,
                           ),
                         ),
@@ -843,9 +844,10 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                                   var itemLength = mediaState?.mediaItem?.duration;
                                   return FractionallySizedBox(
                                     alignment: AlignmentDirectional.centerStart,
-                                    widthFactor: itemLength == null
-                                        ? 0
-                                        : max(0, playbackPosition!.inMilliseconds / itemLength.inMilliseconds),
+                                    widthFactor:
+                                        itemLength == null
+                                            ? 0
+                                            : max(0, playbackPosition!.inMilliseconds / itemLength.inMilliseconds),
                                     child: DecoratedBox(
                                       decoration: ShapeDecoration(
                                         color: elapsedPartBackgroundColor,
@@ -884,9 +886,10 @@ class _CurrentTrackState extends ConsumerState<CurrentTrack> {
                                           fontSize: 16,
                                           height: 26 / 20,
                                           color: primaryTextColor,
-                                          fontWeight: Theme.brightnessOf(context) == Brightness.light
-                                              ? FontWeight.w500
-                                              : FontWeight.w600,
+                                          fontWeight:
+                                              Theme.brightnessOf(context) == Brightness.light
+                                                  ? FontWeight.w500
+                                                  : FontWeight.w600,
                                         ),
                                       ),
                                       const SizedBox(height: 4),
@@ -1126,16 +1129,19 @@ class QueueSectionHeader extends ConsumerWidget {
                     return Row(
                       children: [
                         IconButtonWithSemantics(
-                          label: info?.order == FinampPlaybackOrder.shuffled
-                              ? AppLocalizations.of(context)!.playbackOrderShuffledButtonTooltip
-                              : AppLocalizations.of(context)!.playbackOrderLinearButtonTooltip,
-                          icon: info?.order == FinampPlaybackOrder.shuffled
-                              ? (TablerIcons.arrows_shuffle)
-                              : (TablerIcons.arrows_right),
+                          label:
+                              info?.order == FinampPlaybackOrder.shuffled
+                                  ? AppLocalizations.of(context)!.playbackOrderShuffledButtonTooltip
+                                  : AppLocalizations.of(context)!.playbackOrderLinearButtonTooltip,
+                          icon:
+                              info?.order == FinampPlaybackOrder.shuffled
+                                  ? (TablerIcons.arrows_shuffle)
+                                  : (TablerIcons.arrows_right),
                           iconSize: 28.0,
-                          color: info?.order == FinampPlaybackOrder.shuffled
-                              ? IconTheme.of(context).color!
-                              : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(0.85),
+                          color:
+                              info?.order == FinampPlaybackOrder.shuffled
+                                  ? IconTheme.of(context).color!
+                                  : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(0.85),
                           visualDensity: VisualDensity.standard,
                           onPressed: () async {
                             await queueService.togglePlaybackOrder();
@@ -1148,14 +1154,15 @@ class QueueSectionHeader extends ConsumerWidget {
                           },
                         ),
                         IconButtonWithSemantics(
-                          label: radioEnabled
-                              ? AppLocalizations.of(context)!.loopingUnavailableWhileRadioActiveWarning
-                              : switch (info?.loop) {
-                                  FinampLoopMode.none => AppLocalizations.of(context)!.loopModeNoneButtonLabel,
-                                  FinampLoopMode.one => AppLocalizations.of(context)!.loopModeOneButtonLabel,
-                                  FinampLoopMode.all => AppLocalizations.of(context)!.loopModeAllButtonLabel,
-                                  null => AppLocalizations.of(context)!.loopModeNoneButtonLabel,
-                                },
+                          label:
+                              radioEnabled
+                                  ? AppLocalizations.of(context)!.loopingUnavailableWhileRadioActiveWarning
+                                  : switch (info?.loop) {
+                                    FinampLoopMode.none => AppLocalizations.of(context)!.loopModeNoneButtonLabel,
+                                    FinampLoopMode.one => AppLocalizations.of(context)!.loopModeOneButtonLabel,
+                                    FinampLoopMode.all => AppLocalizations.of(context)!.loopModeAllButtonLabel,
+                                    null => AppLocalizations.of(context)!.loopModeNoneButtonLabel,
+                                  },
                           icon: switch (radioEnabled ? null : info?.loop) {
                             FinampLoopMode.none => TablerIcons.repeat_off,
                             FinampLoopMode.one => TablerIcons.repeat_once,
@@ -1163,11 +1170,12 @@ class QueueSectionHeader extends ConsumerWidget {
                             null => TablerIcons.repeat_off,
                           },
                           iconSize: 28.0,
-                          color: radioEnabled
-                              ? (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(0.3)
-                              : (info?.loop != FinampLoopMode.none
-                                    ? IconTheme.of(context).color!
-                                    : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(
+                          color:
+                              radioEnabled
+                                  ? (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(0.3)
+                                  : (info?.loop != FinampLoopMode.none
+                                      ? IconTheme.of(context).color!
+                                      : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(
                                         0.85,
                                       )),
                           visualDensity: VisualDensity.standard,
@@ -1181,20 +1189,23 @@ class QueueSectionHeader extends ConsumerWidget {
                             queueService.toggleLoopMode();
                             FeedbackHelper.feedback(FeedbackType.selection);
                           },
-                          onLongPress: () => showRadioMenu(
-                            context,
-                            subtitle: AppLocalizations.of(context)!.loopingOverriddenByRadioSubtitle,
-                          ),
+                          onLongPress:
+                              () => showRadioMenu(
+                                context,
+                                subtitle: AppLocalizations.of(context)!.loopingOverriddenByRadioSubtitle,
+                              ),
                         ),
                         IconButtonWithSemantics(
-                          label: radioEnabled
-                              ? AppLocalizations.of(context)!.radioModeDisableButtonTitle
-                              : AppLocalizations.of(context)!.radioModeEnableButtonTitle,
+                          label:
+                              radioEnabled
+                                  ? AppLocalizations.of(context)!.radioModeDisableButtonTitle
+                                  : AppLocalizations.of(context)!.radioModeEnableButtonTitle,
                           icon: radioEnabled ? TablerIcons.radio : TablerIcons.radio_off,
                           iconSize: 28.0,
-                          color: currentRadioAvailabilityStatus.isAvailable
-                              ? IconTheme.of(context).color!
-                              : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(0.85),
+                          color:
+                              currentRadioAvailabilityStatus.isAvailable
+                                  ? IconTheme.of(context).color!
+                                  : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white).withOpacity(0.85),
                           visualDensity: VisualDensity.standard,
                           onPressed: () {
                             toggleRadio();
@@ -1232,19 +1243,20 @@ class QueueSectionHeader extends ConsumerWidget {
               RadioModeAvailabilityStatus.unavailableNotDownloaded =>
                 radioSeedItem?.name != null
                     ? AppLocalizations.of(
-                        context,
-                      )!.radioModeRandomUnavailableNotDownloadedSubtitle(radioModeTranslatedName, radioSeedItem!.name!)
+                      context,
+                    )!.radioModeRandomUnavailableNotDownloadedSubtitle(radioModeTranslatedName, radioSeedItem!.name!)
                     : AppLocalizations.of(
-                        context,
-                      )!.radioModeRandomUnavailableNotDownloadedGenericSubtitle(radioModeTranslatedName),
+                      context,
+                    )!.radioModeRandomUnavailableNotDownloadedGenericSubtitle(radioModeTranslatedName),
               RadioModeAvailabilityStatus.unavailableQueueEmpty => AppLocalizations.of(
                 context,
               )!.radioModeUnavailableQueueEmptySubtitle(radioModeTranslatedName),
             },
-            menuCreator: () => showRadioMenu(
-              context,
-              subtitle: radioFailed ? AppLocalizations.of(context)!.radioFailedSubtitle : null,
-            ),
+            menuCreator:
+                () => showRadioMenu(
+                  context,
+                  subtitle: radioFailed ? AppLocalizations.of(context)!.radioFailedSubtitle : null,
+                ),
             isLoading: radioLoading,
             leading: Icon(
               !currentRadioAvailabilityStatus.isAvailable || radioFailed ? TablerIcons.radio_off : TablerIcons.radio,

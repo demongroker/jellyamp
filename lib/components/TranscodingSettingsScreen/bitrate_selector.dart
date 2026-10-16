@@ -35,13 +35,14 @@ class _BitrateSelectorState extends ConsumerState<BitrateSelector> {
               value: (currentBitrate / 1000).clamp(64, 320),
               divisions: 8,
               label: AppLocalizations.of(context)!.kiloBitsPerSecondLabel(currentBitrate ~/ 1000),
-              onChanged: enabled
-                  ? (value) {
-                      setState(() {
-                        currentBitrate = (value * 1000).toInt();
-                      });
-                    }
-                  : null,
+              onChanged:
+                  enabled
+                      ? (value) {
+                        setState(() {
+                          currentBitrate = (value * 1000).toInt();
+                        });
+                      }
+                      : null,
               onChangeEnd: (value) {
                 FinampSetters.setTranscodeBitrate((value * 1000).toInt());
               },

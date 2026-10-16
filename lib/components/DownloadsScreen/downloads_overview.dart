@@ -77,17 +77,18 @@ class _DownloadsOverviewState extends ConsumerState<DownloadsOverview> {
               final counts = snapshot.data!;
               final downloadCount =
                   (counts[DownloadItemState.complete] ?? 0) +
-                      (counts[DownloadItemState.needsRedownloadComplete] ?? 0) +
-                      (counts[DownloadItemState.needsRedownload] ?? 0) +
-                      (counts[DownloadItemState.failed] ?? 0) +
-                      (counts[DownloadItemState.enqueued] ?? 0) +
-                      (counts[DownloadItemState.downloading] ?? 0) +
-                      (counts[DownloadItemState.paused] ?? 0);
+                  (counts[DownloadItemState.needsRedownloadComplete] ?? 0) +
+                  (counts[DownloadItemState.needsRedownload] ?? 0) +
+                  (counts[DownloadItemState.failed] ?? 0) +
+                  (counts[DownloadItemState.enqueued] ?? 0) +
+                  (counts[DownloadItemState.downloading] ?? 0) +
+                  (counts[DownloadItemState.paused] ?? 0);
 
               final active = counts[DownloadItemState.downloading] ?? 0;
               final paused = counts[DownloadItemState.paused] ?? 0;
               final failed = (counts[DownloadItemState.failed] ?? 0) + (counts[DownloadItemState.syncFailed] ?? 0);
-              final stale = (counts[DownloadItemState.needsRedownload] ?? 0) +
+              final stale =
+                  (counts[DownloadItemState.needsRedownload] ?? 0) +
                   (counts[DownloadItemState.needsRedownloadComplete] ?? 0);
 
               final l10n = AppLocalizations.of(context)!;
@@ -122,10 +123,7 @@ class _DownloadsOverviewState extends ConsumerState<DownloadsOverview> {
                                   style: const TextStyle(color: Colors.grey),
                                 ),
                                 if (_downloadsService.serverMissingBlurhash)
-                                  Text(
-                                    l10n.missingBlurhashWarning,
-                                    style: const TextStyle(color: Colors.red),
-                                  ),
+                                  Text(l10n.missingBlurhashWarning, style: const TextStyle(color: Colors.red)),
                               ],
                             ),
                           ),
@@ -141,10 +139,7 @@ class _DownloadsOverviewState extends ConsumerState<DownloadsOverview> {
                                   ),
                                   style: const TextStyle(color: Colors.blue),
                                 ),
-                                Text(
-                                  l10n.dlFailed(failed),
-                                  style: const TextStyle(color: Colors.red),
-                                ),
+                                Text(l10n.dlFailed(failed), style: const TextStyle(color: Colors.red)),
                                 Text(
                                   l10n.dlEnqueued(counts[DownloadItemState.enqueued] ?? -1),
                                   style: const TextStyle(color: Colors.grey),
@@ -153,14 +148,8 @@ class _DownloadsOverviewState extends ConsumerState<DownloadsOverview> {
                                   l10n.dlRunning(counts[DownloadItemState.downloading] ?? -1),
                                   style: const TextStyle(color: Colors.grey),
                                 ),
-                                Text(
-                                  l10n.dlPaused(paused),
-                                  style: const TextStyle(color: Colors.orange),
-                                ),
-                                Text(
-                                  l10n.dlStale(stale),
-                                  style: const TextStyle(color: Colors.orange),
-                                ),
+                                Text(l10n.dlPaused(paused), style: const TextStyle(color: Colors.orange)),
+                                Text(l10n.dlStale(stale), style: const TextStyle(color: Colors.orange)),
                                 if (_storageUsed != null)
                                   Text(
                                     l10n.storageUsed(FileSize.getSize(_storageUsed!)),
@@ -184,40 +173,43 @@ class _DownloadsOverviewState extends ConsumerState<DownloadsOverview> {
                             visualDensity: VisualDensity.compact,
                             tooltip: l10n.pauseAllDownloads,
                             icon: const Icon(Icons.pause_circle_outline, size: 20),
-                            onPressed: active > 0
-                                ? () {
-                                    _downloadsService.pauseAllDownloads();
-                                    GlobalSnackbar.message(
-                                      (scaffold) => AppLocalizations.of(scaffold)!.pauseAllDownloads,
-                                    );
-                                  }
-                                : null,
+                            onPressed:
+                                active > 0
+                                    ? () {
+                                      _downloadsService.pauseAllDownloads();
+                                      GlobalSnackbar.message(
+                                        (scaffold) => AppLocalizations.of(scaffold)!.pauseAllDownloads,
+                                      );
+                                    }
+                                    : null,
                           ),
                           IconButton(
                             visualDensity: VisualDensity.compact,
                             tooltip: l10n.resumeAllDownloads,
                             icon: const Icon(Icons.play_circle_outline, size: 20),
-                            onPressed: paused > 0
-                                ? () {
-                                    _downloadsService.resumeAllDownloads();
-                                    GlobalSnackbar.message(
-                                      (scaffold) => AppLocalizations.of(scaffold)!.resumeAllDownloads,
-                                    );
-                                  }
-                                : null,
+                            onPressed:
+                                paused > 0
+                                    ? () {
+                                      _downloadsService.resumeAllDownloads();
+                                      GlobalSnackbar.message(
+                                        (scaffold) => AppLocalizations.of(scaffold)!.resumeAllDownloads,
+                                      );
+                                    }
+                                    : null,
                           ),
                           IconButton(
                             visualDensity: VisualDensity.compact,
                             tooltip: l10n.retryFailedDownloads,
                             icon: const Icon(Icons.refresh, size: 20),
-                            onPressed: failed > 0
-                                ? () {
-                                    _downloadsService.retryFailedDownloads();
-                                    GlobalSnackbar.message(
-                                      (scaffold) => AppLocalizations.of(scaffold)!.retryFailedDownloads,
-                                    );
-                                  }
-                                : null,
+                            onPressed:
+                                failed > 0
+                                    ? () {
+                                      _downloadsService.retryFailedDownloads();
+                                      GlobalSnackbar.message(
+                                        (scaffold) => AppLocalizations.of(scaffold)!.retryFailedDownloads,
+                                      );
+                                    }
+                                    : null,
                           ),
                         ],
                       ),
@@ -227,10 +219,7 @@ class _DownloadsOverviewState extends ConsumerState<DownloadsOverview> {
               );
             } else if (snapshot.hasError) {
               GlobalSnackbar.error(snapshot.error);
-              return const SizedBox(
-                height: downloadsOverviewCardLoadingHeight,
-                child: Card(child: Icon(Icons.error)),
-              );
+              return const SizedBox(height: downloadsOverviewCardLoadingHeight, child: Card(child: Icon(Icons.error)));
             } else {
               return const SizedBox(
                 height: downloadsOverviewCardLoadingHeight,
