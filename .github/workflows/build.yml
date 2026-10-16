@@ -202,10 +202,6 @@ jobs:
   build-linux:
     name: Build for Linux
     runs-on: ${{ matrix.os }}
-    # Needed by alexellis/upload-assets on tag pushes (releases) — the default
-    # token is read-only, which fails the upload with 403.
-    permissions:
-      contents: write
     strategy:
       fail-fast: false
       matrix:
@@ -283,8 +279,8 @@ jobs:
     # copy icon assets and desktop file next to bundle location for easy including in tar archive
     - run: |
         cp -r assets/icon/linux/ build/linux/${{ matrix.arch }}/release/icons \
-        && cp assets/finamp.desktop.m4 build/linux/${{ matrix.arch }}/release/ \
-        && cp assets/com.unicornsonlsd.finamp.metainfo.xml build/linux/${{ matrix.arch }}/release/
+        && cp assets/jellyamp.desktop.m4 build/linux/${{ matrix.arch }}/release/ \
+        && cp assets/com.demongroker.jellyamp.metainfo.xml build/linux/${{ matrix.arch }}/release/
     
     # Create dynamic names based on architecture
     - name: Set archive and checksum names
@@ -295,12 +291,12 @@ jobs:
         else
           ref_name="${{ github.ref_name }}"
         fi
-        echo "TAR_NAME=finamp-${ref_name}-linux-${{ matrix.arch }}.tar.gz" >> $GITHUB_ENV
-        echo "SHA_NAME=finamp-${ref_name}-linux-${{ matrix.arch }}.tar.gz.sha256sum" >> $GITHUB_ENV
+        echo "TAR_NAME=jellyamp-${ref_name}-linux-${{ matrix.arch }}.tar.gz" >> $GITHUB_ENV
+        echo "SHA_NAME=jellyamp-${ref_name}-linux-${{ matrix.arch }}.tar.gz.sha256sum" >> $GITHUB_ENV
     
     # archive bundle and generate checksum
     - run: |
-        tar -czf ${TAR_NAME} --directory build/linux/${{ matrix.arch }}/release/ bundle icons finamp.desktop.m4 com.unicornsonlsd.finamp.metainfo.xml \
+        tar -czf ${TAR_NAME} --directory build/linux/${{ matrix.arch }}/release/ bundle icons jellyamp.desktop.m4 com.demongroker.jellyamp.metainfo.xml \
         && sha256sum ${TAR_NAME} > ${SHA_NAME}
 
     - uses: actions/upload-artifact@v6
@@ -314,14 +310,6 @@ jobs:
         name: ${{ env.SHA_NAME }}
         path: ${{ env.SHA_NAME }}
         compression-level: 0 # no compression
-
-    - name: Upload release archive
-      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-      uses: alexellis/upload-assets@0.4.1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        asset_paths: '["./${{ env.TAR_NAME }}", "./${{ env.SHA_NAME }}"]'
 
     - name: Run Integration Tests
       if: *integration_if
@@ -338,10 +326,6 @@ jobs:
   build-windows:
     name: Build for Windows
     runs-on: windows-latest
-    # Needed by alexellis/upload-assets on tag pushes (releases) — the default
-    # token is read-only, which fails the upload with 403.
-    permissions:
-      contents: write
     steps:
     - name: Support longpaths
       run: git config --system core.longpaths true
@@ -384,7 +368,7 @@ jobs:
         else
           ref_name="${{ github.ref_name }}"
         fi
-        echo "BASE_NAME=Finamp-${ref_name}-Windows" >> $GITHUB_ENV
+        echo "BASE_NAME=Jellyamp-${ref_name}-Windows" >> $GITHUB_ENV
 
     # TODO pack in redistributables?
     # upload original, unzipped directory. GitHub will zip it anyway
@@ -405,20 +389,27 @@ jobs:
         path: ./${{ env.BASE_NAME }}.msix
         compression-level: 0 # no compression
 
-    - name: Prepare release archive
+    - name: Prepare release archive + checksums
       if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+      shell: bash
       run: |
         # zip folder
         powershell -Command "Compress-Archive -Path './build/windows/x64/runner/Release/*' -DestinationPath './${{ env.BASE_NAME }}.zip'"
+        # .sha256 for BOTH Windows artifacts (uploaded by the upload-release job)
+        sha256sum "${{ env.BASE_NAME }}.msix" > "${{ env.BASE_NAME }}.msix.sha256"
+        sha256sum "${{ env.BASE_NAME }}.zip" > "${{ env.BASE_NAME }}.zip.sha256"
+        cat "${{ env.BASE_NAME }}.msix.sha256" "${{ env.BASE_NAME }}.zip.sha256"
 
-    - name: Upload release archive
+    - name: Upload release bundle + checksums
       if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-      uses: alexellis/upload-assets@0.4.1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+      uses: actions/upload-artifact@v6
       with:
-        # upload zip archive here, uploading the raw directory fails
-        asset_paths: '["./${{ env.BASE_NAME }}.msix", "./${{ env.BASE_NAME }}.zip"]'
+        name: ${{ env.BASE_NAME }}.release
+        path: |
+          ./${{ env.BASE_NAME }}.zip
+          ./${{ env.BASE_NAME }}.zip.sha256
+          ./${{ env.BASE_NAME }}.msix.sha256
+        compression-level: 0 # no compression
 
     - name: Run Integration Tests
       if: *integration_if
@@ -432,6 +423,35 @@ jobs:
           timeout 2m flutter run -d windows
         fi
         exit $exitcode
+
+  # Tag-only release upload. Holds the `contents: write` permission so the
+  # build jobs above can stay read-only. Attaches the desktop artifacts
+  # (Linux .tar.gz + .sha256sum, Windows .msix/.zip + .sha256). The APK itself
+  # is released by build-apk.yml.
+  upload-release:
+    needs: [build-linux, build-windows]
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+
+      - name: Attach desktop assets to the release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: |
+            release-assets/**/*.tar.gz
+            release-assets/**/*.sha256sum
+            release-assets/**/*.msix
+            release-assets/**/*.zip
+            release-assets/**/*.sha256
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # build-macos:
   #   name: Build for macOS
