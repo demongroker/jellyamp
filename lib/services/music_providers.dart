@@ -66,8 +66,7 @@ Future<List<BaseItemDto>> globalSearch(Ref ref, String searchTerm, {required boo
 /// Fields requested for search results — `MediaSources` and `ProductionYear`
 /// are required for the codec/bit/year filters (they are NOT in the default
 /// fields set, so omitting them silently breaks those filters).
-const _searchFields =
-    'MediaSources,ProductionYear,Genres,ParentId,DateCreated,SortName';
+const _searchFields = 'MediaSources,ProductionYear,Genres,ParentId,DateCreated,SortName';
 
 /// Unified, grouped search across the whole library.
 ///
@@ -84,11 +83,7 @@ final groupedSearchProvider = FutureProvider.autoDispose.family<SearchResults, S
   final filters = query.favoriteOnly ? 'IsFavorite' : null;
   final searchTerm = query.searchTerm.isEmpty ? null : query.searchTerm;
 
-  Future<List<BaseItemDto>?> fetch(
-    String includeItemTypes, {
-    bool recursive = true,
-    BaseItemDto? parentItem,
-  }) {
+  Future<List<BaseItemDto>?> fetch(String includeItemTypes, {bool recursive = true, BaseItemDto? parentItem}) {
     return jellyfinApiHelper.getItems(
       includeItemTypes: includeItemTypes,
       recursive: recursive,
@@ -107,17 +102,12 @@ final groupedSearchProvider = FutureProvider.autoDispose.family<SearchResults, S
     BaseItemDto? parentItem,
   }) async {
     if (!show) return const [];
-    return await fetch(includeItemTypes, recursive: recursive, parentItem: parentItem) ??
-        const [];
+    return await fetch(includeItemTypes, recursive: recursive, parentItem: parentItem) ?? const [];
   }
 
   final genreParent = GetIt.instance<FinampUserHelper>().currentUser!.currentView;
   final results = await Future.wait([
-    fetchOrEmpty(
-      !query.hasTypeScope || query.onlyShowArtists,
-      BaseItemDtoType.artist.jellyfinName!,
-      recursive: false,
-    ),
+    fetchOrEmpty(!query.hasTypeScope || query.onlyShowArtists, BaseItemDtoType.artist.jellyfinName!, recursive: false),
     fetchOrEmpty(!query.hasTypeScope || query.onlyShowAlbums, BaseItemDtoType.album.jellyfinName!),
     fetchOrEmpty(!query.hasTypeScope || query.onlyShowTracks, BaseItemDtoType.track.jellyfinName!),
     fetchOrEmpty(!query.hasTypeScope || query.onlyShowPlaylists, BaseItemDtoType.playlist.jellyfinName!),
@@ -134,13 +124,15 @@ final groupedSearchProvider = FutureProvider.autoDispose.family<SearchResults, S
     var filtered = items.where(query.matches).toList();
     if (wantDownloaded != null) {
       final downloads = GetIt.instance<DownloadsService>();
-      filtered = filtered.where((item) {
-        final type = BaseItemDtoType.fromItem(item) == BaseItemDtoType.track
-            ? DownloadItemType.track
-            : DownloadItemType.collection;
-        final stub = DownloadStub.fromItem(type: type, item: item);
-        return downloads.getStatus(stub, null).isDownloaded == wantDownloaded;
-      }).toList();
+      filtered =
+          filtered.where((item) {
+            final type =
+                BaseItemDtoType.fromItem(item) == BaseItemDtoType.track
+                    ? DownloadItemType.track
+                    : DownloadItemType.collection;
+            final stub = DownloadStub.fromItem(type: type, item: item);
+            return downloads.getStatus(stub, null).isDownloaded == wantDownloaded;
+          }).toList();
     }
     return filtered;
   }
@@ -167,15 +159,17 @@ Future<List<BaseItemDto>> _filterAlbumsByQuality(
   List<BaseItemDto> albums,
 ) async {
   if (albums.isEmpty) return albums;
-  final results = await Future.wait(albums.map((album) async {
-    final tracks = await api.getItems(
-      parentItem: album,
-      includeItemTypes: BaseItemDtoType.track.jellyfinName!,
-      recursive: true,
-      fields: _searchFields,
-    );
-    return query.matchesAllTracks(tracks ?? const []) ? album : null;
-  }));
+  final results = await Future.wait(
+    albums.map((album) async {
+      final tracks = await api.getItems(
+        parentItem: album,
+        includeItemTypes: BaseItemDtoType.track.jellyfinName!,
+        recursive: true,
+        fields: _searchFields,
+      );
+      return query.matchesAllTracks(tracks ?? const []) ? album : null;
+    }),
+  );
   return results.whereType<BaseItemDto>().toList();
 }
 
@@ -385,9 +379,8 @@ Future<PlayableSlice> _fetchFromChildren(
   }
 
   if (exhaustedChildren || (limit != null && precacheOutput.length >= limit)) {
-    final returnedItems = limit == null || !hardLimit
-        ? precacheOutput
-        : precacheOutput.slice(0, min(limit, precacheOutput.length));
+    final returnedItems =
+        limit == null || !hardLimit ? precacheOutput : precacheOutput.slice(0, min(limit, precacheOutput.length));
     return BasePlayableSlice(
       items: returnedItems,
       startingIndex: preTracks.clamp(0, max(0, returnedItems.length - 1)),

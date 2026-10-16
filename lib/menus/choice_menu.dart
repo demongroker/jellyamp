@@ -52,14 +52,15 @@ class ChoiceMenuListTile extends ConsumerWidget {
             leading: Padding(padding: const EdgeInsets.only(top: 2.0), child: leading),
             horizontalTitleGap: 16.0,
             title: Text(title, maxLines: 2, overflow: TextOverflow.ellipsis),
-            subtitle: subtitle != null
-                ? Text(
-                    subtitle!,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: TextTheme.of(context).bodySmall?.fontSize),
-                  )
-                : null,
+            subtitle:
+                subtitle != null
+                    ? Text(
+                      subtitle!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: TextTheme.of(context).bodySmall?.fontSize),
+                    )
+                    : null,
             trailing: Wrap(
               alignment: WrapAlignment.end,
               crossAxisAlignment: WrapCrossAlignment.center,
@@ -80,16 +81,17 @@ class ChoiceMenuListTile extends ConsumerWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 12.0),
-                  child: isLoading
-                      ? SizedBox(
-                          height: compact ? 32.0 : 36.0,
-                          width: compact ? 32.0 : 36.0,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: const CircularProgressIndicator(strokeWidth: 3),
-                          ),
-                        )
-                      : trailing ?? Icon(icon, size: compact ? 32.0 : 36.0, color: themeColor),
+                  child:
+                      isLoading
+                          ? SizedBox(
+                            height: compact ? 32.0 : 36.0,
+                            width: compact ? 32.0 : 36.0,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: const CircularProgressIndicator(strokeWidth: 3),
+                            ),
+                          )
+                          : trailing ?? Icon(icon, size: compact ? 32.0 : 36.0, color: themeColor),
                 ),
               ],
             ),
@@ -142,42 +144,46 @@ class ChoiceMenuOption extends StatelessWidget {
           child: Icon(icon, size: 32.0, color: enabled ? ColorScheme.of(context).primary : null),
         ),
         title: Text(title, maxLines: 1, overflow: TextOverflow.clip),
-        subtitle: badges.isNotEmpty || description != null
-            ? Text.rich(
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                softWrap: true,
-                TextSpan(
-                  children: [
-                    WidgetSpan(
-                      child: Padding(
-                        padding: badges.isNotEmpty ? const EdgeInsets.only(right: 4.0) : EdgeInsets.zero,
-                        child: Row(mainAxisSize: MainAxisSize.min, spacing: 4.0, children: badges),
-                      ),
-                      alignment: PlaceholderAlignment.middle,
-                    ),
-                    if (description != null) TextSpan(text: description!, style: Theme.of(context).textTheme.bodySmall),
-                  ],
-                ),
-              )
-            : null,
-        trailing: isSelected
-            ? Padding(
-                padding: const EdgeInsets.only(left: 2.0),
-                child: isInactive
-                    ? SizedBox(
-                        width: 32.0,
-                        child: Center(
-                          child: Icon(
-                            TablerIcons.point_filled,
-                            size: 20.0,
-                            color: TextTheme.of(context).bodyMedium?.color?.withOpacity(0.6),
-                          ),
+        subtitle:
+            badges.isNotEmpty || description != null
+                ? Text.rich(
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  TextSpan(
+                    children: [
+                      WidgetSpan(
+                        child: Padding(
+                          padding: badges.isNotEmpty ? const EdgeInsets.only(right: 4.0) : EdgeInsets.zero,
+                          child: Row(mainAxisSize: MainAxisSize.min, spacing: 4.0, children: badges),
                         ),
-                      )
-                    : Icon(TablerIcons.check, size: 32.0, color: ColorScheme.of(context).primary),
-              )
-            : null,
+                        alignment: PlaceholderAlignment.middle,
+                      ),
+                      if (description != null)
+                        TextSpan(text: description!, style: Theme.of(context).textTheme.bodySmall),
+                    ],
+                  ),
+                )
+                : null,
+        trailing:
+            isSelected
+                ? Padding(
+                  padding: const EdgeInsets.only(left: 2.0),
+                  child:
+                      isInactive
+                          ? SizedBox(
+                            width: 32.0,
+                            child: Center(
+                              child: Icon(
+                                TablerIcons.point_filled,
+                                size: 20.0,
+                                color: TextTheme.of(context).bodyMedium?.color?.withOpacity(0.6),
+                              ),
+                            ),
+                          )
+                          : Icon(TablerIcons.check, size: 32.0, color: ColorScheme.of(context).primary),
+                )
+                : null,
         onTap: () async {
           onSelect?.call();
         },

@@ -94,9 +94,10 @@ class ItemAmountProvider
          ),
          from: itemAmountProvider,
          name: r'itemAmountProvider',
-         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-             ? null
-             : _$itemAmountHash,
+         debugGetCreateSourceHash:
+             const bool.fromEnvironment('dart.vm.product')
+                 ? null
+                 : _$itemAmountHash,
          dependencies: ItemAmountFamily._dependencies,
          allTransitiveDependencies: ItemAmountFamily._allTransitiveDependencies,
          baseItem: baseItem,
@@ -226,9 +227,10 @@ class ChildItemTypeProvider extends AutoDisposeProvider<BaseItemDtoType> {
         (ref) => childItemType(ref as ChildItemTypeRef, item),
         from: childItemTypeProvider,
         name: r'childItemTypeProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$childItemTypeHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$childItemTypeHash,
         dependencies: ChildItemTypeFamily._dependencies,
         allTransitiveDependencies:
             ChildItemTypeFamily._allTransitiveDependencies,

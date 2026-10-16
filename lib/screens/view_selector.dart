@@ -39,9 +39,8 @@ class _ViewSelectorState extends State<ViewSelector> {
         title: Text(AppLocalizations.of(context)!.selectMusicLibraries),
         leading: FinampAppBarBackButton(),
       ),
-      floatingActionButton: isSubmitButtonEnabled
-          ? FloatingActionButton(onPressed: _submitChoice, child: const Icon(Icons.check))
-          : null,
+      floatingActionButton:
+          isSubmitButtonEnabled ? FloatingActionButton(onPressed: _submitChoice, child: const Icon(Icons.check)) : null,
       body: FutureBuilder<List<BaseItemDto>>(
         future: viewListFuture,
         builder: (context, snapshot) {
@@ -120,9 +119,10 @@ class _ViewSelectorState extends State<ViewSelector> {
                   ListTile(
                     leading: Icon(Icons.refresh),
                     title: Text(AppLocalizations.of(context)!.refresh),
-                    onTap: () => setState(() {
-                      viewListFuture = _jellyfinApiHelper.getViews();
-                    }),
+                    onTap:
+                        () => setState(() {
+                          viewListFuture = _jellyfinApiHelper.getViews();
+                        }),
                   ),
                   ListTile(
                     leading: Icon(Icons.logout),

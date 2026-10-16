@@ -64,24 +64,24 @@ class _ProgressSliderState extends State<ProgressSlider> {
                     // closed and reopened.
                     return widget.showPlaceholder
                         ? Column(
-                            children: [
-                              SizedBox(
-                                height: 24.0,
-                                child: Stack(
-                                  children: [
-                                    Slider(
-                                      value: 0,
-                                      max: 1,
-                                      onChanged: null,
-                                      autofocus: false,
-                                      focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
-                                    ),
-                                  ],
-                                ),
+                          children: [
+                            SizedBox(
+                              height: 24.0,
+                              child: Stack(
+                                children: [
+                                  Slider(
+                                    value: 0,
+                                    max: 1,
+                                    onChanged: null,
+                                    autofocus: false,
+                                    focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
+                                  ),
+                                ],
                               ),
-                              if (widget.showDuration) const _ProgressSliderDuration(position: Duration()),
-                            ],
-                          )
+                            ),
+                            if (widget.showDuration) const _ProgressSliderDuration(position: Duration()),
+                          ],
+                        )
                         : const SizedBox.shrink();
                   } else if (snapshot.hasData) {
                     return Column(
@@ -97,18 +97,20 @@ class _ProgressSliderState extends State<ProgressSlider> {
                                 playbackState: snapshot.data!.playbackState,
                                 position: snapshot.data!.position,
                                 mediaItem: snapshot.data!.mediaItem,
-                                onDrag: (value) => setState(() {
-                                  _dragValue = value;
-                                }),
+                                onDrag:
+                                    (value) => setState(() {
+                                      _dragValue = value;
+                                    }),
                               ),
                             ],
                           ),
                         ),
                         if (widget.showDuration)
                           _ProgressSliderDuration(
-                            position: _dragValue == null
-                                ? snapshot.data!.position
-                                : Duration(microseconds: _dragValue!.toInt()),
+                            position:
+                                _dragValue == null
+                                    ? snapshot.data!.position
+                                    : Duration(microseconds: _dragValue!.toInt()),
                             itemDuration: snapshot.data!.mediaItem?.duration,
                           ),
                       ],
@@ -200,34 +202,37 @@ class __PlaybackProgressSliderState extends ConsumerState<_PlaybackProgressSlide
   @override
   Widget build(BuildContext context) {
     return SliderTheme(
-      data: widget.allowSeeking
-          // ? _sliderThemeData.copyWith(
-          ? SliderTheme.of(context).copyWith(
-              inactiveTrackColor: IconTheme.of(context).color!.withOpacity(0.35),
-              secondaryActiveTrackColor: IconTheme.of(context).color!.withOpacity(0.6),
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
-            )
-          // )
-          // : _sliderThemeData.copyWith(
-          : SliderTheme.of(context).copyWith(
-              inactiveTrackColor: IconTheme.of(context).color!.withOpacity(0.35),
-              secondaryActiveTrackColor: IconTheme.of(context).color!.withOpacity(0.6),
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0.1),
-              // gets rid of both horizontal and vertical padding
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 0.1),
-              trackShape: const RectangularSliderTrackShape(),
-              // rectangular shape is thinner than round
-              trackHeight: 4.0,
-            ),
+      data:
+          widget.allowSeeking
+              // ? _sliderThemeData.copyWith(
+              ? SliderTheme.of(context).copyWith(
+                inactiveTrackColor: IconTheme.of(context).color!.withOpacity(0.35),
+                secondaryActiveTrackColor: IconTheme.of(context).color!.withOpacity(0.6),
+                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
+              )
+              // )
+              // : _sliderThemeData.copyWith(
+              : SliderTheme.of(context).copyWith(
+                inactiveTrackColor: IconTheme.of(context).color!.withOpacity(0.35),
+                secondaryActiveTrackColor: IconTheme.of(context).color!.withOpacity(0.6),
+                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0.1),
+                // gets rid of both horizontal and vertical padding
+                overlayShape: const RoundSliderOverlayShape(overlayRadius: 0.1),
+                trackShape: const RectangularSliderTrackShape(),
+                // rectangular shape is thinner than round
+                trackHeight: 4.0,
+              ),
       // ),
       child: Slider(
         min: 0.0,
-        max: widget.mediaItem?.duration == null
-            ? widget.playbackState.bufferedPosition.inMicroseconds.toDouble()
-            : widget.mediaItem?.duration?.inMicroseconds.toDouble() ?? 0,
-        value: (_dragValue ?? widget.position.inMicroseconds)
-            .clamp(0, widget.mediaItem?.duration?.inMicroseconds.toDouble() ?? 0)
-            .toDouble(),
+        max:
+            widget.mediaItem?.duration == null
+                ? widget.playbackState.bufferedPosition.inMicroseconds.toDouble()
+                : widget.mediaItem?.duration?.inMicroseconds.toDouble() ?? 0,
+        value:
+            (_dragValue ?? widget.position.inMicroseconds)
+                .clamp(0, widget.mediaItem?.duration?.inMicroseconds.toDouble() ?? 0)
+                .toDouble(),
         semanticFormatterCallback: (double value) {
           final positionFullMinutes = Duration(microseconds: value.toInt()).inMinutes % 60;
           final positionFullHours = Duration(microseconds: value.toInt()).inHours;
@@ -241,49 +246,53 @@ class __PlaybackProgressSliderState extends ConsumerState<_PlaybackProgressSlide
               "${durationFullHours > 0 ? "$durationFullHours ${AppLocalizations.of(context)!.hours} " : ""}${durationFullMinutes > 0 ? "$durationFullMinutes ${AppLocalizations.of(context)!.minutes} " : ""}$durationSeconds ${AppLocalizations.of(context)!.seconds}";
           return AppLocalizations.of(context)!.timeFractionTooltip(positionString, durationString);
         },
-        secondaryTrackValue: widget.mediaItem?.extras?["downloadedTrackPath"] == null
-            ? widget.playbackState.bufferedPosition.inMicroseconds
-                  .clamp(
-                    0.0,
-                    widget.mediaItem?.duration == null
-                        ? widget.playbackState.bufferedPosition.inMicroseconds
-                        : widget.mediaItem?.duration?.inMicroseconds ?? 0,
-                  )
-                  .toDouble()
-            : 0,
-        onChanged: widget.allowSeeking
-            ? (newValue) async {
-                // We don't actually tell audio_service to seek here
-                // because it would get flooded with seek requests
-                setState(() {
-                  _dragValue = newValue;
-                });
-                widget.onDrag(newValue);
-              }
-            : (_) {},
-        onChangeStart: widget.allowSeeking
-            ? (value) {
-                setState(() {
-                  _dragValue = value;
-                });
-                widget.onDrag(value);
-              }
-            : (_) {},
-        onChangeEnd: widget.allowSeeking
-            ? (newValue) async {
-                // Seek to the new position
-                await _audioHandler.seek(Duration(microseconds: newValue.toInt()));
-
-                // Clear drag value so that the slider uses the play
-                // duration again.
-                if (mounted) {
+        secondaryTrackValue:
+            widget.mediaItem?.extras?["downloadedTrackPath"] == null
+                ? widget.playbackState.bufferedPosition.inMicroseconds
+                    .clamp(
+                      0.0,
+                      widget.mediaItem?.duration == null
+                          ? widget.playbackState.bufferedPosition.inMicroseconds
+                          : widget.mediaItem?.duration?.inMicroseconds ?? 0,
+                    )
+                    .toDouble()
+                : 0,
+        onChanged:
+            widget.allowSeeking
+                ? (newValue) async {
+                  // We don't actually tell audio_service to seek here
+                  // because it would get flooded with seek requests
                   setState(() {
-                    _dragValue = null;
+                    _dragValue = newValue;
                   });
+                  widget.onDrag(newValue);
                 }
-                widget.onDrag(null);
-              }
-            : (_) {},
+                : (_) {},
+        onChangeStart:
+            widget.allowSeeking
+                ? (value) {
+                  setState(() {
+                    _dragValue = value;
+                  });
+                  widget.onDrag(value);
+                }
+                : (_) {},
+        onChangeEnd:
+            widget.allowSeeking
+                ? (newValue) async {
+                  // Seek to the new position
+                  await _audioHandler.seek(Duration(microseconds: newValue.toInt()));
+
+                  // Clear drag value so that the slider uses the play
+                  // duration again.
+                  if (mounted) {
+                    setState(() {
+                      _dragValue = null;
+                    });
+                  }
+                  widget.onDrag(null);
+                }
+                : (_) {},
         autofocus: false,
         focusNode: FocusNode(skipTraversal: true, canRequestFocus: false),
       ),

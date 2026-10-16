@@ -31,9 +31,10 @@ class AutoOfflineSelector extends ConsumerWidget {
             ),
           ),
           FinampSettingsDropdown<AutoOfflineOption>(
-            dropdownItems: AutoOfflineOption.values
-                .map((e) => DropdownMenuEntry<AutoOfflineOption>(value: e, label: e.toLocalisedString(context)))
-                .toList(),
+            dropdownItems:
+                AutoOfflineOption.values
+                    .map((e) => DropdownMenuEntry<AutoOfflineOption>(value: e, label: e.toLocalisedString(context)))
+                    .toList(),
             selectedValue: option,
             onSelected: (value) {
               if (value != null) {

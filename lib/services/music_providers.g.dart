@@ -83,9 +83,10 @@ class GlobalSearchProvider
         ),
         from: globalSearchProvider,
         name: r'globalSearchProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$globalSearchHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$globalSearchHash,
         dependencies: GlobalSearchFamily._dependencies,
         allTransitiveDependencies:
             GlobalSearchFamily._allTransitiveDependencies,
@@ -217,9 +218,10 @@ class ResolveSectionProvider
         (ref) => resolveSection(ref as ResolveSectionRef, section),
         from: resolveSectionProvider,
         name: r'resolveSectionProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$resolveSectionHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$resolveSectionHash,
         dependencies: ResolveSectionFamily._dependencies,
         allTransitiveDependencies:
             ResolveSectionFamily._allTransitiveDependencies,
@@ -363,9 +365,10 @@ class GetPlayableSliceProvider
          ),
          from: getPlayableSliceProvider,
          name: r'getPlayableSliceProvider',
-         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-             ? null
-             : _$getPlayableSliceHash,
+         debugGetCreateSourceHash:
+             const bool.fromEnvironment('dart.vm.product')
+                 ? null
+                 : _$getPlayableSliceHash,
          dependencies: GetPlayableSliceFamily._dependencies,
          allTransitiveDependencies:
              GetPlayableSliceFamily._allTransitiveDependencies,
@@ -512,9 +515,10 @@ class GetAlbumShuffledPlayerSliceProvider
         ),
         from: getAlbumShuffledPlayerSliceProvider,
         name: r'getAlbumShuffledPlayerSliceProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$getAlbumShuffledPlayerSliceHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$getAlbumShuffledPlayerSliceHash,
         dependencies: GetAlbumShuffledPlayerSliceFamily._dependencies,
         allTransitiveDependencies:
             GetAlbumShuffledPlayerSliceFamily._allTransitiveDependencies,
@@ -589,7 +593,7 @@ class _GetAlbumShuffledPlayerSliceProviderElement
       (origin as GetAlbumShuffledPlayerSliceProvider).item;
 }
 
-String _$getChildTracksHash() => r'be580aaab29da2d26b8932ccf3c4caa55346c9a9';
+String _$getChildTracksHash() => r'c94b4121e0f39fa565716273b35e6ef8f6ebbbe2';
 
 /// See also [getChildTracks].
 @ProviderFor(getChildTracks)
@@ -635,9 +639,10 @@ class GetChildTracksProvider extends AutoDisposeFutureProvider<List<Track>> {
         (ref) => getChildTracks(ref as GetChildTracksRef, item: item),
         from: getChildTracksProvider,
         name: r'getChildTracksProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$getChildTracksHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$getChildTracksHash,
         dependencies: GetChildTracksFamily._dependencies,
         allTransitiveDependencies:
             GetChildTracksFamily._allTransitiveDependencies,
@@ -760,9 +765,10 @@ class GetChildItemsProvider
          (ref) => getChildItems(ref as GetChildItemsRef, item: item),
          from: getChildItemsProvider,
          name: r'getChildItemsProvider',
-         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-             ? null
-             : _$getChildItemsHash,
+         debugGetCreateSourceHash:
+             const bool.fromEnvironment('dart.vm.product')
+                 ? null
+                 : _$getChildItemsHash,
          dependencies: GetChildItemsFamily._dependencies,
          allTransitiveDependencies:
              GetChildItemsFamily._allTransitiveDependencies,
@@ -888,9 +894,10 @@ class GetChildrenProvider
          (ref) => getChildren(ref as GetChildrenRef, item: item),
          from: getChildrenProvider,
          name: r'getChildrenProvider',
-         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-             ? null
-             : _$getChildrenHash,
+         debugGetCreateSourceHash:
+             const bool.fromEnvironment('dart.vm.product')
+                 ? null
+                 : _$getChildrenHash,
          dependencies: GetChildrenFamily._dependencies,
          allTransitiveDependencies:
              GetChildrenFamily._allTransitiveDependencies,

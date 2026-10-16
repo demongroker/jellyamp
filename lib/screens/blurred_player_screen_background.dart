@@ -23,53 +23,56 @@ class BlurredPlayerScreenBackground extends ConsumerWidget {
     final localBlurhash = finampImage.item?.blurHash;
     final imageProvider = finampImage.image;
 
-    var overlayColor = Theme.brightnessOf(context) == Brightness.dark
-        ? Colors.black.withOpacity(ui.clampDouble(0.675 * opacityFactor, 0.0, 1.0))
-        : Colors.white.withOpacity(ui.clampDouble(0.75 * opacityFactor, 0.0, 1.0));
+    var overlayColor =
+        Theme.brightnessOf(context) == Brightness.dark
+            ? Colors.black.withOpacity(ui.clampDouble(0.675 * opacityFactor, 0.0, 1.0))
+            : Colors.white.withOpacity(ui.clampDouble(0.75 * opacityFactor, 0.0, 1.0));
 
-    Widget placeholderBuilder(_) => localBlurhash != null
-        ? SizedBox.expand(
-            child: Image(
-              fit: BoxFit.cover,
-              color: overlayColor,
-              colorBlendMode: BlendMode.srcOver,
-              image: BlurHashImage(localBlurhash),
-            ),
-          )
-        : const SizedBox.shrink();
+    Widget placeholderBuilder(_) =>
+        localBlurhash != null
+            ? SizedBox.expand(
+              child: Image(
+                fit: BoxFit.cover,
+                color: overlayColor,
+                colorBlendMode: BlendMode.srcOver,
+                image: BlurHashImage(localBlurhash),
+              ),
+            )
+            : const SizedBox.shrink();
 
     return Positioned.fill(
       child: AnimatedSwitcher(
         duration: getThemeTransitionDuration(context, null),
         switchOutCurve: const Threshold(0.0),
-        child: imageProvider == null
-            ? placeholderBuilder(null)
-            : OctoImage(
-                // Don't transition between images with identical files/urls unless
-                // system theme has changed
-                key: ValueKey(imageProvider.hashCode + Theme.brightnessOf(context).hashCode),
-                image: imageProvider,
-                fit: BoxFit.cover,
-                fadeInDuration: Duration.zero,
-                fadeOutDuration: Duration.zero,
-                color: overlayColor,
-                colorBlendMode: BlendMode.srcOver,
-                filterQuality: FilterQuality.none,
-                errorBuilder: (x, _, __) => placeholderBuilder(x),
-                placeholderBuilder: placeholderBuilder,
-                imageBuilder: (context, child) {
-                  var image = ImageFiltered(
-                    imageFilter: ui.ImageFilter.blur(sigmaX: 85, sigmaY: 85, tileMode: TileMode.mirror),
-                    child: SizedBox.expand(child: child),
-                  );
-                  // There seems to be some sort of issue with how Linux handles ui.Image that breaks
-                  // cachePaint.  This shouldn't be too important outside mobile, though.
-                  if (Platform.isLinux) {
-                    return image;
-                  }
-                  return CachePaint(imageKey: imageProvider, child: image);
-                },
-              ),
+        child:
+            imageProvider == null
+                ? placeholderBuilder(null)
+                : OctoImage(
+                  // Don't transition between images with identical files/urls unless
+                  // system theme has changed
+                  key: ValueKey(imageProvider.hashCode + Theme.brightnessOf(context).hashCode),
+                  image: imageProvider,
+                  fit: BoxFit.cover,
+                  fadeInDuration: Duration.zero,
+                  fadeOutDuration: Duration.zero,
+                  color: overlayColor,
+                  colorBlendMode: BlendMode.srcOver,
+                  filterQuality: FilterQuality.none,
+                  errorBuilder: (x, _, __) => placeholderBuilder(x),
+                  placeholderBuilder: placeholderBuilder,
+                  imageBuilder: (context, child) {
+                    var image = ImageFiltered(
+                      imageFilter: ui.ImageFilter.blur(sigmaX: 85, sigmaY: 85, tileMode: TileMode.mirror),
+                      child: SizedBox.expand(child: child),
+                    );
+                    // There seems to be some sort of issue with how Linux handles ui.Image that breaks
+                    // cachePaint.  This shouldn't be too important outside mobile, though.
+                    if (Platform.isLinux) {
+                      return image;
+                    }
+                    return CachePaint(imageKey: imageProvider, child: image);
+                  },
+                ),
       ),
     );
   }

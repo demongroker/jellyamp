@@ -150,9 +150,8 @@ class FeatureChipToggle extends ConsumerWidget {
       child: SwitchListTile.adaptive(
         title: Text(context.l10n.featureChipName(feature.name)),
         subtitle: subtitle == "null" ? null : Text(subtitle),
-        secondary: canBeReordered
-            ? ReorderableDragStartListener(index: index, child: const Icon(Icons.drag_handle))
-            : null,
+        secondary:
+            canBeReordered ? ReorderableDragStartListener(index: index, child: const Icon(Icons.drag_handle)) : null,
         value: ref.watch(finampSettingsProvider.featureChipsConfiguration).features.contains(feature),
         onChanged: (value) {
           final config = FinampSettingsHelper.finampSettings.featureChipsConfiguration;

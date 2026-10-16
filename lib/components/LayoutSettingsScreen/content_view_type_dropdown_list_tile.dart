@@ -21,18 +21,19 @@ class ContentViewTypeDropdownListTile extends ConsumerWidget {
         children: [
           Text(AppLocalizations.of(context)!.viewTypeSubtitle),
           FinampSettingsDropdown<ContentViewType>(
-            dropdownItems: ContentViewType.values
-                .map(
-                  (e) => DropdownMenuEntry<ContentViewType>(
-                    value: e,
-                    label: e.toLocalisedString(context.l10n),
-                    leadingIcon: switch (e) {
-                      ContentViewType.list => const Icon(TablerIcons.layout_list),
-                      ContentViewType.grid => const Icon(TablerIcons.layout_grid),
-                    },
-                  ),
-                )
-                .toList(),
+            dropdownItems:
+                ContentViewType.values
+                    .map(
+                      (e) => DropdownMenuEntry<ContentViewType>(
+                        value: e,
+                        label: e.toLocalisedString(context.l10n),
+                        leadingIcon: switch (e) {
+                          ContentViewType.list => const Icon(TablerIcons.layout_list),
+                          ContentViewType.grid => const Icon(TablerIcons.layout_grid),
+                        },
+                      ),
+                    )
+                    .toList(),
             selectedValue: ref.watch(finampSettingsProvider.contentViewType),
             onSelected: (value) {
               if (value != null) {

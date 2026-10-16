@@ -123,12 +123,13 @@ class _HomeScreenSectionConfigurationMenuState extends ConsumerState<HomeScreenS
   void initState() {
     super.initState();
 
-    final initialTitle = tabTitle =
-        widget.initialState.customSectionTitle ??
-        (widget.initialState.presetType != null
-            // Widget context is not available yet
-            ? widget.initialState.getTitle(GlobalSnackbar.requireL10n)
-            : "");
+    final initialTitle =
+        tabTitle =
+            widget.initialState.customSectionTitle ??
+            (widget.initialState.presetType != null
+                // Widget context is not available yet
+                ? widget.initialState.getTitle(GlobalSnackbar.requireL10n)
+                : "");
 
     switch (widget.initialState.base) {
       case QueuesHomeSection section:
@@ -268,9 +269,10 @@ class _HomeScreenSectionConfigurationMenuState extends ConsumerState<HomeScreenS
             child: Text(context.l10n.sectionType, style: Theme.of(context).textTheme.bodyMedium),
           ),
           FinampSettingsDropdown<_SectionType>(
-            dropdownItems: _SectionType.values
-                .map((e) => DropdownMenuEntry<_SectionType>(value: e, label: e.toLocalisedString(context.l10n)))
-                .toList(),
+            dropdownItems:
+                _SectionType.values
+                    .map((e) => DropdownMenuEntry<_SectionType>(value: e, label: e.toLocalisedString(context.l10n)))
+                    .toList(),
             selectedValue: selectedSectionType,
             onSelected: (selectedActionType) {
               if (selectedActionType != null) {
@@ -346,17 +348,18 @@ class _HomeScreenSectionConfigurationMenuState extends ConsumerState<HomeScreenS
                 _ => throw "???",
               };
               return FinampSettingsDropdown<ContentType?>(
-                dropdownItems: allowedSelections
-                    .map(
-                      (e) => DropdownMenuEntry<ContentType?>(
-                        value: e,
-                        label: switch (e) {
-                          ContentType.mixed => context.l10n.allTypes,
-                          _ => e.toLocalisedString(context.l10n),
-                        },
-                      ),
-                    )
-                    .toList(),
+                dropdownItems:
+                    allowedSelections
+                        .map(
+                          (e) => DropdownMenuEntry<ContentType?>(
+                            value: e,
+                            label: switch (e) {
+                              ContentType.mixed => context.l10n.allTypes,
+                              _ => e.toLocalisedString(context.l10n),
+                            },
+                          ),
+                        )
+                        .toList(),
                 selectedValue: collectionContent,
                 onSelected: (selectedContentType) {
                   if (selectedContentType != null) {
@@ -424,10 +427,11 @@ class _HomeScreenSectionConfigurationMenuState extends ConsumerState<HomeScreenS
               child: Text(context.l10n.tabType, style: Theme.of(context).textTheme.bodyMedium),
             ),
             FinampSettingsDropdown<ContentType>(
-              dropdownItems: ContentType.values
-                  .where((contentType) => contentType.directlyDisplayable)
-                  .map((e) => DropdownMenuEntry<ContentType>(value: e, label: e.toLocalisedString(context.l10n)))
-                  .toList(),
+              dropdownItems:
+                  ContentType.values
+                      .where((contentType) => contentType.directlyDisplayable)
+                      .map((e) => DropdownMenuEntry<ContentType>(value: e, label: e.toLocalisedString(context.l10n)))
+                      .toList(),
               selectedValue: tabContent,
               onSelected: (selectedTabType) {
                 if (selectedTabType != null) {
@@ -503,9 +507,8 @@ class _HomeScreenSectionConfigurationMenuState extends ConsumerState<HomeScreenS
           spacing: 4.0,
           children: [
             SortAndFilterEmbeddedMenu(
-              tabType: selectedSectionType == _SectionType.collection
-                  ? collectionContent ?? ContentType.tracks
-                  : tabContent,
+              tabType:
+                  selectedSectionType == _SectionType.collection ? collectionContent ?? ContentType.tracks : tabContent,
               controller: activeSortController!,
               removeOnly: false,
             ),
@@ -592,69 +595,71 @@ Future<(HomeScreenSectionPresetType?,)?> showSectionPresetPickerMenu(
   BuildContext context, {
   int? editingSectionIndex,
 }) async {
-  final List<Widget> menuItems = HomeScreenSectionPresetType.values
-      .where((x) => x.isEnabled)
-      .map<Widget>((presetType) {
-        return Consumer(
-          builder: (context, ref, child) {
-            final currentSections = ref.watch(finampSettingsProvider.homeScreenConfiguration).sections;
-            return ChoiceMenuOption(
-              title: HomeScreenSectionConfiguration.getTitleForPreset(l10n: context.l10n, presetType: presetType),
-              description: HomeScreenSectionConfiguration.getDescriptionForPreset(
-                l10n: context.l10n,
-                presetType: presetType,
-              ),
-              badges: [
-                // // similar mode is recommended
-                // if (preset == RadioMode.similar && radioModeOptionAvailabilityStatus.isAvailable)
-                //   Icon(TablerIcons.star, size: 14.0),
-              ],
-              enabled: currentSections.where((section) => section.presetType == presetType).isEmpty,
-              icon: TablerIcons.settings_star,
-              isInactive: false,
-              isSelected: editingSectionIndex != null && currentSections[editingSectionIndex].presetType == presetType,
-              onSelect: () async {
-                //TODO ideally rebuild with check and then pop after delay
-                // FeedbackHelper.feedback(FeedbackType.selection);
-                // await Future<void>.delayed(const Duration(milliseconds: 400));
-                // Navigator.of(context).pop(preset);
-                if (context.mounted) {
-                  FeedbackHelper.feedback(FeedbackType.selection);
-                  Navigator.of(context).pop((presetType,));
-                }
+  final List<Widget> menuItems =
+      HomeScreenSectionPresetType.values
+          .where((x) => x.isEnabled)
+          .map<Widget>((presetType) {
+            return Consumer(
+              builder: (context, ref, child) {
+                final currentSections = ref.watch(finampSettingsProvider.homeScreenConfiguration).sections;
+                return ChoiceMenuOption(
+                  title: HomeScreenSectionConfiguration.getTitleForPreset(l10n: context.l10n, presetType: presetType),
+                  description: HomeScreenSectionConfiguration.getDescriptionForPreset(
+                    l10n: context.l10n,
+                    presetType: presetType,
+                  ),
+                  badges: [
+                    // // similar mode is recommended
+                    // if (preset == RadioMode.similar && radioModeOptionAvailabilityStatus.isAvailable)
+                    //   Icon(TablerIcons.star, size: 14.0),
+                  ],
+                  enabled: currentSections.where((section) => section.presetType == presetType).isEmpty,
+                  icon: TablerIcons.settings_star,
+                  isInactive: false,
+                  isSelected:
+                      editingSectionIndex != null && currentSections[editingSectionIndex].presetType == presetType,
+                  onSelect: () async {
+                    //TODO ideally rebuild with check and then pop after delay
+                    // FeedbackHelper.feedback(FeedbackType.selection);
+                    // await Future<void>.delayed(const Duration(milliseconds: 400));
+                    // Navigator.of(context).pop(preset);
+                    if (context.mounted) {
+                      FeedbackHelper.feedback(FeedbackType.selection);
+                      Navigator.of(context).pop((presetType,));
+                    }
+                  },
+                );
               },
             );
-          },
-        );
-      })
-      .followedBy(<Widget>[
-        Divider(height: 8.0, thickness: 1.5, indent: 20.0, endIndent: 20.0, radius: BorderRadius.circular(2.0)),
-        Consumer(
-          builder: (context, ref, child) {
-            final currentSections = ref.watch(finampSettingsProvider.homeScreenConfiguration).sections;
-            return ChoiceMenuOption(
-              title: AppLocalizations.of(context)!.homeScreenSectionCustomSectionTitle,
-              description: AppLocalizations.of(context)!.homeScreenSectionCustomSectionDescription,
-              icon: TablerIcons.adjustments,
-              isSelected: editingSectionIndex != null && currentSections[editingSectionIndex].presetType == null,
-              enabled: true,
-              onSelect: () async {
-                //TODO ideally rebuild with check and then pop after delay
-                // FeedbackHelper.feedback(FeedbackType.selection);
-                // await Future<void>.delayed(const Duration(milliseconds: 400));
-                // if (context.mounted) {
-                //   Navigator.of(context).pop();
-                // }
-                if (context.mounted) {
-                  FeedbackHelper.feedback(FeedbackType.selection);
-                  Navigator.of(context).pop((null,));
-                }
+          })
+          .followedBy(<Widget>[
+            Divider(height: 8.0, thickness: 1.5, indent: 20.0, endIndent: 20.0, radius: BorderRadius.circular(2.0)),
+            Consumer(
+              builder: (context, ref, child) {
+                final currentSections = ref.watch(finampSettingsProvider.homeScreenConfiguration).sections;
+                return ChoiceMenuOption(
+                  title: AppLocalizations.of(context)!.homeScreenSectionCustomSectionTitle,
+                  description: AppLocalizations.of(context)!.homeScreenSectionCustomSectionDescription,
+                  icon: TablerIcons.adjustments,
+                  isSelected: editingSectionIndex != null && currentSections[editingSectionIndex].presetType == null,
+                  enabled: true,
+                  onSelect: () async {
+                    //TODO ideally rebuild with check and then pop after delay
+                    // FeedbackHelper.feedback(FeedbackType.selection);
+                    // await Future<void>.delayed(const Duration(milliseconds: 400));
+                    // if (context.mounted) {
+                    //   Navigator.of(context).pop();
+                    // }
+                    if (context.mounted) {
+                      FeedbackHelper.feedback(FeedbackType.selection);
+                      Navigator.of(context).pop((null,));
+                    }
+                  },
+                );
               },
-            );
-          },
-        ),
-      ])
-      .toList();
+            ),
+          ])
+          .toList();
 
   return await showThemedBottomSheet<(HomeScreenSectionPresetType?,)?>(
     context: context,
@@ -676,10 +681,7 @@ Future<(HomeScreenSectionPresetType?,)?> showSectionPresetPickerMenu(
               ],
             ),
           ),
-          sliver: MenuMask(
-            height: MenuMaskHeight(36.0),
-            child: SliverList.list(children: menuItems),
-          ),
+          sliver: MenuMask(height: MenuMaskHeight(36.0), child: SliverList.list(children: menuItems)),
         ),
       ];
       // header + menu entries

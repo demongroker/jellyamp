@@ -28,7 +28,8 @@ Future<BaseItemDto?> itemById(Ref ref, BaseItemId baseItemId) async {
     // unreachable, composing with the authoritative connectivity state (not just
     // the Offline Mode setting) so we never take an unnecessary network
     // round-trip the moment the server is detected offline (P0.3 step 7/8).
-    final resolveLocally = ref.watch(finampSettingsProvider.isOffline) ||
+    final resolveLocally =
+        ref.watch(finampSettingsProvider.isOffline) ||
         ref.watch(connectivityStateProvider) == ConnectivityState.offline;
     if (resolveLocally) {
       baseItem = (await downloadsService.getCollectionInfo(id: baseItemId))?.baseItem;

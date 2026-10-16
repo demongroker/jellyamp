@@ -25,9 +25,8 @@ class CTALarge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accentColor = disabled
-        ? Theme.of(context).colorScheme.primary.withOpacity(0.5)
-        : Theme.of(context).colorScheme.primary;
+    final accentColor =
+        disabled ? Theme.of(context).colorScheme.primary.withOpacity(0.5) : Theme.of(context).colorScheme.primary;
     return Semantics(
       label: text,
       tooltip: label,
@@ -39,12 +38,13 @@ class CTALarge extends StatelessWidget {
       child: ConstrainedBox(
         constraints: BoxConstraints(minWidth: minWidth ?? 0),
         child: FilledButton(
-          onPressed: disabled
-              ? null
-              : () {
-                  FeedbackHelper.feedback(FeedbackType.selection);
-                  onPressed();
-                },
+          onPressed:
+              disabled
+                  ? null
+                  : () {
+                    FeedbackHelper.feedback(FeedbackType.selection);
+                    onPressed();
+                  },
           style: ButtonStyle(
             shape: WidgetStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
@@ -72,11 +72,10 @@ class CTALarge extends StatelessWidget {
               Text(
                 text,
                 style: TextStyle(
-                  color:
-                      (Theme.brightnessOf(context) == Brightness.light
-                              ? Color.alphaBlend(accentColor.withOpacity(0.33), Colors.black)
-                              : Colors.white)
-                          .withOpacity(disabled ? 0.5 : 1.0),
+                  color: (Theme.brightnessOf(context) == Brightness.light
+                          ? Color.alphaBlend(accentColor.withOpacity(0.33), Colors.black)
+                          : Colors.white)
+                      .withOpacity(disabled ? 0.5 : 1.0),
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                 ),

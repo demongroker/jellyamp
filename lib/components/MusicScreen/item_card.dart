@@ -48,12 +48,13 @@ class ItemCard extends ConsumerWidget {
                     // handle tiles with no image when text is disabled by showing a fallback text instead of the image
                     Container(
                       padding: const EdgeInsets.all(4.0),
-                      color: Theme.brightnessOf(context) == Brightness.dark
-                          ? ColorScheme.of(context).primary.withOpacity(0.08)
-                          : Color.alphaBlend(
-                              ColorScheme.of(context).primary.withOpacity(0.1),
-                              Colors.white,
-                            ).withOpacity(1.0),
+                      color:
+                          Theme.brightnessOf(context) == Brightness.dark
+                              ? ColorScheme.of(context).primary.withOpacity(0.08)
+                              : Color.alphaBlend(
+                                ColorScheme.of(context).primary.withOpacity(0.1),
+                                Colors.white,
+                              ).withOpacity(1.0),
                       child: Align(
                         alignment: Alignment.center,
                         child: _ItemCollectionCardText(item: item, onImage: true),
@@ -68,12 +69,7 @@ class ItemCard extends ConsumerWidget {
                             : finampSettingsProvider.gridImageSize,
                       ),
                     ),
-                  Positioned.fill(
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(onTap: onTap),
-                    ),
-                  ),
+                  Positioned.fill(child: Material(color: Colors.transparent, child: InkWell(onTap: onTap))),
                 ],
               ),
             ),
@@ -170,9 +166,13 @@ class HomeScreenQueueTile extends ConsumerWidget {
           onTap: () => showQueueRestoreMenu(context: context, queueInfo: info),
           child: Container(
             decoration: BoxDecoration(
-              color: Theme.brightnessOf(context) == Brightness.dark
-                  ? ColorScheme.of(context).primary.withOpacity(0.08)
-                  : Color.alphaBlend(ColorScheme.of(context).primary.withOpacity(0.1), Colors.white).withOpacity(1.0),
+              color:
+                  Theme.brightnessOf(context) == Brightness.dark
+                      ? ColorScheme.of(context).primary.withOpacity(0.08)
+                      : Color.alphaBlend(
+                        ColorScheme.of(context).primary.withOpacity(0.1),
+                        Colors.white,
+                      ).withOpacity(1.0),
               borderRadius: BorderRadius.circular(8.0),
             ),
             padding: const EdgeInsets.all(8.0),
@@ -219,9 +219,10 @@ class HomeScreenQueueTile extends ConsumerWidget {
 
 /// This might calculate the width base on the device width in the future, or something similar
 (double, double) calculateItemCollectionCardWidth(WidgetRef ref, {bool forHomeScreen = false}) {
-  final target = ref
-      .watch(forHomeScreen ? finampSettingsProvider.homeScreenImageSize : finampSettingsProvider.gridImageSize)
-      .toDouble();
+  final target =
+      ref
+          .watch(forHomeScreen ? finampSettingsProvider.homeScreenImageSize : finampSettingsProvider.gridImageSize)
+          .toDouble();
   final padding = ((target - 30) / 17.0).clamp(1.0, 10.0);
   return (target - padding, padding);
 }
@@ -265,11 +266,11 @@ double calculateItemCollectionCardHeight({
   return calculateItemCollectionCardWidth(ref, forHomeScreen: forHomeScreen).$1 +
       (ref.watch(finampSettingsProvider.showTextOnGridView) || sectionInfo != null
           ? _itemCollectionCardTextSpacing +
-                calculateTextHeight(
-                  style: TextTheme.of(ref.context).bodySmall!,
-                  lines: calculateItemCollectionTextLines(resolvedItemType),
-                  scaling: MediaQuery.textScalerOf(ref.context),
-                )
+              calculateTextHeight(
+                style: TextTheme.of(ref.context).bodySmall!,
+                lines: calculateItemCollectionTextLines(resolvedItemType),
+                scaling: MediaQuery.textScalerOf(ref.context),
+              )
           : 0);
 }
 

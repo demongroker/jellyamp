@@ -286,15 +286,15 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler with SeekHandler, Queue
       FinampSettingsHelper.finampSettings.duckOnAudioInterruption
           ? const AudioSessionConfiguration.music()
           : const AudioSessionConfiguration.music().copyWith(
-              // disable Android automatic ducking (https://developer.android.com/media/optimize/audio-focus#automatic_ducking)
-              // so that we can handle it manually, by setting the content type to "speech"
-              // if we instead set `willPauseOnDucked` to `true`, Android will send us pause events instead of duck events
-              // and then we don't know how to properly handle them (is this just a notification or a phone call?)
-              androidAudioAttributes: const AndroidAudioAttributes(
-                contentType: AndroidAudioContentType.speech,
-                usage: AndroidAudioUsage.media,
-              ),
+            // disable Android automatic ducking (https://developer.android.com/media/optimize/audio-focus#automatic_ducking)
+            // so that we can handle it manually, by setting the content type to "speech"
+            // if we instead set `willPauseOnDucked` to `true`, Android will send us pause events instead of duck events
+            // and then we don't know how to properly handle them (is this just a notification or a phone call?)
+            androidAudioAttributes: const AndroidAudioAttributes(
+              contentType: AndroidAudioContentType.speech,
+              usage: AndroidAudioUsage.media,
             ),
+          ),
     );
   }
 
@@ -382,40 +382,43 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler with SeekHandler, Queue
       maxSkipsOnError: 0,
       handleInterruptions: FinampSettingsHelper.finampSettings.duckOnAudioInterruption,
       androidAudioOffloadPreferences: AndroidAudioOffloadPreferences(
-        audioOffloadMode: FinampSettingsHelper.finampSettings.forceAudioOffloadingOnAndroid
-            ? AndroidAudioOffloadMode.enabled
-            : AndroidAudioOffloadMode.disabled,
+        audioOffloadMode:
+            FinampSettingsHelper.finampSettings.forceAudioOffloadingOnAndroid
+                ? AndroidAudioOffloadMode.enabled
+                : AndroidAudioOffloadMode.disabled,
         isGaplessSupportRequired: true,
         isSpeedChangeSupportRequired: true,
       ),
       audioLoadConfiguration: AudioLoadConfiguration(
         androidLoadControl: AndroidLoadControl(
-          targetBufferBytes: FinampSettingsHelper.finampSettings.bufferDisableSizeConstraints
-              ? null
-              : 1024 * 1024 * FinampSettingsHelper.finampSettings.bufferSizeMegabytes,
+          targetBufferBytes:
+              FinampSettingsHelper.finampSettings.bufferDisableSizeConstraints
+                  ? null
+                  : 1024 * 1024 * FinampSettingsHelper.finampSettings.bufferSizeMegabytes,
           // minBufferDuration: FinampSettingsHelper.finampSettings.bufferDuration, //!!! there are issues with the bufferForPlaybackDuration setting, the min duration seemingly has to be smaller than that. so we're using the default
           // it seems like the player won't fetch more than [minBufferDuration], even if the buffer isn't filled yet
           // so if we ignore size constraints, we just set the minimum to the specified buffer size, but allow fetching even more to reduce the request frequency
-          minBufferDuration: FinampSettingsHelper.finampSettings.bufferDisableSizeConstraints
-              ? maxBufferDuration
-              : minBufferDuration,
+          minBufferDuration:
+              FinampSettingsHelper.finampSettings.bufferDisableSizeConstraints ? maxBufferDuration : minBufferDuration,
           maxBufferDuration:
               // allows the player to fetch a bit more data in exchange for reduced request frequency
               FinampSettingsHelper.finampSettings.bufferDisableSizeConstraints
-              ? (maxBufferDuration + Duration(seconds: 90))
-              : maxBufferDuration,
-          prioritizeTimeOverSizeThresholds: FinampSettingsHelper
-              .finampSettings
-              .bufferDisableSizeConstraints, // targetBufferBytes sets the absolute maximum, but if this false and maxBufferDuration is reached, buffering will end
+                  ? (maxBufferDuration + Duration(seconds: 90))
+                  : maxBufferDuration,
+          prioritizeTimeOverSizeThresholds:
+              FinampSettingsHelper
+                  .finampSettings
+                  .bufferDisableSizeConstraints, // targetBufferBytes sets the absolute maximum, but if this false and maxBufferDuration is reached, buffering will end
           bufferForPlaybackDuration: Duration(seconds: 5),
           bufferForPlaybackAfterRebufferDuration: Duration(seconds: 10),
         ),
         darwinLoadControl: DarwinLoadControl(
           // preferredForwardBufferDuration:
           //     FinampSettingsHelper.finampSettings.bufferDuration,
-          preferredForwardBufferDuration: FinampSettingsHelper.finampSettings.bufferDisableSizeConstraints
-              ? FinampSettingsHelper.finampSettings.bufferDuration
-              : null, // let system decide
+          preferredForwardBufferDuration:
+              FinampSettingsHelper.finampSettings.bufferDisableSizeConstraints
+                  ? FinampSettingsHelper.finampSettings.bufferDuration
+                  : null, // let system decide
         ),
       ),
       audioPipeline: _audioPipeline,
@@ -866,9 +869,10 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler with SeekHandler, Queue
     _audioServiceBackgroundTaskLogger.fine("skipping by offset: $offset");
 
     try {
-      int queueIndex = _player.shuffleModeEnabled
-          ? shuffleIndices.indexOf((_player.currentIndex ?? 0)) + offset
-          : (_player.currentIndex ?? 0) + offset;
+      int queueIndex =
+          _player.shuffleModeEnabled
+              ? shuffleIndices.indexOf((_player.currentIndex ?? 0)) + offset
+              : (_player.currentIndex ?? 0) + offset;
       if (queueIndex >= _player.effectiveIndices.length) {
         if (_player.loopMode == LoopMode.off) {
           //!!! seek to end of track to for the player to handle the end of queue
@@ -979,10 +983,11 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler with SeekHandler, Queue
         playable: false,
       ),
       MediaItem(
-        id: MediaItemId(
-          contentType: ContentType.performingArtists,
-          parentType: MediaItemParentType.rootCollection,
-        ).toString(),
+        id:
+            MediaItemId(
+              contentType: ContentType.performingArtists,
+              parentType: MediaItemParentType.rootCollection,
+            ).toString(),
         // ignore: deprecated_member_use_from_same_package
         title: _appLocalizations?.artists ?? ContentType.performingArtists.toString(),
         playable: false,
@@ -1236,9 +1241,8 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler with SeekHandler, Queue
     }
 
     final radioEnabled = FinampSettingsHelper.finampSettings.radioEnabled;
-    final radioActive = GetIt.instance<ProviderContainer>()
-        .read(RadioServiceHelper.currentRadioAvailabilityStatusProvider)
-        .isAvailable;
+    final radioActive =
+        GetIt.instance<ProviderContainer>().read(RadioServiceHelper.currentRadioAvailabilityStatusProvider).isAvailable;
 
     return PlaybackState(
       controls: [
@@ -1256,52 +1260,57 @@ class MusicPlayerBackgroundTask extends BaseAudioHandler with SeekHandler, Queue
           //TODO eventually we probably want separate settings for this, and not store them as individual booleans in Hive
           radioEnabled
               ? MediaControl.custom(
-                  name: CustomPlaybackActions.radio.name,
-                  androidIcon: radioActive ? "drawable/tabler_icons_radio_24" : "drawable/tabler_icons_radio_off_24",
-                  label: radioActive
-                      ? GlobalSnackbar.requireL10n.radioModeActiveTitle
-                      : GlobalSnackbar.requireL10n.radioModeInactiveTitle,
-                )
+                name: CustomPlaybackActions.radio.name,
+                androidIcon: radioActive ? "drawable/tabler_icons_radio_24" : "drawable/tabler_icons_radio_off_24",
+                label:
+                    radioActive
+                        ? GlobalSnackbar.requireL10n.radioModeActiveTitle
+                        : GlobalSnackbar.requireL10n.radioModeInactiveTitle,
+              )
               : MediaControl.custom(
-                  name: CustomPlaybackActions.shuffle.name,
-                  androidIcon: _player.shuffleModeEnabled
-                      ? "drawable/baseline_shuffle_on_24"
-                      : "drawable/baseline_shuffle_24",
-                  label: _player.shuffleModeEnabled
-                      ? GlobalSnackbar.requireL10n.playbackOrderShuffledButtonLabel
-                      : GlobalSnackbar.requireL10n.playbackOrderLinearButtonLabel,
-                ),
+                name: CustomPlaybackActions.shuffle.name,
+                androidIcon:
+                    _player.shuffleModeEnabled ? "drawable/baseline_shuffle_on_24" : "drawable/baseline_shuffle_24",
+                label:
+                    _player.shuffleModeEnabled
+                        ? GlobalSnackbar.requireL10n.playbackOrderShuffledButtonLabel
+                        : GlobalSnackbar.requireL10n.playbackOrderLinearButtonLabel,
+              ),
         if (FinampSettingsHelper.finampSettings.showStopButtonOnMediaNotification)
           MediaControl.stop.copyWith(androidIcon: "drawable/baseline_stop_24"),
       ],
-      systemActions: FinampSettingsHelper.finampSettings.showSeekControlsOnMediaNotification
-          ? const {MediaAction.seek, MediaAction.seekForward, MediaAction.seekBackward}
-          : {},
+      systemActions:
+          FinampSettingsHelper.finampSettings.showSeekControlsOnMediaNotification
+              ? const {MediaAction.seek, MediaAction.seekForward, MediaAction.seekBackward}
+              : {},
       androidCompactActionIndices: const [0, 1, 2],
-      processingState: const {
-        ProcessingState.idle: AudioProcessingState.idle,
-        ProcessingState.loading: AudioProcessingState.loading,
-        ProcessingState.buffering: AudioProcessingState.buffering,
-        ProcessingState.ready: AudioProcessingState.ready,
-        ProcessingState.completed: AudioProcessingState.completed,
-      }[_player.processingState]!,
+      processingState:
+          const {
+            ProcessingState.idle: AudioProcessingState.idle,
+            ProcessingState.loading: AudioProcessingState.loading,
+            ProcessingState.buffering: AudioProcessingState.buffering,
+            ProcessingState.ready: AudioProcessingState.ready,
+            ProcessingState.completed: AudioProcessingState.completed,
+          }[_player.processingState]!,
       playing: _player.playing,
       //!!! use the current player position, since there might be a delay before this event is processed.
       // Do **not** use [event.updatePosition] or [event.bufferedPosition], since that could lead to a discontinuity in the playback position (resetting to 0) and cause incorrect history entries
       updatePosition: _player.position,
       bufferedPosition: _player.bufferedPosition,
       speed: _player.speed,
-      queueIndex: _player.shuffleModeEnabled && shuffleIndices.isNotEmpty && event.currentIndex != null
-          ? shuffleIndices.indexOf(event.currentIndex!)
-          : event.currentIndex,
+      queueIndex:
+          _player.shuffleModeEnabled && shuffleIndices.isNotEmpty && event.currentIndex != null
+              ? shuffleIndices.indexOf(event.currentIndex!)
+              : event.currentIndex,
       shuffleMode: _player.shuffleModeEnabled ? AudioServiceShuffleMode.all : AudioServiceShuffleMode.none,
       repeatMode: _audioServiceRepeatMode(_player.loopMode),
     );
   }
 
-  int? get queueIndex => _player.shuffleModeEnabled && shuffleIndices.isNotEmpty && _player.currentIndex != null
-      ? shuffleIndices.indexOf(_player.currentIndex!)
-      : _player.currentIndex;
+  int? get queueIndex =>
+      _player.shuffleModeEnabled && shuffleIndices.isNotEmpty && _player.currentIndex != null
+          ? shuffleIndices.indexOf(_player.currentIndex!)
+          : _player.currentIndex;
   SequenceState get sequenceState => _player.sequenceState;
   double get volume => (_volume._internalVolume * 100).roundToDouble() / 100;
   bool get paused => !_player.playing;

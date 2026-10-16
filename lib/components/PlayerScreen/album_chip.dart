@@ -124,21 +124,22 @@ class _AlbumChipContent extends StatelessWidget {
         borderRadius: _borderRadius,
         child: InkWell(
           borderRadius: _borderRadius,
-          onTap: item.albumId != null
-              ? () async {
-                  if (FinampSettingsHelper.finampSettings.isOffline) {
-                    var stub = await isarDownloader.getCollectionInfo(id: item.albumId!);
-                    if (stub?.baseItem != null && context.mounted) {
-                      await Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: stub!.baseItem!);
-                    }
-                  } else {
-                    var album = await jellyfinApiHelper.getItemById(item.albumId!);
-                    if (context.mounted) {
-                      await Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: album);
+          onTap:
+              item.albumId != null
+                  ? () async {
+                    if (FinampSettingsHelper.finampSettings.isOffline) {
+                      var stub = await isarDownloader.getCollectionInfo(id: item.albumId!);
+                      if (stub?.baseItem != null && context.mounted) {
+                        await Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: stub!.baseItem!);
+                      }
+                    } else {
+                      var album = await jellyfinApiHelper.getItemById(item.albumId!);
+                      if (context.mounted) {
+                        await Navigator.of(context).pushNamed(AlbumScreen.routeName, arguments: album);
+                      }
                     }
                   }
-                }
-              : null,
+                  : null,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
             child: Text(

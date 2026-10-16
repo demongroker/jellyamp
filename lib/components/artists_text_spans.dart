@@ -16,40 +16,33 @@ List<TextSpan> buildArtistsTextSpans(BaseItemDto item, Color? textColour, BuildC
   List<NameIdPair>? artists = item.type == "MusicAlbum" ? item.albumArtists : item.artistItems;
 
   if (artists?.isEmpty ?? true) {
-    separatedArtistTextSpans = [
-      TextSpan(
-        text: "Unknown Artist",
-        style: TextStyle(color: textColour),
-      ),
-    ];
+    separatedArtistTextSpans = [TextSpan(text: "Unknown Artist", style: TextStyle(color: textColour))];
   } else {
     artists
         ?.map(
           (e) => TextSpan(
             text: e.name,
             style: TextStyle(color: textColour),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                Future<BaseItemDto>? artistFuture = FinampSettingsHelper.finampSettings.isOffline
-                    ? isarDownloader.getCollectionInfo(id: e.id).then((value) => value!.baseItem!)
-                    : jellyfinApiHelper.getItemById(e.id);
+            recognizer:
+                TapGestureRecognizer()
+                  ..onTap = () {
+                    Future<BaseItemDto>? artistFuture =
+                        FinampSettingsHelper.finampSettings.isOffline
+                            ? isarDownloader.getCollectionInfo(id: e.id).then((value) => value!.baseItem!)
+                            : jellyfinApiHelper.getItemById(e.id);
 
-                artistFuture.then(
-                  (artist) => popRoutes
-                      ? Navigator.of(context).popAndPushNamed(ArtistScreen.routeName, arguments: artist)
-                      : Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: artist),
-                );
-              },
+                    artistFuture.then(
+                      (artist) =>
+                          popRoutes
+                              ? Navigator.of(context).popAndPushNamed(ArtistScreen.routeName, arguments: artist)
+                              : Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: artist),
+                    );
+                  },
           ),
         )
         .forEach((artistTextSpan) {
           separatedArtistTextSpans.add(artistTextSpan);
-          separatedArtistTextSpans.add(
-            TextSpan(
-              text: ", ",
-              style: TextStyle(color: textColour),
-            ),
-          );
+          separatedArtistTextSpans.add(TextSpan(text: ", ", style: TextStyle(color: textColour)));
         });
     separatedArtistTextSpans.removeLast();
   }

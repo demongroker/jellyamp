@@ -42,9 +42,8 @@ class ArtistChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final artists = ((artistType == ArtistType.albumArtist) ? baseItem?.albumArtists : baseItem?.artistItems) ?? [];
-    final filteredArtists = {
-      for (var artist in artists) artist.id: artist,
-    }.values.sortedBy((e) => e.name ?? '').toList();
+    final filteredArtists =
+        {for (var artist in artists) artist.id: artist}.values.sortedBy((e) => e.name ?? '').toList();
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -54,18 +53,21 @@ class ArtistChips extends StatelessWidget {
           spacing: 4.0,
           runSpacing: 4.0,
           crossAxisAlignment: WrapCrossAlignment.center,
-          children: filteredArtists.isEmpty
-              ? [ArtistChip(backgroundColor: backgroundColor, color: color, artist: null, key: const ValueKey(null))]
-              : List.generate(filteredArtists.length, (index) {
-                  final currentArtist = filteredArtists[index];
+          children:
+              filteredArtists.isEmpty
+                  ? [
+                    ArtistChip(backgroundColor: backgroundColor, color: color, artist: null, key: const ValueKey(null)),
+                  ]
+                  : List.generate(filteredArtists.length, (index) {
+                    final currentArtist = filteredArtists[index];
 
-                  return ArtistChip(
-                    backgroundColor: backgroundColor,
-                    color: color,
-                    artist: BaseItemDto(id: currentArtist.id, name: currentArtist.name, type: "MusicArtist"),
-                    key: ValueKey(currentArtist.id),
-                  );
-                }),
+                    return ArtistChip(
+                      backgroundColor: backgroundColor,
+                      color: color,
+                      artist: BaseItemDto(id: currentArtist.id, name: currentArtist.name, type: "MusicArtist"),
+                      key: ValueKey(currentArtist.id),
+                    );
+                  }),
         ),
       ),
     );
@@ -123,10 +125,7 @@ class _ArtistChipContent extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (isArtist && item?.imageId != null)
-                  AlbumImage(
-                    item: item,
-                    borderRadius: const BorderRadius.only(topLeft: _radius, bottomLeft: _radius),
-                  ),
+                  AlbumImage(item: item, borderRadius: const BorderRadius.only(topLeft: _radius, bottomLeft: _radius)),
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 6),

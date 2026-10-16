@@ -47,16 +47,17 @@ class ToggleableListTile extends ConsumerWidget {
     var themeColor = Theme.of(context).colorScheme.primary;
     final showDivider = divider ?? trailing == null;
     return Padding(
-      padding: condensed
-          ? const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0)
-          : const EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
+      padding:
+          condensed
+              ? const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0)
+              : const EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
       child: Container(
         decoration: ShapeDecoration(
           color: themeColor.withOpacity(
             lowContrast
                 ? state
-                      ? 0.1
-                      : 0.0
+                    ? 0.1
+                    : 0.0
                 : state
                 ? 0.3
                 : 0.1,
@@ -100,25 +101,27 @@ class ToggleableListTile extends ConsumerWidget {
                   ),
                 Padding(
                   padding: EdgeInsets.only(left: showDivider ? 8.0 : 16.0, right: 12.0),
-                  child: isLoading
-                      ? const CircularProgressIndicator()
-                      : trailing ?? Icon(icon, size: iconSize, color: themeColor),
+                  child:
+                      isLoading
+                          ? const CircularProgressIndicator()
+                          : trailing ?? Icon(icon, size: iconSize, color: themeColor),
                 ),
               ],
             ),
-            onTap: isLoading
-                ? null
-                : () async {
-                    FeedbackHelper.feedback(FeedbackType.selection);
-                    try {
-                      await onToggle(state);
-                      if (confirmationFeedback) {
-                        FeedbackHelper.feedback(FeedbackType.heavy);
+            onTap:
+                isLoading
+                    ? null
+                    : () async {
+                      FeedbackHelper.feedback(FeedbackType.selection);
+                      try {
+                        await onToggle(state);
+                        if (confirmationFeedback) {
+                          FeedbackHelper.feedback(FeedbackType.heavy);
+                        }
+                      } catch (e) {
+                        GlobalSnackbar.error(e);
                       }
-                    } catch (e) {
-                      GlobalSnackbar.error(e);
-                    }
-                  },
+                    },
             contentPadding: EdgeInsets.zero,
             minVerticalPadding: 0,
             visualDensity: condensed ? const VisualDensity(horizontal: 0.0, vertical: -2.0) : null,

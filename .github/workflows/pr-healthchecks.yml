@@ -25,6 +25,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.44.9'
           channel: 'stable'
       - name: Verify Flutter setup
         run: flutter doctor
@@ -53,6 +54,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.44.9'
           channel: 'stable'
       - name: Verify Flutter setup
         run: flutter doctor

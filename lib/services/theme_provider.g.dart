@@ -78,9 +78,10 @@ class FinampThemeProvider extends AutoDisposeProvider<ColorScheme> {
         (ref) => finampTheme(ref as FinampThemeRef, request),
         from: finampThemeProvider,
         name: r'finampThemeProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$finampThemeHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$finampThemeHash,
         dependencies: FinampThemeFamily._dependencies,
         allTransitiveDependencies: FinampThemeFamily._allTransitiveDependencies,
         request: request,
@@ -195,9 +196,10 @@ class ThemeImageProvider extends AutoDisposeProvider<FinampThemeImage> {
         (ref) => themeImage(ref as ThemeImageRef, request),
         from: themeImageProvider,
         name: r'themeImageProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$themeImageHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$themeImageHash,
         dependencies: ThemeImageFamily._dependencies,
         allTransitiveDependencies: ThemeImageFamily._allTransitiveDependencies,
         request: request,
@@ -269,7 +271,7 @@ class _ThemeImageProviderElement
 }
 
 String _$finampThemeFromImageHash() =>
-    r'473099b6a288c9c6a7c33727eabc654de4e5c034';
+    r'488adda8331de4da6ec35b6157728daeb2b08764';
 
 abstract class _$FinampThemeFromImage
     extends BuildlessAutoDisposeNotifier<ColorScheme> {
@@ -323,9 +325,10 @@ class FinampThemeFromImageProvider
         () => FinampThemeFromImage()..theme = theme,
         from: finampThemeFromImageProvider,
         name: r'finampThemeFromImageProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$finampThemeFromImageHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$finampThemeFromImageHash,
         dependencies: FinampThemeFromImageFamily._dependencies,
         allTransitiveDependencies:
             FinampThemeFromImageFamily._allTransitiveDependencies,

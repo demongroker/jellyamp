@@ -63,10 +63,7 @@ class PlaybackAction extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           spacing: compactLayout ? 0 : 9,
           children: [
-            Padding(
-              padding: EdgeInsets.only(left: addShuffleIcon ? 10.0 : 0.0),
-              child: iconWidget,
-            ),
+            Padding(padding: EdgeInsets.only(left: addShuffleIcon ? 10.0 : 0.0), child: iconWidget),
             Text(
               label,
               textAlign: TextAlign.center,
@@ -76,17 +73,19 @@ class PlaybackAction extends ConsumerWidget {
             ),
           ],
         ),
-        onPressed: enabled
-            ? () {
-                FeedbackHelper.feedback(FeedbackType.selection);
-                onPressed();
-              }
-            : null,
+        onPressed:
+            enabled
+                ? () {
+                  FeedbackHelper.feedback(FeedbackType.selection);
+                  onPressed();
+                }
+                : null,
         onLongPress: onLongPress,
         visualDensity: VisualDensity.compact,
-        padding: compactLayout
-            ? EdgeInsets.only(top: 5.0, left: 4.0, right: 4.0, bottom: 5.0)
-            : EdgeInsets.only(top: 10.0, left: 8.0, right: 8.0, bottom: 12.0),
+        padding:
+            compactLayout
+                ? EdgeInsets.only(top: 5.0, left: 4.0, right: 4.0, bottom: 5.0)
+                : EdgeInsets.only(top: 10.0, left: 8.0, right: 8.0, bottom: 12.0),
       ),
     );
   }

@@ -68,11 +68,10 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
                       var size = MediaQuery.sizeOf(context);
                       var padding = MediaQuery.paddingOf(context);
                       // When resizing window, update weights to keep player width consistent
-                      _weight =
-                          (1.0 -
-                                  (_playerWidth ?? FinampSettingsHelper.finampSettings.splitScreenPlayerWidth) /
-                                      constraints.maxWidth)
-                              .clamp(_controller.limits[0]!.min!, _controller.limits[0]!.max!);
+                      _weight = (1.0 -
+                              (_playerWidth ?? FinampSettingsHelper.finampSettings.splitScreenPlayerWidth) /
+                                  constraints.maxWidth)
+                          .clamp(_controller.limits[0]!.min!, _controller.limits[0]!.max!);
                       _controller.weights = [_weight];
                       return SplitView(
                         key: const ValueKey("PlayerSplitView"),
@@ -96,13 +95,14 @@ Widget buildPlayerSplitScreenScaffold(BuildContext context, Widget? widget) {
                         children: [
                           ListenableBuilder(
                             listenable: _controller,
-                            builder: (context, child) => MediaQuery(
-                              data: MediaQuery.of(context).copyWith(
-                                size: Size(size.width * (_controller.weights[0] ?? 1.0), size.height),
-                                padding: padding.copyWith(right: padding.right + 6),
-                              ),
-                              child: child!,
-                            ),
+                            builder:
+                                (context, child) => MediaQuery(
+                                  data: MediaQuery.of(context).copyWith(
+                                    size: Size(size.width * (_controller.weights[0] ?? 1.0), size.height),
+                                    padding: padding.copyWith(right: padding.right + 6),
+                                  ),
+                                  child: child!,
+                                ),
                             child: widget,
                           ),
                           ListenableBuilder(

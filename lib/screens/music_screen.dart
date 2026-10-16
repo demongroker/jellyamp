@@ -58,13 +58,15 @@ class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderSt
   final _jellyfinApiHelper = GetIt.instance<JellyfinApiHelper>();
 
   QueueItemSource get musicScreenSource => QueueItemSource.rawId(
-    type: ref.watch(finampSettingsProvider.onlyShowFavorites)
-        ? QueueItemSourceType.favorites
-        : QueueItemSourceType.allTracks,
+    type:
+        ref.watch(finampSettingsProvider.onlyShowFavorites)
+            ? QueueItemSourceType.favorites
+            : QueueItemSourceType.allTracks,
     name: QueueItemSourceName(
-      type: ref.watch(finampSettingsProvider.onlyShowFavorites)
-          ? QueueItemSourceNameType.yourLikes
-          : QueueItemSourceNameType.musicScreenTracks,
+      type:
+          ref.watch(finampSettingsProvider.onlyShowFavorites)
+              ? QueueItemSourceNameType.yourLikes
+              : QueueItemSourceNameType.musicScreenTracks,
     ),
     id: "allTracks",
     library: currentLibraryPlaceholder.resolve2(ref),
@@ -195,17 +197,18 @@ class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderSt
     ref.watch(FinampUserHelper.finampCurrentUserProvider);
     // Get the filtered tab or the tabs from the user's tab order,
     // and filter them to only include enabled tabs
-    final sortedTabs = widget.singleTabConfig != null
-        ? [
-            switch (widget.singleTabConfig!.base) {
-              QueuesHomeSection() => ContentType.home,
-              TabsHomeSection tabSection => tabSection.contentType,
-              CollectionHomeSection() => ContentType.mixed,
-            },
-          ]
-        : ref
-              .watch(finampSettingsProvider.tabOrder)
-              .where((e) => ref.watch(finampSettingsProvider.showTabs(e)) ?? false);
+    final sortedTabs =
+        widget.singleTabConfig != null
+            ? [
+              switch (widget.singleTabConfig!.base) {
+                QueuesHomeSection() => ContentType.home,
+                TabsHomeSection tabSection => tabSection.contentType,
+                CollectionHomeSection() => ContentType.mixed,
+              },
+            ]
+            : ref
+                .watch(finampSettingsProvider.tabOrder)
+                .where((e) => ref.watch(finampSettingsProvider.showTabs(e)) ?? false);
 
     if (sortedTabs.length != _tabController?.length) {
       _musicScreenLogger.info(
@@ -235,17 +238,18 @@ class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderSt
           singleTabConfig: widget.singleTabConfig,
           sortedTabs: sortedTabs.toList(),
           tabController: _tabController,
-          onSearch: () => setState(() {
-            isSearching = true;
-            if (_tabController != null &&
-                !_tabController!.indexIsChanging &&
-                sortedTabs.elementAt(_tabController!.index) == ContentType.home) {
-              // we can't search on the home tab yet
-              _tabController!.index = sortedTabs.toList().indexWhere(
-                (ContentType tabType) => tabType != ContentType.home,
-              );
-            }
-          }),
+          onSearch:
+              () => setState(() {
+                isSearching = true;
+                if (_tabController != null &&
+                    !_tabController!.indexIsChanging &&
+                    sortedTabs.elementAt(_tabController!.index) == ContentType.home) {
+                  // we can't search on the home tab yet
+                  _tabController!.index = sortedTabs.toList().indexWhere(
+                    (ContentType tabType) => tabType != ContentType.home,
+                  );
+                }
+              }),
           onStopSearch: _stopSearching,
           onUpdateSearchQuery: (value) {
             setState(() {
@@ -268,78 +272,82 @@ class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderSt
             }
             final child = TabBarView(
               controller: _tabController,
-              physics: ref.watch(finampSettingsProvider.disableGesture) || MediaQuery.disableAnimationsOf(context)
-                  ? const NeverScrollableScrollPhysics()
-                  : widget.singleTabConfig != null
-                  ? NeverScrollableScrollPhysics()
-                  : AlwaysScrollableScrollPhysics(),
+              physics:
+                  ref.watch(finampSettingsProvider.disableGesture) || MediaQuery.disableAnimationsOf(context)
+                      ? const NeverScrollableScrollPhysics()
+                      : widget.singleTabConfig != null
+                      ? NeverScrollableScrollPhysics()
+                      : AlwaysScrollableScrollPhysics(),
               dragStartBehavior: DragStartBehavior.down,
-              children: sortedTabs.map((tabType) {
-                if (tabType == ContentType.home && widget.singleTabConfig == null) {
-                  return HomeScreenContent(refresh: refreshMap[tabType]);
-                }
-                final contentTabType = tabType == ContentType.genericArtists
-                    ? ref.watch(finampSettingsProvider.defaultArtistType).tabType
-                    : tabType;
-                sortAndFilterControllerMap[contentTabType] ??= widget.singleTabConfig != null
-                    ? SortAndFilterController(
-                        startingConfig: widget.singleTabConfig!.sortConfig,
-                        contentType: contentTabType,
-                      )
-                    : SortAndFilterController.trackSettings(contentTabType);
+              children:
+                  sortedTabs.map((tabType) {
+                    if (tabType == ContentType.home && widget.singleTabConfig == null) {
+                      return HomeScreenContent(refresh: refreshMap[tabType]);
+                    }
+                    final contentTabType =
+                        tabType == ContentType.genericArtists
+                            ? ref.watch(finampSettingsProvider.defaultArtistType).tabType
+                            : tabType;
+                    sortAndFilterControllerMap[contentTabType] ??=
+                        widget.singleTabConfig != null
+                            ? SortAndFilterController(
+                              startingConfig: widget.singleTabConfig!.sortConfig,
+                              contentType: contentTabType,
+                            )
+                            : SortAndFilterController.trackSettings(contentTabType);
 
-                FinampDisplayable? displayable;
-                if (widget.singleTabConfig != null) {
-                  displayable = ref.watch(resolveSectionProvider(widget.singleTabConfig!)).value;
-                  // TODO precache resolved sections?  Or remove baked in item somehow?  Or save items into home screen settings?
-                  if (displayable == null) {
-                    return SizedBox.shrink();
-                  }
-                  if (displayable is FinampSortable) {
-                    displayable = displayable.copyWith(
-                      ref
-                          .watch(resolveSortProvider(sortAndFilterControllerMap[contentTabType]!))
-                          .copyWithSearch(searchQuery),
-                    );
-                  }
-                } else {
-                  displayable = MusicScreenPlayable(
-                    tab: contentTabType,
-                    library: currentLibraryPlaceholder,
-                    source: musicScreenSource,
-                    sortConfig: ref
-                        .watch(resolveSortProvider(sortAndFilterControllerMap[contentTabType]!))
-                        .copyWithSearch(searchQuery),
-                  );
-                }
+                    FinampDisplayable? displayable;
+                    if (widget.singleTabConfig != null) {
+                      displayable = ref.watch(resolveSectionProvider(widget.singleTabConfig!)).value;
+                      // TODO precache resolved sections?  Or remove baked in item somehow?  Or save items into home screen settings?
+                      if (displayable == null) {
+                        return SizedBox.shrink();
+                      }
+                      if (displayable is FinampSortable) {
+                        displayable = displayable.copyWith(
+                          ref
+                              .watch(resolveSortProvider(sortAndFilterControllerMap[contentTabType]!))
+                              .copyWithSearch(searchQuery),
+                        );
+                      }
+                    } else {
+                      displayable = MusicScreenPlayable(
+                        tab: contentTabType,
+                        library: currentLibraryPlaceholder,
+                        source: musicScreenSource,
+                        sortConfig: ref
+                            .watch(resolveSortProvider(sortAndFilterControllerMap[contentTabType]!))
+                            .copyWithSearch(searchQuery),
+                      );
+                    }
 
-                return Column(
-                  children: [
-                    if (displayable is FinampSortable)
-                      SortAndFilterRow(
-                        tabType: contentTabType,
-                        controller: sortAndFilterControllerMap[contentTabType]!,
-                        allowFilters: widget.allowFilters,
-                      ),
-                    ArtistTypeSelectionRow(
-                      tabType: tabType,
-                      defaultArtistType: ref.watch(finampSettingsProvider.defaultArtistType),
-                      refreshTab: refreshTab,
-                      singleTabConfig: widget.singleTabConfig,
-                    ),
-                    Expanded(
-                      // Prevent track highlight background from showing on header
-                      child: Material(
-                        child: MusicScreenTabView(
-                          refresh: refreshMap[tabType],
-                          allowTrackGestures: widget.singleTabConfig != null,
-                          displayable: displayable,
+                    return Column(
+                      children: [
+                        if (displayable is FinampSortable)
+                          SortAndFilterRow(
+                            tabType: contentTabType,
+                            controller: sortAndFilterControllerMap[contentTabType]!,
+                            allowFilters: widget.allowFilters,
+                          ),
+                        ArtistTypeSelectionRow(
+                          tabType: tabType,
+                          defaultArtistType: ref.watch(finampSettingsProvider.defaultArtistType),
+                          refreshTab: refreshTab,
+                          singleTabConfig: widget.singleTabConfig,
                         ),
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
+                        Expanded(
+                          // Prevent track highlight background from showing on header
+                          child: Material(
+                            child: MusicScreenTabView(
+                              refresh: refreshMap[tabType],
+                              allowTrackGestures: widget.singleTabConfig != null,
+                              displayable: displayable,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }).toList(),
             );
 
             // The full-width navigation drawer has been replaced by a slim,
@@ -348,10 +356,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderSt
             if (widget.showHeader) {
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const FinampNavigationRail(),
-                  Expanded(child: child),
-                ],
+                children: [const FinampNavigationRail(), Expanded(child: child)],
               );
             }
 
@@ -362,4 +367,3 @@ class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderSt
     );
   }
 }
-

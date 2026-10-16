@@ -43,11 +43,12 @@ class MusicScreenTabView extends ConsumerStatefulWidget {
 
   final bool allowTrackGestures;
 
-  SortAndFilterConfiguration get sortConfig => displayable is FinampSortable
-      ? (displayable as FinampSortable).sortConfig
-      : displayable is FinampPlayableDto
-      ? SortAndFilterConfiguration.defaultForItem((displayable as FinampPlayableDto).item)
-      : SortAndFilterConfiguration.defaultSort;
+  SortAndFilterConfiguration get sortConfig =>
+      displayable is FinampSortable
+          ? (displayable as FinampSortable).sortConfig
+          : displayable is FinampPlayableDto
+          ? SortAndFilterConfiguration.defaultForItem((displayable as FinampPlayableDto).item)
+          : SortAndFilterConfiguration.defaultSort;
 
   ContentType? get contentType => switch (displayable) {
     MusicScreenPlayable(tab: var tab) => tab,
@@ -293,158 +294,160 @@ class _MusicScreenTabViewState extends ConsumerState<MusicScreenTabView>
     final itemPadding = calculateItemCollectionCardWidth(ref).$2;
     var tabContent =
         ref.watch(finampSettingsProvider.contentViewType) == ContentViewType.list ||
-            widget.contentType == ContentType.tracks ||
-            widget.contentType == null
-        ? SafeArea(
-            top: false,
-            bottom: false,
-            child: PagedListView<int, FinampDisplayableOrPlayable>.separated(
+                widget.contentType == ContentType.tracks ||
+                widget.contentType == null
+            ? SafeArea(
+              top: false,
+              bottom: false,
+              child: PagedListView<int, FinampDisplayableOrPlayable>.separated(
+                state: ref.watch(pageControl),
+                fetchNextPage: () {
+                  ref.read(pageControl.notifier).newPage();
+                },
+                scrollController: controller,
+                physics: _DeferredLoadingAlwaysScrollableScrollPhysics(tabState: this),
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                builderDelegate: PagedChildBuilderDelegate<FinampDisplayableOrPlayable>(
+                  itemBuilder: (context, item, index) {
+                    // Use right padding inherited from fast scroller minus
+                    // built-in icon padding
+                    return Padding(
+                      padding: EdgeInsets.only(right: max(0, MediaQuery.paddingOf(context).right - 20)),
+                      child: CachedBuilder(
+                        key: ValueKey(item.id),
+                        cacheKey: (item.id, index),
+                        builder: (context) {
+                          return AutoScrollTag(
+                            key: ValueKey(index),
+                            controller: controller,
+                            index: index,
+                            child: switch (item) {
+                              Track() => Consumer(
+                                builder: (context, ref, _) {
+                                  return TrackListTile(
+                                    key: ValueKey(item.item.id),
+                                    item: item.item,
+                                    index: index,
+                                    // when the tabBar was filtered and we only have the tracks tab,
+                                    // we can allow Dismiss gestures in the track list
+                                    allowDismiss: widget.allowTrackGestures,
+                                    parentItem: switch (true) {
+                                      _ when widget.sortConfig.genreFilter != null =>
+                                        ref.watch(itemByIdProvider(widget.sortConfig.genreFilter!.id)).value,
+                                      _ when widget.sortConfig.artistFilter != null =>
+                                        ref.watch(itemByIdProvider(widget.sortConfig.artistFilter!.id)).value,
+                                      _ => null,
+                                    },
+                                    forceAlbumArtists: (widget.sortConfig.sortBy == SortBy.albumArtist),
+                                    adaptiveAdditionalInfoSortBy: widget.sortConfig.sortBy,
+                                    parentPlayable:
+                                        ref.watch(finampSettingsProvider.startInstantMixForIndividualTracks) &&
+                                                !ref.watch(finampSettingsProvider.isOffline)
+                                            ? InstantMix(item.item)
+                                            : widget.displayable is FinampPlayable
+                                            ? (widget.displayable as FinampPlayable)
+                                            : item,
+                                  );
+                                },
+                              ),
+                              FinampPlayableDto() => ItemWrapper(
+                                key: ValueKey(item.item.id),
+                                item: item.item,
+                                genreFilter: widget.sortConfig.genreFilter,
+                                adaptiveAdditionalInfoSortBy: widget.sortConfig.sortBy,
+                                showFavoriteIconOnlyWhenFilterDisabled: true,
+                              ),
+                              PlayableQueue() => QueueRestoreTile(info: item.queue),
+                              LatestQueues() ||
+                              PrecalculatedPlayable() ||
+                              MusicScreenPlayable<FinampPlayableDto>() ||
+                              UnavailableHomeSectionPlayable() => throw UnsupportedError("Unsupported type $item"),
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  firstPageProgressIndicatorBuilder: (_) => const FirstPageProgressIndicator(),
+                  newPageProgressIndicatorBuilder: (_) => const NewPageProgressIndicator(),
+                  noItemsFoundIndicatorBuilder: (_) => emptyListIndicator,
+                  newPageErrorIndicatorBuilder: (_) => NewPageErrorIndicator(onTap: _retry),
+                  firstPageErrorIndicatorBuilder: (_) => FirstPageErrorIndicator(onTap: _retry),
+                  noMoreItemsIndicatorBuilder: (_) => SizedBox(height: TrackListItemTile.defaultTileHeight / 2),
+                  invisibleItemsThreshold: 70,
+                ),
+                separatorBuilder: (context, index) => const SizedBox.shrink(),
+              ),
+            )
+            : PagedGridView<int, FinampDisplayableOrPlayable>(
+              // If we made it here, we must be in a non-track music screen, so pageControl should only return FinampPlayableItem
               state: ref.watch(pageControl),
               fetchNextPage: () {
                 ref.read(pageControl.notifier).newPage();
               },
+              padding: EdgeInsets.only(
+                top: itemPadding,
+                bottom: itemPadding,
+                left: MediaQuery.paddingOf(context).left + itemPadding,
+                // Grid is automatically adding one itemPadding to the right of all elements
+                right: MediaQuery.paddingOf(context).right,
+              ),
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              showNewPageProgressIndicatorAsGridChild: false,
+              showNewPageErrorIndicatorAsGridChild: false,
+              showNoMoreItemsIndicatorAsGridChild: false,
               scrollController: controller,
               physics: _DeferredLoadingAlwaysScrollableScrollPhysics(tabState: this),
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               builderDelegate: PagedChildBuilderDelegate<FinampDisplayableOrPlayable>(
                 itemBuilder: (context, item, index) {
-                  // Use right padding inherited from fast scroller minus
-                  // built-in icon padding
-                  return Padding(
-                    padding: EdgeInsets.only(right: max(0, MediaQuery.paddingOf(context).right - 20)),
-                    child: CachedBuilder(
-                      key: ValueKey(item.id),
-                      cacheKey: (item.id, index),
-                      builder: (context) {
-                        return AutoScrollTag(
-                          key: ValueKey(index),
-                          controller: controller,
-                          index: index,
-                          child: switch (item) {
-                            Track() => Consumer(
-                              builder: (context, ref, _) {
-                                return TrackListTile(
-                                  key: ValueKey(item.item.id),
-                                  item: item.item,
-                                  index: index,
-                                  // when the tabBar was filtered and we only have the tracks tab,
-                                  // we can allow Dismiss gestures in the track list
-                                  allowDismiss: widget.allowTrackGestures,
-                                  parentItem: switch (true) {
-                                    _ when widget.sortConfig.genreFilter != null =>
-                                      ref.watch(itemByIdProvider(widget.sortConfig.genreFilter!.id)).value,
-                                    _ when widget.sortConfig.artistFilter != null =>
-                                      ref.watch(itemByIdProvider(widget.sortConfig.artistFilter!.id)).value,
-                                    _ => null,
-                                  },
-                                  forceAlbumArtists: (widget.sortConfig.sortBy == SortBy.albumArtist),
-                                  adaptiveAdditionalInfoSortBy: widget.sortConfig.sortBy,
-                                  parentPlayable:
-                                      ref.watch(finampSettingsProvider.startInstantMixForIndividualTracks) &&
-                                          !ref.watch(finampSettingsProvider.isOffline)
-                                      ? InstantMix(item.item)
-                                      : widget.displayable is FinampPlayable
-                                      ? (widget.displayable as FinampPlayable)
-                                      : item,
-                                );
-                              },
-                            ),
-                            FinampPlayableDto() => ItemWrapper(
-                              key: ValueKey(item.item.id),
-                              item: item.item,
-                              genreFilter: widget.sortConfig.genreFilter,
-                              adaptiveAdditionalInfoSortBy: widget.sortConfig.sortBy,
-                              showFavoriteIconOnlyWhenFilterDisabled: true,
-                            ),
-                            PlayableQueue() => QueueRestoreTile(info: item.queue),
-                            LatestQueues() ||
-                            PrecalculatedPlayable() ||
-                            MusicScreenPlayable<FinampPlayableDto>() ||
-                            UnavailableHomeSectionPlayable() => throw UnsupportedError("Unsupported type $item"),
-                          },
-                        );
-                      },
-                    ),
+                  // We only allow grid mode for FinampDisplayable<FinampPlayableItem>
+                  final baseItem = (item as FinampPlayableDto).item;
+                  return CachedBuilder(
+                    key: ValueKey(baseItem.id),
+                    cacheKey: (baseItem.id, index),
+                    builder: (context) {
+                      return AutoScrollTag(
+                        key: ValueKey(index),
+                        controller: controller,
+                        index: index,
+                        child: ItemWrapper(
+                          key: ValueKey(baseItem.id),
+                          item: baseItem,
+                          isGrid: true,
+                          genreFilter: widget.sortConfig.genreFilter,
+                        ),
+                      );
+                    },
                   );
                 },
                 firstPageProgressIndicatorBuilder: (_) => const FirstPageProgressIndicator(),
                 newPageProgressIndicatorBuilder: (_) => const NewPageProgressIndicator(),
                 noItemsFoundIndicatorBuilder: (_) => emptyListIndicator,
+                noMoreItemsIndicatorBuilder:
+                    (_) => SizedBox(
+                      height:
+                          MediaQuery.paddingOf(context).bottom + ref.watch(finampSettingsProvider.gridImageSize) / 2,
+                    ),
                 newPageErrorIndicatorBuilder: (_) => NewPageErrorIndicator(onTap: _retry),
                 firstPageErrorIndicatorBuilder: (_) => FirstPageErrorIndicator(onTap: _retry),
-                noMoreItemsIndicatorBuilder: (_) => SizedBox(height: TrackListItemTile.defaultTileHeight / 2),
                 invisibleItemsThreshold: 70,
               ),
-              separatorBuilder: (context, index) => const SizedBox.shrink(),
-            ),
-          )
-        : PagedGridView<int, FinampDisplayableOrPlayable>(
-            // If we made it here, we must be in a non-track music screen, so pageControl should only return FinampPlayableItem
-            state: ref.watch(pageControl),
-            fetchNextPage: () {
-              ref.read(pageControl.notifier).newPage();
-            },
-            padding: EdgeInsets.only(
-              top: itemPadding,
-              bottom: itemPadding,
-              left: MediaQuery.paddingOf(context).left + itemPadding,
-              // Grid is automatically adding one itemPadding to the right of all elements
-              right: MediaQuery.paddingOf(context).right,
-            ),
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            showNewPageProgressIndicatorAsGridChild: false,
-            showNewPageErrorIndicatorAsGridChild: false,
-            showNoMoreItemsIndicatorAsGridChild: false,
-            scrollController: controller,
-            physics: _DeferredLoadingAlwaysScrollableScrollPhysics(tabState: this),
-            builderDelegate: PagedChildBuilderDelegate<FinampDisplayableOrPlayable>(
-              itemBuilder: (context, item, index) {
-                // We only allow grid mode for FinampDisplayable<FinampPlayableItem>
-                final baseItem = (item as FinampPlayableDto).item;
-                return CachedBuilder(
-                  key: ValueKey(baseItem.id),
-                  cacheKey: (baseItem.id, index),
-                  builder: (context) {
-                    return AutoScrollTag(
-                      key: ValueKey(index),
-                      controller: controller,
-                      index: index,
-                      child: ItemWrapper(
-                        key: ValueKey(baseItem.id),
-                        item: baseItem,
-                        isGrid: true,
-                        genreFilter: widget.sortConfig.genreFilter,
-                      ),
-                    );
-                  },
-                );
-              },
-              firstPageProgressIndicatorBuilder: (_) => const FirstPageProgressIndicator(),
-              newPageProgressIndicatorBuilder: (_) => const NewPageProgressIndicator(),
-              noItemsFoundIndicatorBuilder: (_) => emptyListIndicator,
-              noMoreItemsIndicatorBuilder: (_) => SizedBox(
-                height: MediaQuery.paddingOf(context).bottom + ref.watch(finampSettingsProvider.gridImageSize) / 2,
-              ),
-              newPageErrorIndicatorBuilder: (_) => NewPageErrorIndicator(onTap: _retry),
-              firstPageErrorIndicatorBuilder: (_) => FirstPageErrorIndicator(onTap: _retry),
-              invisibleItemsThreshold: 70,
-            ),
-            gridDelegate: MusicScreenGridLayout(ref: ref, contentType: widget.contentType!),
-          );
+              gridDelegate: MusicScreenGridLayout(ref: ref, contentType: widget.contentType!),
+            );
 
     var showFastScroller = ref.watch(finampSettingsProvider.showFastScroller);
     return RefreshIndicator(
       onRefresh: () async => _refresh(),
       child:
           showFastScroller &&
-              (widget.sortConfig.sortBy == SortBy.sortName || widget.sortConfig.sortBy == SortBy.albumArtist)
-          ? AlphabetList(
-              callback: scrollToLetter,
-              scrollController: controller,
-              sortOrder: widget.sortConfig.sortOrder,
-              child: tabContent,
-            )
-          : tabContent,
+                  (widget.sortConfig.sortBy == SortBy.sortName || widget.sortConfig.sortBy == SortBy.albumArtist)
+              ? AlphabetList(
+                callback: scrollToLetter,
+                scrollController: controller,
+                sortOrder: widget.sortConfig.sortOrder,
+                child: tabContent,
+              )
+              : tabContent,
     );
   }
 }

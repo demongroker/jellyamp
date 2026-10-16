@@ -190,52 +190,52 @@ class QuickConnectSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return connectionState.quickConnectState != null
         ? Column(
-            children: [
-              Text(AppLocalizations.of(context)!.loginFlowQuickConnectPrompt, textAlign: TextAlign.center),
-              GestureDetector(
-                onTap: () async {
-                  if (connectionState.quickConnectState?.code != null) {
-                    FeedbackHelper.feedback(FeedbackType.selection);
-                    await Clipboard.setData(ClipboardData(text: connectionState.quickConnectState!.code!));
-                  }
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: SelectableText(
-                    connectionState.quickConnectState?.code ?? "",
-                    style: Theme.of(
-                      context,
-                    ).textTheme.displaySmall!.copyWith(fontFamily: "monospace", letterSpacing: 5.0),
-                    semanticsLabel: connectionState.quickConnectState?.code?.split("").join(" "),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  AppLocalizations.of(context)!.loginFlowQuickConnectInstructions,
-                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    fontWeight: FontWeight.w300,
-                    color: Theme.of(context).textTheme.bodySmall!.color!.withOpacity(0.9),
-                  ),
+          children: [
+            Text(AppLocalizations.of(context)!.loginFlowQuickConnectPrompt, textAlign: TextAlign.center),
+            GestureDetector(
+              onTap: () async {
+                if (connectionState.quickConnectState?.code != null) {
+                  FeedbackHelper.feedback(FeedbackType.selection);
+                  await Clipboard.setData(ClipboardData(text: connectionState.quickConnectState!.code!));
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: SelectableText(
+                  connectionState.quickConnectState?.code ?? "",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.displaySmall!.copyWith(fontFamily: "monospace", letterSpacing: 5.0),
+                  semanticsLabel: connectionState.quickConnectState?.code?.split("").join(" "),
                   textAlign: TextAlign.center,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                child: Text(
-                  "- ${AppLocalizations.of(context)!.orDivider} -",
-                  style: Theme.of(context).textTheme.bodyLarge,
-                  textAlign: TextAlign.center,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                AppLocalizations.of(context)!.loginFlowQuickConnectInstructions,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  fontWeight: FontWeight.w300,
+                  color: Theme.of(context).textTheme.bodySmall!.color!.withOpacity(0.9),
                 ),
+                textAlign: TextAlign.center,
               ),
-            ],
-          )
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+              child: Text(
+                "- ${AppLocalizations.of(context)!.orDivider} -",
+                style: Theme.of(context).textTheme.bodyLarge,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        )
         : Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 12.0),
-            child: Text(AppLocalizations.of(context)!.loginFlowQuickConnectDisabled, textAlign: TextAlign.center),
-          );
+          padding: const EdgeInsets.only(top: 16.0, bottom: 12.0),
+          child: Text(AppLocalizations.of(context)!.loginFlowQuickConnectDisabled, textAlign: TextAlign.center),
+        );
   }
 }
 
@@ -248,9 +248,10 @@ class JellyfinUserWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final avatarUrl = user != null && jellyfinApiHelper.baseUrlTemp != null
-        ? jellyfinApiHelper.getUserImageUrl(baseUrl: jellyfinApiHelper.baseUrlTemp!, user: user!)?.toString()
-        : null;
+    final avatarUrl =
+        user != null && jellyfinApiHelper.baseUrlTemp != null
+            ? jellyfinApiHelper.getUserImageUrl(baseUrl: jellyfinApiHelper.baseUrlTemp!, user: user!)?.toString()
+            : null;
 
     const double avatarSize = 72.0;
 
@@ -259,11 +260,7 @@ class JellyfinUserWidget extends StatelessWidget {
         if (avatarUrl != null) {
           return Image.network(avatarUrl, width: avatarSize, height: avatarSize);
         } else {
-          return SizedBox(
-            width: avatarSize,
-            height: avatarSize,
-            child: FinampIcon(avatarSize, avatarSize),
-          );
+          return SizedBox(width: avatarSize, height: avatarSize, child: FinampIcon(avatarSize, avatarSize));
         }
       } else {
         return Container(
@@ -310,16 +307,16 @@ class JellyfinUserWidget extends StatelessWidget {
 
     return onPressed != null
         ? ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Theme.of(context).textTheme.bodyMedium!.color,
-              surfaceTintColor: Colors.transparent,
-              backgroundColor: Colors.transparent,
-              shadowColor: Colors.transparent,
-              padding: const EdgeInsets.all(0),
-            ),
-            onPressed: onPressed,
-            child: buildContent(),
-          )
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Theme.of(context).textTheme.bodyMedium!.color,
+            surfaceTintColor: Colors.transparent,
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            padding: const EdgeInsets.all(0),
+          ),
+          onPressed: onPressed,
+          child: buildContent(),
+        )
         : Container(child: buildContent());
   }
 }

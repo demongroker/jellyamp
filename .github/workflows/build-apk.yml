@@ -63,11 +63,19 @@ jobs:
           mv build/app/outputs/flutter-apk/app-release.apk \
              build/app/outputs/flutter-apk/${{ steps.filename.outputs.name }}
 
-      - name: Upload APK
+      - name: Generate SHA-256 checksum
+        run: |
+          cd build/app/outputs/flutter-apk
+          sha256sum "${{ steps.filename.outputs.name }}" > "${{ steps.filename.outputs.name }}.sha256"
+          cat "${{ steps.filename.outputs.name }}.sha256"
+
+      - name: Upload APK + checksum
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.filename.outputs.name }}
-          path: build/app/outputs/flutter-apk/${{ steps.filename.outputs.name }}
+          path: |
+            build/app/outputs/flutter-apk/${{ steps.filename.outputs.name }}
+            build/app/outputs/flutter-apk/${{ steps.filename.outputs.name }}.sha256
           retention-days: 30
 
       # Always create draft release on feature branches (agent will publish)
@@ -78,6 +86,8 @@ jobs:
           tag_name: ${{ steps.version.outputs.tag }}
           name: Jellyamp ${{ steps.version.outputs.tag }}
           draft: true
-          files: build/app/outputs/flutter-apk/${{ steps.filename.outputs.name }}
+          files: |
+            build/app/outputs/flutter-apk/${{ steps.filename.outputs.name }}
+            build/app/outputs/flutter-apk/${{ steps.filename.outputs.name }}.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

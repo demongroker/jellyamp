@@ -129,12 +129,13 @@ Future<List<BaseItemDto>?> loadChildTracksOffline({
       items = [item];
       break;
     case BaseItemDtoType.genre:
-      items = (await downloadsService.getAllTracks(
-        viewFilter: finampUserHelper.currentUser?.currentView?.id,
-        genreFilter: item.id,
-        nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
-        onlyFavorites: sortConfig.favoritesFilter,
-      )).map((e) => e.baseItem!).toList();
+      items =
+          (await downloadsService.getAllTracks(
+            viewFilter: finampUserHelper.currentUser?.currentView?.id,
+            genreFilter: item.id,
+            nullableViewFilters: settings.showDownloadsWithUnknownLibrary,
+            onlyFavorites: sortConfig.favoritesFilter,
+          )).map((e) => e.baseItem!).toList();
       items.shuffle();
       if (items.length - 1 > settings.trackShuffleItemCount) {
         items = items.sublist(0, settings.trackShuffleItemCount);
@@ -174,17 +175,18 @@ void openItemPage(BaseItemDto item, NavigatorState navigator, {bool showTracks =
     final finampUserHelper = GetIt.instance<FinampUserHelper>();
     navigator.push(
       MaterialPageRoute<MusicScreen>(
-        builder: (context) => MusicScreen(
-          singleTabConfig: HomeScreenSectionConfiguration(
-            base: CollectionHomeSection(
-              itemId: item.id,
-              libraryId: finampUserHelper.currentUser!.currentViewId!,
-              contentType: ContentType.mixed,
+        builder:
+            (context) => MusicScreen(
+              singleTabConfig: HomeScreenSectionConfiguration(
+                base: CollectionHomeSection(
+                  itemId: item.id,
+                  libraryId: finampUserHelper.currentUser!.currentViewId!,
+                  contentType: ContentType.mixed,
+                ),
+                customSectionTitle: item.name ?? AppLocalizations.of(context)!.unknownName,
+                sortConfig: SortAndFilterConfiguration.defaultSort,
+              ),
             ),
-            customSectionTitle: item.name ?? AppLocalizations.of(context)!.unknownName,
-            sortConfig: SortAndFilterConfiguration.defaultSort,
-          ),
-        ),
       ),
     );
     return;

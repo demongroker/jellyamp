@@ -133,13 +133,13 @@ class _AudioFadeProgressVisualizerContainerState extends State<AudioFadeProgress
               borderRadius: widget.borderRadius,
               border:
                   (_controller.status == AnimationStatus.forward || _controller.status == AnimationStatus.reverse) &&
-                      !MediaQuery.disableAnimationsOf(context)
-                  ? ProgressBorder.all(
-                      color: widget.color ?? Theme.of(context).textTheme.bodyMedium!.color!.withAlpha(128),
-                      width: 4,
-                      progress: _animation.value,
-                    )
-                  : null,
+                          !MediaQuery.disableAnimationsOf(context)
+                      ? ProgressBorder.all(
+                        color: widget.color ?? Theme.of(context).textTheme.bodyMedium!.color!.withAlpha(128),
+                        width: 4,
+                        progress: _animation.value,
+                      )
+                      : null,
             ),
             child: widget.child,
           );

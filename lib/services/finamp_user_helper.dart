@@ -53,6 +53,7 @@ class FinampUserHelper {
     }
     return user;
   }
+
   FinampUser? _currentUserCache;
 
   Iterable<FinampUser> get finampUsers {

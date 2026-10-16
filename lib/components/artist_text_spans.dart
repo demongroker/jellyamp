@@ -21,19 +21,21 @@ List<TextSpan> getArtistsTextSpans(BaseItemDto item, BuildContext context, bool 
           (e) => TextSpan(
             text: e.name,
             style: Theme.of(context).textTheme.bodyMedium,
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                // Offline artists aren't implemented yet so we return if offline
-                if (FinampSettingsHelper.finampSettings.isOffline) return;
+            recognizer:
+                TapGestureRecognizer()
+                  ..onTap = () {
+                    // Offline artists aren't implemented yet so we return if offline
+                    if (FinampSettingsHelper.finampSettings.isOffline) return;
 
-                jellyfinApiHelper
-                    .getItemById(e.id)
-                    .then(
-                      (artist) => popRoutes
-                          ? Navigator.of(context).popAndPushNamed(ArtistScreen.routeName, arguments: artist)
-                          : Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: artist),
-                    );
-              },
+                    jellyfinApiHelper
+                        .getItemById(e.id)
+                        .then(
+                          (artist) =>
+                              popRoutes
+                                  ? Navigator.of(context).popAndPushNamed(ArtistScreen.routeName, arguments: artist)
+                                  : Navigator.of(context).pushNamed(ArtistScreen.routeName, arguments: artist),
+                        );
+                  },
           ),
         )
         .forEach((artistTextSpan) {

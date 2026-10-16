@@ -38,47 +38,49 @@ Widget buildCuratedItemFilterRow({
               child: IntrinsicWidth(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: filterOrder.asMap().entries.expand((entry) {
-                    final int index = entry.key;
-                    final type = entry.value;
-                    final bool isSelected = (currentSelectedFilter == type);
-                    final colorScheme = Theme.of(context).colorScheme;
-                    double leftPadding = index == 0 ? 8.0 : 0.0;
-                    double rightPadding = index == CuratedItemSelectionType.values.length - 1 ? 8.0 : 6.0;
-                    final String? tooltipMessage =
-                        (isOffline &&
-                            (type == CuratedItemSelectionType.mostPlayed ||
-                                type == CuratedItemSelectionType.recentlyPlayed))
-                        ? AppLocalizations.of(context)!.notAvailableInOfflineMode
-                        : (disabledFiltersList.contains(type)
-                              ? (type == CuratedItemSelectionType.favorites
-                                    ? AppLocalizations.of(context)!.curatedItemsNoFavorites('other')
-                                    : AppLocalizations.of(context)!.curatedItemsNotListenedYet('other'))
-                              : null);
-                    final chip = FilterChip(
-                      label: Text(type.toLocalisedString(context.l10n)),
-                      onSelected: disabledFiltersList.contains(type)
-                          ? null
-                          : (_) {
-                              if (onFilterSelected != null) {
-                                onFilterSelected(type);
-                              }
-                            },
-                      selected: isSelected,
-                      showCheckmark: false,
-                      selectedColor: colorScheme.primary,
-                      backgroundColor: colorScheme.surface,
-                      labelStyle: TextStyle(color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface),
-                      shape: const StadiumBorder(),
-                    );
+                  children:
+                      filterOrder.asMap().entries.expand((entry) {
+                        final int index = entry.key;
+                        final type = entry.value;
+                        final bool isSelected = (currentSelectedFilter == type);
+                        final colorScheme = Theme.of(context).colorScheme;
+                        double leftPadding = index == 0 ? 8.0 : 0.0;
+                        double rightPadding = index == CuratedItemSelectionType.values.length - 1 ? 8.0 : 6.0;
+                        final String? tooltipMessage =
+                            (isOffline &&
+                                    (type == CuratedItemSelectionType.mostPlayed ||
+                                        type == CuratedItemSelectionType.recentlyPlayed))
+                                ? AppLocalizations.of(context)!.notAvailableInOfflineMode
+                                : (disabledFiltersList.contains(type)
+                                    ? (type == CuratedItemSelectionType.favorites
+                                        ? AppLocalizations.of(context)!.curatedItemsNoFavorites('other')
+                                        : AppLocalizations.of(context)!.curatedItemsNotListenedYet('other'))
+                                    : null);
+                        final chip = FilterChip(
+                          label: Text(type.toLocalisedString(context.l10n)),
+                          onSelected:
+                              disabledFiltersList.contains(type)
+                                  ? null
+                                  : (_) {
+                                    if (onFilterSelected != null) {
+                                      onFilterSelected(type);
+                                    }
+                                  },
+                          selected: isSelected,
+                          showCheckmark: false,
+                          selectedColor: colorScheme.primary,
+                          backgroundColor: colorScheme.surface,
+                          labelStyle: TextStyle(color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface),
+                          shape: const StadiumBorder(),
+                        );
 
-                    return [
-                      Padding(
-                        padding: EdgeInsets.only(left: leftPadding, right: rightPadding),
-                        child: tooltipMessage != null ? Tooltip(message: tooltipMessage, child: chip) : chip,
-                      ),
-                    ];
-                  }).toList(),
+                        return [
+                          Padding(
+                            padding: EdgeInsets.only(left: leftPadding, right: rightPadding),
+                            child: tooltipMessage != null ? Tooltip(message: tooltipMessage, child: chip) : chip,
+                          ),
+                        ];
+                      }).toList(),
                 ),
               ),
             ),

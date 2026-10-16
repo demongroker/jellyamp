@@ -113,9 +113,8 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                           backgroundColor: Colors.transparent,
                           fontWeight: active ? FontWeight.w600 : FontWeight.w500,
                         ),
-                        foregroundColor: active
-                            ? Colors.white
-                            : Theme.of(context).textTheme.bodySmall?.color ?? Colors.white,
+                        foregroundColor:
+                            active ? Colors.white : Theme.of(context).textTheme.bodySmall?.color ?? Colors.white,
                         backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(active ? 0.6 : 0.1),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                         minimumSize: Size(42, 52),
@@ -483,28 +482,31 @@ class _SleepTimerMenuState extends State<SleepTimerMenu> {
                         Duration? durationUntilEndOfFinalTrack;
                         if (finalTrackIndex != null) {
                           durationOfFinalTrack = queueInfo.fullQueue[finalTrackIndex - 1].item.duration!;
-                          durationUntilFinalTrack = newSleepTimer.totalDuration < currentTrackRemainingDuration
-                              ? Duration.zero
-                              : currentTrackRemainingDuration +
-                                    queueInfo.getDurationUntil(finalTrackIndex - queueInfo.currentTrackIndex);
-                          durationUntilEndOfFinalTrack = newSleepTimer.totalDuration < currentTrackRemainingDuration
-                              ? currentTrackRemainingDuration
-                              : durationUntilFinalTrack + durationOfFinalTrack;
+                          durationUntilFinalTrack =
+                              newSleepTimer.totalDuration < currentTrackRemainingDuration
+                                  ? Duration.zero
+                                  : currentTrackRemainingDuration +
+                                      queueInfo.getDurationUntil(finalTrackIndex - queueInfo.currentTrackIndex);
+                          durationUntilEndOfFinalTrack =
+                              newSleepTimer.totalDuration < currentTrackRemainingDuration
+                                  ? currentTrackRemainingDuration
+                                  : durationUntilFinalTrack + durationOfFinalTrack;
                         }
-                        remaining = finishTrack
-                            ? Duration(
-                                milliseconds: min(
-                                  durationUntilEndOfFinalTrack?.inMilliseconds ??
-                                      (queueRemainingDuration + currentTrackRemainingDuration).inMilliseconds,
-                                  (queueRemainingDuration + currentTrackRemainingDuration).inMilliseconds,
-                                ),
-                              )
-                            : Duration(
-                                milliseconds: min(
-                                  newSleepTimer.totalDuration.inMilliseconds,
-                                  (queueRemainingDuration + currentTrackRemainingDuration).inMilliseconds,
-                                ),
-                              );
+                        remaining =
+                            finishTrack
+                                ? Duration(
+                                  milliseconds: min(
+                                    durationUntilEndOfFinalTrack?.inMilliseconds ??
+                                        (queueRemainingDuration + currentTrackRemainingDuration).inMilliseconds,
+                                    (queueRemainingDuration + currentTrackRemainingDuration).inMilliseconds,
+                                  ),
+                                )
+                                : Duration(
+                                  milliseconds: min(
+                                    newSleepTimer.totalDuration.inMilliseconds,
+                                    (queueRemainingDuration + currentTrackRemainingDuration).inMilliseconds,
+                                  ),
+                                );
                       case _MenuPage.tracks:
                         remaining =
                             currentTrackRemainingDuration + queueInfo.getDurationUntil(newSleepTimer.tracksLength);

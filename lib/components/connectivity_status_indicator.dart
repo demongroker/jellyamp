@@ -50,14 +50,7 @@ class ConnectivityStatusIndicator extends ConsumerWidget {
             children: [
               Icon(icon, size: 16, color: icePrimaryColor),
               const SizedBox(width: jSpaceSm),
-              Text(
-                label,
-                style: const TextStyle(
-                  color: iceHighlightColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              Text(label, style: const TextStyle(color: iceHighlightColor, fontSize: 12, fontWeight: FontWeight.w600)),
             ],
           ),
         ),
@@ -80,11 +73,7 @@ Widget buildAppWithConnectivityIndicator(BuildContext context, Widget? widget) {
           top: 0,
           left: 0,
           right: 0,
-          child: SafeArea(
-            bottom: false,
-            minimum: EdgeInsets.only(top: jSpaceSm),
-            child: ConnectivityStatusIndicator(),
-          ),
+          child: SafeArea(bottom: false, minimum: EdgeInsets.only(top: jSpaceSm), child: ConnectivityStatusIndicator()),
         ),
       ],
     ),

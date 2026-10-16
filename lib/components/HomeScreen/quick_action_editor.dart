@@ -150,9 +150,10 @@ class QuickActionConfigMenuState extends ConsumerState<QuickActionConfigMenu> {
         child: SimpleButton(
           text: context.l10n.back,
           icon: TablerIcons.chevron_left,
-          onPressed: () => setState(() {
-            selected = null;
-          }),
+          onPressed:
+              () => setState(() {
+                selected = null;
+              }),
         ),
       ),
       SizedBox(height: 20.0),

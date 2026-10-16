@@ -73,9 +73,10 @@ class DownloadButton extends ConsumerWidget {
     var downloadButton = Opacity(
       opacity: downloadDisabled ? 0.4 : 1.0,
       child: IconButton(
-        icon: status == DownloadItemStatus.notNeeded
-            ? const Icon(TablerIcons.download)
-            : const Icon(TablerIcons.lock), //TODO get better icon
+        icon:
+            status == DownloadItemStatus.notNeeded
+                ? const Icon(TablerIcons.download)
+                : const Icon(TablerIcons.lock), //TODO get better icon
         onPressed: () async {
           if (downloadDisabled) {
             sendDisabledDownloadMessageToSnackbar(customTooltip);
@@ -85,11 +86,12 @@ class DownloadButton extends ConsumerWidget {
           if (warning != null) {
             await showDialog<void>(
               context: context,
-              builder: (context) => ConfirmationPromptDialog(
-                promptText: warning,
-                confirmButtonText: AppLocalizations.of(context)!.addButtonLabel,
-                onConfirmed: () => DownloadDialog.show(context, item, viewId),
-              ),
+              builder:
+                  (context) => ConfirmationPromptDialog(
+                    promptText: warning,
+                    confirmButtonText: AppLocalizations.of(context)!.addButtonLabel,
+                    onConfirmed: () => DownloadDialog.show(context, item, viewId),
+                  ),
             );
           } else {
             int? trackCount = switch (item.baseItemType) {

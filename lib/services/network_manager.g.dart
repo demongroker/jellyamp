@@ -19,9 +19,10 @@ final autoOfflineProvider =
     AutoDisposeNotifierProvider<AutoOffline, int>.internal(
       AutoOffline.new,
       name: r'autoOfflineProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$autoOfflineHash,
+      debugGetCreateSourceHash:
+          const bool.fromEnvironment('dart.vm.product')
+              ? null
+              : _$autoOfflineHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );

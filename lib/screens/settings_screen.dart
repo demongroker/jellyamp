@@ -99,30 +99,33 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           TextSpan(
                             text: repoLink,
                             style: linkStyle,
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () async {
-                                await launchUrl(Uri.parse(repoLink));
-                              },
+                            recognizer:
+                                TapGestureRecognizer()
+                                  ..onTap = () async {
+                                    await launchUrl(Uri.parse(repoLink));
+                                  },
                           ),
                           const TextSpan(text: '\n\n'),
                           TextSpan(text: '${localizations.aboutTranslations}\n'),
                           TextSpan(
                             text: translationsLink,
                             style: linkStyle,
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () async {
-                                await launchUrl(Uri.parse(translationsLink));
-                              },
+                            recognizer:
+                                TapGestureRecognizer()
+                                  ..onTap = () async {
+                                    await launchUrl(Uri.parse(translationsLink));
+                                  },
                           ),
                           const TextSpan(text: '\n\n'),
                           TextSpan(text: '${localizations.aboutReleaseNotes}\n'),
                           TextSpan(
                             text: releaseNotesLink,
                             style: linkStyle,
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () async {
-                                await launchUrl(Uri.parse(releaseNotesLink));
-                              },
+                            recognizer:
+                                TapGestureRecognizer()
+                                  ..onTap = () async {
+                                    await launchUrl(Uri.parse(releaseNotesLink));
+                                  },
                           ),
                           const TextSpan(text: '\n\n\n'),
                           TextSpan(
@@ -197,9 +200,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ListTile(
             leading: const Icon(Icons.library_music),
             title: Text(AppLocalizations.of(context)!.selectMusicLibraries),
-            subtitle: ref.watch(finampSettingsProvider.isOffline)
-                ? Text(AppLocalizations.of(context)!.notAvailableInOfflineMode)
-                : null,
+            subtitle:
+                ref.watch(finampSettingsProvider.isOffline)
+                    ? Text(AppLocalizations.of(context)!.notAvailableInOfflineMode)
+                    : null,
             enabled: !ref.watch(finampSettingsProvider.isOffline),
             onTap: () => Navigator.of(context).pushNamed(ViewSelector.routeName),
           ),
@@ -220,9 +224,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               onTap: () => AppShareHelper.shareApkFile(),
             ),
             ListTile(
-              leading: Icon(
-                AppShareHelper.isServerRunning ? TablerIcons.wifi : TablerIcons.wifi_off,
-              ),
+              leading: Icon(AppShareHelper.isServerRunning ? TablerIcons.wifi : TablerIcons.wifi_off),
               title: Text(
                 AppShareHelper.isServerRunning
                     ? AppLocalizations.of(context)!.shareApkServerStopTitle
@@ -240,26 +242,25 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 if (urls != null && context.mounted) {
                   await showDialog<void>(
                     context: context,
-                    builder: (ctx) => AlertDialog(
-                      title: Text(AppLocalizations.of(ctx)!.shareApkServerDialogTitle),
-                      content: SingleChildScrollView(
-                        child: SelectableText(
-                          '${AppLocalizations.of(ctx)!.shareApkServerDialogBody}\n\n$urls',
+                    builder:
+                        (ctx) => AlertDialog(
+                          title: Text(AppLocalizations.of(ctx)!.shareApkServerDialogTitle),
+                          content: SingleChildScrollView(
+                            child: SelectableText('${AppLocalizations.of(ctx)!.shareApkServerDialogBody}\n\n$urls'),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () async {
+                                await AppShareHelper.copyLocalApkUrls();
+                              },
+                              child: Text(AppLocalizations.of(ctx)!.shareApkCopyUrls),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.pop(ctx),
+                              child: Text(AppLocalizations.of(ctx)!.close),
+                            ),
+                          ],
                         ),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () async {
-                            await AppShareHelper.copyLocalApkUrls();
-                          },
-                          child: Text(AppLocalizations.of(ctx)!.shareApkCopyUrls),
-                        ),
-                        TextButton(
-                          onPressed: () => Navigator.pop(ctx),
-                          child: Text(AppLocalizations.of(ctx)!.close),
-                        ),
-                      ],
-                    ),
                   );
                 }
               },
@@ -293,27 +294,27 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 }
 
-  // Simple update checker integration (B)
-  // Update checker (runs on app startup via provider)
-  Widget _buildUpdateTile() {
-    return Consumer(
-      builder: (context, ref, child) {
-        final updateAsync = ref.watch(updateCheckerProvider);
+// Simple update checker integration (B)
+// Update checker (runs on app startup via provider)
+Widget _buildUpdateTile() {
+  return Consumer(
+    builder: (context, ref, child) {
+      final updateAsync = ref.watch(updateCheckerProvider);
 
-        return updateAsync.when(
-          data: (update) {
-            if (update == null) return const SizedBox.shrink();
+      return updateAsync.when(
+        data: (update) {
+          if (update == null) return const SizedBox.shrink();
 
-            return ListTile(
-              leading: const Icon(Icons.system_update, color: Colors.green),
-              title: Text('Update available: v${update.latestVersion}'),
-              subtitle: const Text('Tap to view release'),
-              onTap: () => launchUrl(Uri.parse(update.htmlUrl)),
-            );
-          },
-          loading: () => const SizedBox.shrink(),
-          error: (_, __) => const SizedBox.shrink(),
-        );
-      },
-    );
-  }
+          return ListTile(
+            leading: const Icon(Icons.system_update, color: Colors.green),
+            title: Text('Update available: v${update.latestVersion}'),
+            subtitle: const Text('Tap to view release'),
+            onTap: () => launchUrl(Uri.parse(update.htmlUrl)),
+          );
+        },
+        loading: () => const SizedBox.shrink(),
+        error: (_, __) => const SizedBox.shrink(),
+      );
+    },
+  );
+}

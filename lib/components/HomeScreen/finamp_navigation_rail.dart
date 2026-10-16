@@ -183,8 +183,7 @@ class FinampNavigationRail extends ConsumerWidget {
                           tooltip: l10n.home,
                           onPressed: () {
                             if (views.isNotEmpty) {
-                              finampUserHelper
-                                  .setCurrentUserCurrentViewId(views.first.id);
+                              finampUserHelper.setCurrentUserCurrentViewId(views.first.id);
                             }
                           },
                           icon: const FinampIcon(36, 36),

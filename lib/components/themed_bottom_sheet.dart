@@ -179,23 +179,23 @@ class _ThemedBottomSheetState extends ConsumerState<ThemedBottomSheet> {
         if (ref.watch(finampSettingsProvider.useCoverAsBackground)) const BlurredPlayerScreenBackground(),
         widget.showDragHandle
             ? Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16.0, bottom: 10.0),
-                    child: Builder(
-                      builder: (context) {
-                        var textColor = Theme.of(context).textTheme.bodySmall!.color!;
-                        return Container(
-                          width: 40,
-                          height: 3.5,
-                          decoration: BoxDecoration(color: textColor, borderRadius: BorderRadius.circular(3.5)),
-                        );
-                      },
-                    ),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0, bottom: 10.0),
+                  child: Builder(
+                    builder: (context) {
+                      var textColor = Theme.of(context).textTheme.bodySmall!.color!;
+                      return Container(
+                        width: 40,
+                        height: 3.5,
+                        decoration: BoxDecoration(color: textColor, borderRadius: BorderRadius.circular(3.5)),
+                      );
+                    },
                   ),
-                  Expanded(child: scrollview),
-                ],
-              )
+                ),
+                Expanded(child: scrollview),
+              ],
+            )
             : scrollview,
       ],
     );

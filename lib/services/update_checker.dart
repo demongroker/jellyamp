@@ -23,13 +23,7 @@ class UpdateInfo {
   /// `SHA-256: <hex>`. When present, the installer verifies before installing.
   final String? sha256;
 
-  const UpdateInfo({
-    required this.latestVersion,
-    required this.htmlUrl,
-    this.body,
-    this.downloadUrl,
-    this.sha256,
-  });
+  const UpdateInfo({required this.latestVersion, required this.htmlUrl, this.body, this.downloadUrl, this.sha256});
 
   /// Short one-line release note derived from the GitHub release body
   /// (first meaningful markdown line, headers/bullets/backticks stripped).
@@ -37,13 +31,14 @@ class UpdateInfo {
     final b = body;
     if (b == null || b.isEmpty) return null;
 
-    final lines = b
-        .split('\n')
-        .map((l) => l.trim())
-        .where((l) => l.isNotEmpty)
-        .map((l) => l.replaceFirst(RegExp(r'^#{1,6}\s*'), '').replaceFirst(RegExp(r'^\s*[-*]\s*'), '').trim())
-        .where((l) => l.isNotEmpty)
-        .toList();
+    final lines =
+        b
+            .split('\n')
+            .map((l) => l.trim())
+            .where((l) => l.isNotEmpty)
+            .map((l) => l.replaceFirst(RegExp(r'^#{1,6}\s*'), '').replaceFirst(RegExp(r'^\s*[-*]\s*'), '').trim())
+            .where((l) => l.isNotEmpty)
+            .toList();
 
     if (lines.isEmpty) return null;
 
@@ -104,12 +99,12 @@ class UpdateChecker {
         }
       }
       if (downloadUrl == null) {
-        final apks = assets
-            .whereType<Map<String, dynamic>>()
-            .where((a) => ((a['name'] as String?) ?? '').toLowerCase().endsWith('.apk'))
-            .toList();
-        if (apks.length == 1 &&
-            (((apks.first['name'] as String?) ?? '').toLowerCase().startsWith('jellyamp-'))) {
+        final apks =
+            assets
+                .whereType<Map<String, dynamic>>()
+                .where((a) => ((a['name'] as String?) ?? '').toLowerCase().endsWith('.apk'))
+                .toList();
+        if (apks.length == 1 && (((apks.first['name'] as String?) ?? '').toLowerCase().startsWith('jellyamp-'))) {
           downloadUrl = apks.first['browser_download_url'] as String?;
         }
       }
@@ -155,11 +150,7 @@ class UpdateChecker {
       final lastNotified = box.get('lastNotifiedVersion');
       if (lastNotified == info.latestVersion) return;
 
-      await UpdateInstaller.showUpdateNotification(
-        info.latestVersion,
-        info.note,
-        info.htmlUrl,
-      );
+      await UpdateInstaller.showUpdateNotification(info.latestVersion, info.note, info.htmlUrl);
       await box.put('lastNotifiedVersion', info.latestVersion);
     } catch (e, st) {
       _log.warning('Update notification failed', e, st);

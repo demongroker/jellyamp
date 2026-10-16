@@ -54,50 +54,51 @@ class _DownloadedItemTypeListState extends ConsumerState<DownloadedItemsList> {
     final items = ref.watch(_downloadsService.userDownloadedItemsProvider(widget.type));
     return items.isNotEmpty
         ? SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              DownloadStub stub = items.elementAt(index);
-              return ExpansionTile(
-                key: PageStorageKey(stub.id),
-                leading: (stub.type == DownloadItemType.finampCollection)
-                    ? AlbumImage(item: stub.finampCollection?.item)
-                    : AlbumImage(item: stub.baseItem),
-                title: Text(stub.baseItem?.name ?? stub.name),
-                subtitle: buildDownloadedItemSubtitle(context, stub),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // P0.2 step 7: pause/resume/cancel wired to the state machine
-                    DownloadActions(stub: stub),
-                    if ((!(stub.baseItemType == BaseItemDtoType.album || stub.baseItemType == BaseItemDtoType.track)) &&
-                        !ref.watch(finampSettingsProvider.isOffline))
-                      IconButton(
-                        icon: const Icon(Icons.sync),
-                        onPressed: () {
-                          _downloadsService.resync(stub, null);
-                        },
-                      ),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () => askBeforeDeleteDownloadFromDevice(context, stub),
-                    ),
-                  ],
-                ),
-                tilePadding: const EdgeInsets.symmetric(horizontal: 16),
-                shape: LinearBorder(),
-                collapsedShape: LinearBorder(),
+          delegate: SliverChildBuilderDelegate((context, index) {
+            DownloadStub stub = items.elementAt(index);
+            return ExpansionTile(
+              key: PageStorageKey(stub.id),
+              leading:
+                  (stub.type == DownloadItemType.finampCollection)
+                      ? AlbumImage(item: stub.finampCollection?.item)
+                      : AlbumImage(item: stub.baseItem),
+              title: Text(stub.baseItem?.name ?? stub.name),
+              subtitle: buildDownloadedItemSubtitle(context, stub),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (stub.type == DownloadItemType.finampCollection || stub.baseItemType.hasChildren)
-                    DownloadedChildrenList(parent: stub),
+                  // P0.2 step 7: pause/resume/cancel wired to the state machine
+                  DownloadActions(stub: stub),
+                  if ((!(stub.baseItemType == BaseItemDtoType.album || stub.baseItemType == BaseItemDtoType.track)) &&
+                      !ref.watch(finampSettingsProvider.isOffline))
+                    IconButton(
+                      icon: const Icon(Icons.sync),
+                      onPressed: () {
+                        _downloadsService.resync(stub, null);
+                      },
+                    ),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () => askBeforeDeleteDownloadFromDevice(context, stub),
+                  ),
                 ],
-              );
-            }, childCount: items.length),
-          )
+              ),
+              tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+              shape: LinearBorder(),
+              collapsedShape: LinearBorder(),
+              children: [
+                if (stub.type == DownloadItemType.finampCollection || stub.baseItemType.hasChildren)
+                  DownloadedChildrenList(parent: stub),
+              ],
+            );
+          }, childCount: items.length),
+        )
         : SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Text(AppLocalizations.of(context)!.noItemsDownloaded),
-            ),
-          );
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Text(AppLocalizations.of(context)!.noItemsDownloaded),
+          ),
+        );
   }
 }
 
@@ -132,14 +133,15 @@ class _DownloadedChildrenListState extends ConsumerState<DownloadedChildrenList>
         }
       }
       // Filter out tracks with matching album id
-      items = items.where((stub) {
-        final type = BaseItemDtoType.fromItem(stub.baseItem!);
-        if (type == BaseItemDtoType.track) {
-          final albumId = stub.baseItem?.albumId;
-          return !albumIds.contains(albumId);
-        }
-        return true;
-      }).toList();
+      items =
+          items.where((stub) {
+            final type = BaseItemDtoType.fromItem(stub.baseItem!);
+            if (type == BaseItemDtoType.track) {
+              final albumId = stub.baseItem?.albumId;
+              return !albumIds.contains(albumId);
+            }
+            return true;
+          }).toList();
     }
 
     return Container(

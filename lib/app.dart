@@ -261,15 +261,16 @@ class FinampApp extends ConsumerWidget {
     final locale = ref.watch(finampSettingsProvider.locale);
     // Trigger update check on app startup
     ref.watch(updateCheckerProvider);
-    final transitionBuilder = MediaQuery.disableAnimationsOf(context)
-        ? PageTransitionsTheme(
-            // Disable page transitions on all platforms if [disableAnimations] is true, otherwise use default transitions
-            builders: TargetPlatform.values.fold(
-              <TargetPlatform, PageTransitionsBuilder>{},
-              (previousValue, element) => previousValue..[element] = const NoTransitionPageTransitionsBuilder(),
-            ),
-          )
-        : null;
+    final transitionBuilder =
+        MediaQuery.disableAnimationsOf(context)
+            ? PageTransitionsTheme(
+              // Disable page transitions on all platforms if [disableAnimations] is true, otherwise use default transitions
+              builders: TargetPlatform.values.fold(
+                <TargetPlatform, PageTransitionsBuilder>{},
+                (previousValue, element) => previousValue..[element] = const NoTransitionPageTransitionsBuilder(),
+              ),
+            )
+            : null;
     return MaterialApp(
       title: "Jellyamp",
       routes: {
@@ -307,53 +308,57 @@ class FinampApp extends ConsumerWidget {
         GenreSettingsScreen.routeName: (context) => const GenreSettingsScreen(),
         NetworkSettingsScreen.routeName: (context) => const NetworkSettingsScreen(),
         AccessibilitySettingsScreen.routeName: (context) => const AccessibilitySettingsScreen(),
-        PlaylistEditScreen.routeName: (context) =>
-            PlaylistEditScreen(playlist: ModalRoute.settingsOf(context)!.arguments as BaseItemDto),
+        PlaylistEditScreen.routeName:
+            (context) => PlaylistEditScreen(playlist: ModalRoute.settingsOf(context)!.arguments as BaseItemDto),
         //ShowAllScreen.routeName: (context) => const ShowAllScreen(),
       },
       initialRoute: SplashScreen.routeName,
       navigatorObservers: [SplitScreenNavigatorObserver(), KeepScreenOnObserver()],
       builder: buildAppWithConnectivityIndicator,
-      theme: applyJellyAmpTheme(ThemeData(
-        brightness: Brightness.light,
-        colorScheme: getColorScheme(accentColor, Brightness.light, amoledTheme),
-        appBarTheme: const AppBarThemeData(
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.light,
-            statusBarIconBrightness: Brightness.dark,
-            systemNavigationBarIconBrightness: Brightness.dark,
+      theme: applyJellyAmpTheme(
+        ThemeData(
+          brightness: Brightness.light,
+          colorScheme: getColorScheme(accentColor, Brightness.light, amoledTheme),
+          appBarTheme: const AppBarThemeData(
+            systemOverlayStyle: SystemUiOverlayStyle(
+              statusBarBrightness: Brightness.light,
+              statusBarIconBrightness: Brightness.dark,
+              systemNavigationBarIconBrightness: Brightness.dark,
+            ),
           ),
+          snackBarTheme: const SnackBarThemeData(
+            //TODO get rid of floating action buttons and re-enable the floating behavior and insetPadding
+            // behavior: SnackBarBehavior.floating,
+            elevation: 10.0,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12.0))),
+            // insetPadding: EdgeInsets.symmetric(
+            //   horizontal: 12.0,
+            //   vertical: 0.0,
+            // ),
+            dismissDirection: DismissDirection.horizontal,
+          ),
+          tooltipTheme: const TooltipThemeData(waitDuration: Duration(milliseconds: 800), preferBelow: false),
+          pageTransitionsTheme: transitionBuilder,
         ),
-        snackBarTheme: const SnackBarThemeData(
-          //TODO get rid of floating action buttons and re-enable the floating behavior and insetPadding
-          // behavior: SnackBarBehavior.floating,
-          elevation: 10.0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12.0))),
-          // insetPadding: EdgeInsets.symmetric(
-          //   horizontal: 12.0,
-          //   vertical: 0.0,
-          // ),
-          dismissDirection: DismissDirection.horizontal,
+      ),
+      darkTheme: applyJellyAmpTheme(
+        ThemeData(
+          brightness: Brightness.dark,
+          colorScheme: getColorScheme(accentColor, Brightness.dark, amoledTheme),
+          snackBarTheme: const SnackBarThemeData(
+            //TODO get rid of floating action buttons and re-enable the floating behavior and insetPadding
+            // behavior: SnackBarBehavior.floating,
+            elevation: 10.0,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12.0))),
+            // insetPadding: EdgeInsets.symmetric(
+            //   horizontal: 12.0,
+            //   vertical: 0.0,
+            // ),
+            dismissDirection: DismissDirection.horizontal,
+          ),
+          pageTransitionsTheme: transitionBuilder,
         ),
-        tooltipTheme: const TooltipThemeData(waitDuration: Duration(milliseconds: 800), preferBelow: false),
-        pageTransitionsTheme: transitionBuilder,
-      )),
-      darkTheme: applyJellyAmpTheme(ThemeData(
-        brightness: Brightness.dark,
-        colorScheme: getColorScheme(accentColor, Brightness.dark, amoledTheme),
-        snackBarTheme: const SnackBarThemeData(
-          //TODO get rid of floating action buttons and re-enable the floating behavior and insetPadding
-          // behavior: SnackBarBehavior.floating,
-          elevation: 10.0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12.0))),
-          // insetPadding: EdgeInsets.symmetric(
-          //   horizontal: 12.0,
-          //   vertical: 0.0,
-          // ),
-          dismissDirection: DismissDirection.horizontal,
-        ),
-        pageTransitionsTheme: transitionBuilder,
-      )),
+      ),
       scrollBehavior: FinampScrollBehavior(),
       themeMode: themeMode,
       localizationsDelegates: const [
@@ -366,8 +371,9 @@ class FinampApp extends ConsumerWidget {
       // We awkwardly put English as the first supported locale so
       // that basicLocaleListResolution falls back to it instead of
       // the first language in supportedLocales (Arabic as of writing)
-      localeListResolutionCallback: (locales, supportedLocales) =>
-          basicLocaleListResolution(locales, [const Locale("en")].followedBy(supportedLocales)),
+      localeListResolutionCallback:
+          (locales, supportedLocales) =>
+              basicLocaleListResolution(locales, [const Locale("en")].followedBy(supportedLocales)),
       locale: locale,
       scaffoldMessengerKey: GlobalSnackbar.rawMaterialAppScaffoldKey,
       navigatorKey: GlobalSnackbar.rawMaterialAppNavigatorKey,
@@ -448,9 +454,10 @@ class ErrorScreen extends StatelessWidget {
                                 text: 'Delete FinampSettings',
                                 icon: Icons.delete,
                                 onPressed: () async {
-                                  final dir = (Platform.isAndroid || Platform.isIOS)
-                                      ? await getApplicationDocumentsDirectory()
-                                      : await getApplicationSupportDirectory();
+                                  final dir =
+                                      (Platform.isAndroid || Platform.isIOS)
+                                          ? await getApplicationDocumentsDirectory()
+                                          : await getApplicationSupportDirectory();
 
                                   await Hive.deleteBoxFromDisk("FinampSettings", path: dir.path);
                                   Gaimon.success();
@@ -460,9 +467,10 @@ class ErrorScreen extends StatelessWidget {
                                 text: 'Delete Stored Queues',
                                 icon: Icons.delete,
                                 onPressed: () async {
-                                  final dir = (Platform.isAndroid || Platform.isIOS)
-                                      ? await getApplicationDocumentsDirectory()
-                                      : await getApplicationSupportDirectory();
+                                  final dir =
+                                      (Platform.isAndroid || Platform.isIOS)
+                                          ? await getApplicationDocumentsDirectory()
+                                          : await getApplicationSupportDirectory();
 
                                   await Hive.deleteBoxFromDisk("Queues", path: dir.path);
                                   Gaimon.success();
@@ -501,10 +509,7 @@ class ErrorScreen extends StatelessWidget {
               SizedBox(height: 10.0),
               if (trace != null)
                 Text.rich(
-                  TextSpan(
-                    text: trace.toString(),
-                    style: const TextStyle(fontSize: 10.0, fontFamily: "monospace"),
-                  ),
+                  TextSpan(text: trace.toString(), style: const TextStyle(fontSize: 10.0, fontFamily: "monospace")),
                 ),
             ],
           ),

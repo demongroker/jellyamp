@@ -26,11 +26,21 @@ class $ImagesGen {
   /// File path: images/finamp_cropped.svg
   String get finampCroppedSvg => 'images/finamp_cropped.svg';
 
+  /// File path: images/jellyamp_icon.svg
+  String get jellyampIcon => 'images/jellyamp_icon.svg';
+
   /// File path: images/jellyfin-icon-transparent.png
   AssetGenImage get jellyfinIconTransparent => const AssetGenImage('images/jellyfin-icon-transparent.png');
 
   /// List of all assets
-  List<dynamic> get values => [albumWhite, finamp, finampCroppedPng, finampCroppedSvg, jellyfinIconTransparent];
+  List<dynamic> get values => [
+    albumWhite,
+    finamp,
+    finampCroppedPng,
+    finampCroppedSvg,
+    jellyampIcon,
+    jellyfinIconTransparent,
+  ];
 }
 
 class $AssetsIconGen {

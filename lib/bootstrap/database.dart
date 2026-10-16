@@ -21,9 +21,10 @@ import 'package:path_provider/path_provider.dart';
 /// P0.4: extracted from `main.dart` (was `setupHive`). Order and behavior are
 /// unchanged.
 Future<void> setupHive() async {
-  final dir = (Platform.isAndroid || Platform.isIOS)
-      ? await getApplicationDocumentsDirectory()
-      : await getApplicationSupportDirectory();
+  final dir =
+      (Platform.isAndroid || Platform.isIOS)
+          ? await getApplicationDocumentsDirectory()
+          : await getApplicationSupportDirectory();
 
   // Use Hive.init instead of initFlutter to set correct default path.
   WidgetsFlutterBinding.ensureInitialized();

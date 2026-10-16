@@ -24,13 +24,7 @@ class LogsScreen extends StatelessWidget {
           // CopyLogsButton(), //!!! this doesn't return the full logs, only logs since the app started. Full logs can get quite large, so we need a better solution for this.
         ],
       ),
-      body: Column(
-        children: const [
-          VerboseLoggingSwitch(),
-          Divider(height: 1),
-          Expanded(child: LogsView()),
-        ],
-      ),
+      body: Column(children: const [VerboseLoggingSwitch(), Divider(height: 1), Expanded(child: LogsView())]),
     );
   }
 }

@@ -107,14 +107,15 @@ class _ClientCertificateMenuContentState extends ConsumerState<_ClientCertificat
     final l10n = AppLocalizations.of(context)!;
     await showDialog<void>(
       context: context,
-      builder: (context) => ConfirmationPromptDialog(
-        promptText: l10n.clientCertificateDeleteConfirm,
-        confirmButtonText: l10n.removeClientCertificate,
-        onConfirmed: () async {
-          FinampSetters.setClientCertificate(null);
-          await _clientCertificateInstaller.clearClientCertificate();
-        },
-      ),
+      builder:
+          (context) => ConfirmationPromptDialog(
+            promptText: l10n.clientCertificateDeleteConfirm,
+            confirmButtonText: l10n.removeClientCertificate,
+            onConfirmed: () async {
+              FinampSetters.setClientCertificate(null);
+              await _clientCertificateInstaller.clearClientCertificate();
+            },
+          ),
     );
   }
 
@@ -136,9 +137,10 @@ class _ClientCertificateMenuContentState extends ConsumerState<_ClientCertificat
             children: [
               Icon(
                 isInstalled ? TablerIcons.certificate : TablerIcons.certificate_off,
-                color: isInstalled
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.onSurface.withAlpha(153),
+                color:
+                    isInstalled
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.onSurface.withAlpha(153),
                 size: 28.0,
               ),
               Expanded(
@@ -163,9 +165,10 @@ class _ClientCertificateMenuContentState extends ConsumerState<_ClientCertificat
               Expanded(
                 child: FilledButton.tonal(
                   onPressed: _importing ? null : _importCertificate,
-                  child: _importing
-                      ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2.5))
-                      : Text(l10n.importClientCertificate),
+                  child:
+                      _importing
+                          ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2.5))
+                          : Text(l10n.importClientCertificate),
                 ),
               ),
               if (isInstalled)

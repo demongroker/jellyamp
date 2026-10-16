@@ -25,28 +25,29 @@ class SubtitleWithMoreInfoDialog extends StatelessWidget {
           TextSpan(
             text: AppLocalizations.of(context)!.moreInfo,
             style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w500),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                showGeneralDialog(
-                  barrierDismissible: true,
-                  barrierLabel: AppLocalizations.of(context)!.close,
-                  context: context,
-                  pageBuilder: (context, anim1, anim2) {
-                    return AlertDialog(
-                      title: Text(dialogTitle),
-                      content: SingleChildScrollView(child: Text(dialogContent)),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(AppLocalizations.of(context)!.close),
-                        ),
-                      ],
+            recognizer:
+                TapGestureRecognizer()
+                  ..onTap = () {
+                    showGeneralDialog(
+                      barrierDismissible: true,
+                      barrierLabel: AppLocalizations.of(context)!.close,
+                      context: context,
+                      pageBuilder: (context, anim1, anim2) {
+                        return AlertDialog(
+                          title: Text(dialogTitle),
+                          content: SingleChildScrollView(child: Text(dialogContent)),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(AppLocalizations.of(context)!.close),
+                            ),
+                          ],
+                        );
+                      },
                     );
                   },
-                );
-              },
           ),
         ],
       ),

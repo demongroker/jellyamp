@@ -328,9 +328,10 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
                   await _queueService.togglePlaybackOrder();
                 },
                 label: playbackOrderTooltips[playbackBehavior.order]!,
-                iconColor: playbackBehavior.order == FinampPlaybackOrder.shuffled
-                    ? iconColor
-                    : Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+                iconColor:
+                    playbackBehavior.order == FinampPlaybackOrder.shuffled
+                        ? iconColor
+                        : Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
               ),
               ValueListenableBuilder<SleepTimer?>(
                 valueListenable: _audioHandler.timer,
@@ -362,23 +363,24 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
                             toggleSleepTimerMenu();
                           }
                         },
-                        label: hasTimeLeft
-                            ? timerValue.asString(context)
-                            : AppLocalizations.of(context)!.sleepTimerTooltip,
-                        iconColor: hasTimeLeft
-                            ? iconColor
-                            : Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+                        label:
+                            hasTimeLeft
+                                ? timerValue.asString(context)
+                                : AppLocalizations.of(context)!.sleepTimerTooltip,
+                        iconColor:
+                            hasTimeLeft ? iconColor : Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
                       );
                     },
                   );
                 },
               ),
               PlaybackAction(
-                icon: radioEnabled
-                    ? (currentRadioAvailabilityStatus.isAvailable && !radioFailed)
-                          ? TablerIcons.radio
-                          : TablerIcons.radio_off
-                    : loopModeIcons[playbackBehavior.loop]!,
+                icon:
+                    radioEnabled
+                        ? (currentRadioAvailabilityStatus.isAvailable && !radioFailed)
+                            ? TablerIcons.radio
+                            : TablerIcons.radio_off
+                        : loopModeIcons[playbackBehavior.loop]!,
                 onPressed: () async {
                   if (radioEnabled) {
                     await showRadioMenu(
@@ -389,20 +391,24 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
                   }
                   _queueService.toggleLoopMode();
                 },
-                onLongPress: () => showRadioMenu(
-                  context,
-                  subtitle: radioFailed
-                      ? AppLocalizations.of(context)!.radioFailedSubtitle
-                      : AppLocalizations.of(context)!.loopingOverriddenByRadioSubtitle,
-                ),
-                label: radioEnabled
-                    ? (currentRadioAvailabilityStatus.isAvailable
-                          ? AppLocalizations.of(context)!.radioModeOptionTitle(radioMode.name)
-                          : AppLocalizations.of(context)!.radioModeInactiveTitle)
-                    : loopModeTooltips[playbackBehavior.loop]!,
-                iconColor: currentRadioAvailabilityStatus.isAvailable || playbackBehavior.loop != FinampLoopMode.none
-                    ? iconColor
-                    : Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+                onLongPress:
+                    () => showRadioMenu(
+                      context,
+                      subtitle:
+                          radioFailed
+                              ? AppLocalizations.of(context)!.radioFailedSubtitle
+                              : AppLocalizations.of(context)!.loopingOverriddenByRadioSubtitle,
+                    ),
+                label:
+                    radioEnabled
+                        ? (currentRadioAvailabilityStatus.isAvailable
+                            ? AppLocalizations.of(context)!.radioModeOptionTitle(radioMode.name)
+                            : AppLocalizations.of(context)!.radioModeInactiveTitle)
+                        : loopModeTooltips[playbackBehavior.loop]!,
+                iconColor:
+                    currentRadioAvailabilityStatus.isAvailable || playbackBehavior.loop != FinampLoopMode.none
+                        ? iconColor
+                        : Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
               ),
             ];
 
@@ -412,9 +418,10 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
                 toggleSpeedMenu();
               },
               label: AppLocalizations.of(context)!.playbackSpeedButtonLabel(playbackBehavior.speed),
-              iconColor: playbackBehavior.speed == 1.0
-                  ? Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white
-                  : iconColor,
+              iconColor:
+                  playbackBehavior.speed == 1.0
+                      ? Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white
+                      : iconColor,
             );
 
             if (speedWidgetWasVisible || shouldShowSpeedControls(playbackBehavior.speed, metadata)) {
@@ -462,13 +469,14 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
                       final isSpeedMenu = (child.key is ValueKey && (child.key as ValueKey).value == 'speed');
                       final isSleepMenu = (child.key is ValueKey && (child.key as ValueKey).value == 'sleep');
                       // Slide in from right for speed, left for sleep
-                      final Offset beginOffset = previousMenu == null || activeMenu == null
-                          ? Offset(0, 0)
-                          : (isSpeedMenu
-                                ? const Offset(1, 0)
-                                : isSleepMenu
-                                ? const Offset(-1, 0)
-                                : Offset.zero);
+                      final Offset beginOffset =
+                          previousMenu == null || activeMenu == null
+                              ? Offset(0, 0)
+                              : (isSpeedMenu
+                                  ? const Offset(1, 0)
+                                  : isSleepMenu
+                                  ? const Offset(-1, 0)
+                                  : Offset.zero);
 
                       final Offset endOffset = Offset.zero;
                       return FadeTransition(
@@ -505,9 +513,10 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
           child: Padding(
             padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
             child: Divider(
-              color: Theme.brightnessOf(context) == Brightness.light
-                  ? Color.alphaBlend(Theme.of(context).primaryColor.withOpacity(0.6), Colors.black26)
-                  : Color.alphaBlend(Theme.of(context).primaryColor.withOpacity(0.8), Colors.white),
+              color:
+                  Theme.brightnessOf(context) == Brightness.light
+                      ? Color.alphaBlend(Theme.of(context).primaryColor.withOpacity(0.6), Colors.black26)
+                      : Color.alphaBlend(Theme.of(context).primaryColor.withOpacity(0.8), Colors.white),
               indent: 24.0,
               endIndent: 24.0,
               height: 2.0,
@@ -518,9 +527,7 @@ class _TrackMenuState extends ConsumerState<TrackMenu> with TickerProviderStateM
       SliverPersistentHeader(delegate: MenuItemInfoSliverHeader(item: playableItem), pinned: true),
       MenuMask(
         height: MenuItemInfoSliverHeader.defaultHeight,
-        child: SliverToBoxAdapter(
-          child: PlaybackActionRow(item: playableItem, queueItem: widget.queueItem),
-        ),
+        child: SliverToBoxAdapter(child: PlaybackActionRow(item: playableItem, queueItem: widget.queueItem)),
       ),
       MenuMask(
         height: MenuItemInfoSliverHeader.defaultHeight,

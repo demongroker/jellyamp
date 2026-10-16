@@ -101,9 +101,10 @@ class LoadHomeSectionItemsProvider
          ),
          from: loadHomeSectionItemsProvider,
          name: r'loadHomeSectionItemsProvider',
-         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-             ? null
-             : _$loadHomeSectionItemsHash,
+         debugGetCreateSourceHash:
+             const bool.fromEnvironment('dart.vm.product')
+                 ? null
+                 : _$loadHomeSectionItemsHash,
          dependencies: LoadHomeSectionItemsFamily._dependencies,
          allTransitiveDependencies:
              LoadHomeSectionItemsFamily._allTransitiveDependencies,
@@ -259,9 +260,10 @@ class GetJellyfinCollectionProvider
         ),
         from: getJellyfinCollectionProvider,
         name: r'getJellyfinCollectionProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$getJellyfinCollectionHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$getJellyfinCollectionHash,
         dependencies: GetJellyfinCollectionFamily._dependencies,
         allTransitiveDependencies:
             GetJellyfinCollectionFamily._allTransitiveDependencies,
@@ -415,9 +417,10 @@ class PagedContentProvider
         () => PagedContent()..request = request,
         from: pagedContentProvider,
         name: r'pagedContentProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$pagedContentHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$pagedContentHash,
         dependencies: PagedContentFamily._dependencies,
         allTransitiveDependencies:
             PagedContentFamily._allTransitiveDependencies,

@@ -69,39 +69,42 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, BaseItemDto> metadataPr
           // We could explicitly get a mediaSource of type Default, but just grabbing
           // the first seems to generally work?
           var codec = profile?.codec != FinampTranscodingCodec.original ? profile?.codec.name : audioStream?.codec;
-          var container = profile?.codec != FinampTranscodingCodec.original
-              ? profile?.codec.container
-              : downloadItem.baseItem!.mediaSources?.firstOrNull?.container;
-          var bitrate = profile?.codec != FinampTranscodingCodec.original
-              ? profile?.stereoBitrate
-              : downloadItem.baseItem!.mediaSources?.firstOrNull?.bitrate;
+          var container =
+              profile?.codec != FinampTranscodingCodec.original
+                  ? profile?.codec.container
+                  : downloadItem.baseItem!.mediaSources?.firstOrNull?.container;
+          var bitrate =
+              profile?.codec != FinampTranscodingCodec.original
+                  ? profile?.stereoBitrate
+                  : downloadItem.baseItem!.mediaSources?.firstOrNull?.bitrate;
 
           // We cannot create accurate MediaStreams for a transcoded item,so
           // just return the lyrics stream, as those are not affected and will not
           // be shown if the mediaStream is not present
-          List<MediaStream> mediaStream = profile?.codec != FinampTranscodingCodec.original
-              ? [
-                      MediaStream(
-                        index: 0,
-                        type: "Audio",
-                        codec: codec,
-                        bitRate: bitrate,
-                        sampleRate: null,
-                        channels: null,
-                        // Lossy formats do not have a fixed bit depth
-                        //bitDepth: audioStream?.bitDepth,
-                        bitDepth: null,
-                        isInterlaced: false,
-                        isDefault: true,
-                        isForced: false,
-                        isExternal: false,
-                        isTextSubtitleStream: false,
-                        supportsExternalStream: false,
-                      ),
-                    ]
-                    .followedBy(downloadItem.baseItem!.mediaStreams?.where((x) => x.type == "Lyric").toList() ?? [])
-                    .toList()
-              : downloadItem.baseItem!.mediaStreams ?? [];
+          List<MediaStream> mediaStream =
+              profile?.codec != FinampTranscodingCodec.original
+                  ? [
+                        MediaStream(
+                          index: 0,
+                          type: "Audio",
+                          codec: codec,
+                          bitRate: bitrate,
+                          sampleRate: null,
+                          channels: null,
+                          // Lossy formats do not have a fixed bit depth
+                          //bitDepth: audioStream?.bitDepth,
+                          bitDepth: null,
+                          isInterlaced: false,
+                          isDefault: true,
+                          isForced: false,
+                          isExternal: false,
+                          isTextSubtitleStream: false,
+                          supportsExternalStream: false,
+                        ),
+                      ]
+                      .followedBy(downloadItem.baseItem!.mediaStreams?.where((x) => x.type == "Lyric").toList() ?? [])
+                      .toList()
+                  : downloadItem.baseItem!.mediaStreams ?? [];
 
           localPlaybackInfo = PlaybackInfoResponse(
             mediaSources: [
@@ -153,14 +156,12 @@ final AutoDisposeFutureProviderFamily<MetadataProvider?, BaseItemDto> metadataPr
         if (localPlaybackInfo != null && (playbackInfo.mediaSources?.isNotEmpty ?? false)) {
           playbackInfo.mediaSources!.first.protocol = localPlaybackInfo.mediaSources!.first.protocol;
           playbackInfo.mediaSources!.first.bitrate = localPlaybackInfo.mediaSources!.first.bitrate;
-          var remoteBitDepth = playbackInfo.mediaSources!.first.mediaStreams
-              .firstWhereOrNull((x) => x.type == "Audio")
-              ?.bitDepth;
+          var remoteBitDepth =
+              playbackInfo.mediaSources!.first.mediaStreams.firstWhereOrNull((x) => x.type == "Audio")?.bitDepth;
           // Use lyrics mediastream from online item, but take all other streams
           // from downloaded item
-          playbackInfo.mediaSources!.first.mediaStreams = playbackInfo.mediaSources!.first.mediaStreams
-              .where((x) => x.type == "Lyric")
-              .toList();
+          playbackInfo.mediaSources!.first.mediaStreams =
+              playbackInfo.mediaSources!.first.mediaStreams.where((x) => x.type == "Lyric").toList();
           playbackInfo.mediaSources!.first.mediaStreams.addAll(
             localPlaybackInfo.mediaSources!.first.mediaStreams.where((x) => x.type != "Lyric"),
           );

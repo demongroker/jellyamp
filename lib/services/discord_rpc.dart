@@ -178,12 +178,14 @@ class DiscordRpc {
     }
 
     if (!skipUrlGetting) {
-      smallImage = _jellyfinApiHelper
-          .getImageUrl(item: artistItem!, maxHeight: 128, maxWidth: 128, forcePublicAddress: forcePublicAddress)
-          ?.toString();
-      largeImage = _jellyfinApiHelper
-          .getImageUrl(item: baseItem, maxHeight: 128, maxWidth: 128, forcePublicAddress: forcePublicAddress)
-          ?.toString();
+      smallImage =
+          _jellyfinApiHelper
+              .getImageUrl(item: artistItem!, maxHeight: 128, maxWidth: 128, forcePublicAddress: forcePublicAddress)
+              ?.toString();
+      largeImage =
+          _jellyfinApiHelper
+              .getImageUrl(item: baseItem, maxHeight: 128, maxWidth: 128, forcePublicAddress: forcePublicAddress)
+              ?.toString();
     }
 
     largeImage ??= FinampSettingsHelper.finampSettings.rpcIcon.toString();

@@ -20,15 +20,16 @@ class DiscordRpcIconSelector extends ConsumerWidget {
         children: [
           Text(AppLocalizations.of(context)!.discordRPCIconSettingDescription),
           FinampSettingsDropdown<DiscordRpcIcon>(
-            dropdownItems: DiscordRpcIcon.values
-                .map(
-                  (e) => DropdownMenuEntry<DiscordRpcIcon>(
-                    value: e,
-                    label: e.toLocalisedString(context),
-                    leadingIcon: Image.asset(e.toImage(), width: 32, height: 32),
-                  ),
-                )
-                .toList(),
+            dropdownItems:
+                DiscordRpcIcon.values
+                    .map(
+                      (e) => DropdownMenuEntry<DiscordRpcIcon>(
+                        value: e,
+                        label: e.toLocalisedString(context),
+                        leadingIcon: Image.asset(e.toImage(), width: 32, height: 32),
+                      ),
+                    )
+                    .toList(),
             selectedValue: option,
             onSelected: (value) {
               if (value != null) {

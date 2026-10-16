@@ -47,9 +47,10 @@ class NowPlayingBar extends ConsumerWidget {
       BoxShadow(
         blurRadius: 20.0,
         spreadRadius: 2.0,
-        color: Theme.brightnessOf(context) == Brightness.light
-            ? darkColorScheme.surface.withOpacity(0.12)
-            : Colors.black.withOpacity(0.45),
+        color:
+            Theme.brightnessOf(context) == Brightness.light
+                ? darkColorScheme.surface.withOpacity(0.12)
+                : Colors.black.withOpacity(0.45),
       ),
     ],
   );
@@ -87,9 +88,10 @@ class NowPlayingBar extends ConsumerWidget {
             ).primary.withOpacity(Theme.brightnessOf(context) == Brightness.light ? 0.75 : 0.3),
             borderRadius: BorderRadius.circular(12.0),
             clipBehavior: Clip.antiAlias,
-            color: Theme.brightnessOf(context) == Brightness.dark
-                ? IconTheme.of(context).color!.withOpacity(0.1)
-                : Theme.of(context).cardColor,
+            color:
+                Theme.brightnessOf(context) == Brightness.dark
+                    ? IconTheme.of(context).color!.withOpacity(0.1)
+                    : Theme.of(context).cardColor,
             elevation: 8.0,
             child: Container(
               width: MediaQuery.widthOf(context),
@@ -110,9 +112,10 @@ class NowPlayingBar extends ConsumerWidget {
                       width: albumImageSize,
                       height: albumImageSize,
                       decoration: const ShapeDecoration(shape: Border(), color: Color.fromRGBO(0, 0, 0, 0.3)),
-                      child: (retryCallback != null)
-                          ? const Icon(Icons.refresh, size: albumImageSize)
-                          : const Center(child: CircularProgressIndicator.adaptive()),
+                      child:
+                          (retryCallback != null)
+                              ? const Icon(Icons.refresh, size: albumImageSize)
+                              : const Center(child: CircularProgressIndicator.adaptive()),
                     ),
                     Expanded(
                       child: Container(
@@ -169,9 +172,10 @@ class NowPlayingBar extends ConsumerWidget {
 
     Duration? playbackPosition;
 
-    final currentTrackBaseItem = currentTrack.item.extras?["itemJson"] != null
-        ? jellyfin_models.BaseItemDto.fromJson(currentTrack.item.extras!["itemJson"] as Map<String, dynamic>)
-        : null;
+    final currentTrackBaseItem =
+        currentTrack.item.extras?["itemJson"] != null
+            ? jellyfin_models.BaseItemDto.fromJson(currentTrack.item.extras!["itemJson"] as Map<String, dynamic>)
+            : null;
     var context = ref.context;
 
     final elapsedPartBackgroundColor = getProgressForegroundColor(ref);
@@ -195,9 +199,8 @@ class NowPlayingBar extends ConsumerWidget {
           onTap: () async => await openPlayerScreen(),
           child: Dismissible(
             key: const Key("NowPlayingBarDismiss"),
-            direction: ref.watch(finampSettingsProvider.disableGesture)
-                ? DismissDirection.none
-                : DismissDirection.vertical,
+            direction:
+                ref.watch(finampSettingsProvider.disableGesture) ? DismissDirection.none : DismissDirection.vertical,
             confirmDismiss: (direction) async {
               if (direction == DismissDirection.down) {
                 FeedbackHelper.feedback(FeedbackType.success);
@@ -214,9 +217,10 @@ class NowPlayingBar extends ConsumerWidget {
               //TODO use a PageView instead of a Dismissible, and only wrap dynamic items (not the buttons)
               child: Dismissible(
                 key: const Key("NowPlayingBar"),
-                direction: ref.watch(finampSettingsProvider.disableGesture)
-                    ? DismissDirection.none
-                    : DismissDirection.horizontal,
+                direction:
+                    ref.watch(finampSettingsProvider.disableGesture)
+                        ? DismissDirection.none
+                        : DismissDirection.horizontal,
                 confirmDismiss: (direction) async {
                   if (direction == DismissDirection.endToStart) {
                     FeedbackHelper.feedback(FeedbackType.light);
@@ -238,20 +242,21 @@ class NowPlayingBar extends ConsumerWidget {
                   ),
                   clipBehavior: Clip.antiAlias,
                   // Ice glass tint over progress colors
-                  color: isDark
-                      ? Color.alphaBlend(
-                          ColorScheme.of(context).primary.withOpacity(0.14),
-                          const Color(0xFF121820).withOpacity(0.92),
-                        )
-                      : Color.alphaBlend(
-                          ColorScheme.of(context).primary.withOpacity(0.08),
-                          Colors.white.withOpacity(0.92),
-                        ),
+                  color:
+                      isDark
+                          ? Color.alphaBlend(
+                            ColorScheme.of(context).primary.withOpacity(0.14),
+                            const Color(0xFF121820).withOpacity(0.92),
+                          )
+                          : Color.alphaBlend(
+                            ColorScheme.of(context).primary.withOpacity(0.08),
+                            Colors.white.withOpacity(0.92),
+                          ),
                   elevation: 4.0,
                   // If we have a media item and the player hasn't finished, show
                   // the now playing bar.
                   child: //TODO move into separate component and share with queue list
-                  Container(
+                      Container(
                     width: MediaQuery.widthOf(context),
                     height: albumImageSize,
                     padding: EdgeInsets.zero,
@@ -314,9 +319,13 @@ class NowPlayingBar extends ConsumerWidget {
                                         var itemLength = currentTrack.item.duration;
                                         return FractionallySizedBox(
                                           alignment: AlignmentDirectional.centerStart,
-                                          widthFactor: itemLength == null
-                                              ? 0
-                                              : max(0, playbackPosition!.inMilliseconds / itemLength.inMilliseconds),
+                                          widthFactor:
+                                              itemLength == null
+                                                  ? 0
+                                                  : max(
+                                                    0,
+                                                    playbackPosition!.inMilliseconds / itemLength.inMilliseconds,
+                                                  ),
                                           child: DecoratedBox(
                                             decoration: ShapeDecoration(
                                               color: elapsedPartBackgroundColor,
@@ -402,7 +411,7 @@ class NowPlayingBar extends ConsumerWidget {
                                                             printDuration(
                                                               showRemaining
                                                                   ? ((currentTrack.item.duration ?? Duration.zero) -
-                                                                        (playbackPosition ?? Duration.zero))
+                                                                      (playbackPosition ?? Duration.zero))
                                                                   : playbackPosition,
                                                               leadingZeroes: false,
                                                               isRemaining: showRemaining,

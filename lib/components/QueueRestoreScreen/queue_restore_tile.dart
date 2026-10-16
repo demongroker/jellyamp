@@ -48,10 +48,7 @@ class QueueRestoreTile extends ConsumerWidget {
         visualDensity: VisualDensity.standard,
         title: Text(source.name.getLocalized(context.l10n)),
         titleAlignment: ListTileTitleAlignment.center,
-        leading: Padding(
-          padding: const EdgeInsets.only(right: 16),
-          child: AlbumImage(item: track),
-        ),
+        leading: Padding(padding: const EdgeInsets.only(right: 16), child: AlbumImage(item: track)),
         isThreeLine: true,
         //dense: true,
         subtitle: Column(
@@ -65,12 +62,12 @@ class QueueRestoreTile extends ConsumerWidget {
             ...((track?.name == null)
                 ? <Text>[]
                 : [
-                    // exclude subtitle line 1 if track name is null
-                    Text(
-                      AppLocalizations.of(context)!.queueRestoreSubtitle1(track!.name!),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ]),
+                  // exclude subtitle line 1 if track name is null
+                  Text(
+                    AppLocalizations.of(context)!.queueRestoreSubtitle1(track!.name!),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ]),
             Text(
               AppLocalizations.of(context)!.queueRestoreSubtitle2(info.trackCount, remainingTracks),
               style: Theme.of(context).textTheme.bodySmall,

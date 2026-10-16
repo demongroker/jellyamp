@@ -52,17 +52,19 @@ class _PlaybackActionRowState extends ConsumerState<PlaybackActionRow> {
 
     // initial page for regular playback action row
     // queue menu pages are saved as a separate setting from others.
-    var lastUsedPlaybackActionRowPage = widget.queueItem != null
-        ? ref.watch(finampSettingsProvider.lastUsedPlaybackActionRowPageForQueueMenu)
-        : ref.watch(finampSettingsProvider.lastUsedPlaybackActionRowPage);
+    var lastUsedPlaybackActionRowPage =
+        widget.queueItem != null
+            ? ref.watch(finampSettingsProvider.lastUsedPlaybackActionRowPageForQueueMenu)
+            : ref.watch(finampSettingsProvider.lastUsedPlaybackActionRowPage);
     lastUsedPlaybackActionRowPage =
         nextUpEmpty && preferPreprendingToNextUp && lastUsedPlaybackActionRowPage == PlaybackActionRowPage.appendNext
-        ? PlaybackActionRowPage.playNext
-        : lastUsedPlaybackActionRowPage;
+            ? PlaybackActionRowPage.playNext
+            : lastUsedPlaybackActionRowPage;
     final lastUsedPlaybackActionRowPageIndex = playbackActionPages.keys.toList().indexOf(lastUsedPlaybackActionRowPage);
-    final initialPageViewIndex = ref.watch(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)
-        ? lastUsedPlaybackActionRowPageIndex
-        : 0;
+    final initialPageViewIndex =
+        ref.watch(finampSettingsProvider.rememberLastUsedPlaybackActionRowPage)
+            ? lastUsedPlaybackActionRowPageIndex
+            : 0;
     controller = PageController(initialPage: initialPageViewIndex.clamp(0, playbackActionPages.length));
     final double playActionRowHeight = widget.compactLayout ? 76.0 : playActionRowHeightDefault;
     final rememberLastUsedPlaybackActionRowPage = ref.read(

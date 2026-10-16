@@ -40,47 +40,49 @@ class _ApkServer {
 
       _startAutoStopTimer();
 
-      unawaited(server.forEach((request) async {
-        try {
-          if (request.method != 'GET') {
-            request.response.statusCode = HttpStatus.methodNotAllowed;
-            await request.response.close();
-            return;
-          }
-
-          final token = request.uri.queryParameters['token'];
-          if (token != _currentToken) {
-            request.response.statusCode = HttpStatus.forbidden;
-            await request.response.close();
-            return;
-          }
-
-          if (request.uri.path.endsWith('.apk') || request.uri.path == '/') {
-            final length = await apkFile.length();
-            request.response.statusCode = HttpStatus.ok;
-            request.response.headers.contentType = ContentType('application', 'vnd.android.package-archive');
-            request.response.headers.set('Content-Length', length);
-            request.response.headers.set('Content-Disposition', 'attachment; filename="Jellyamp.apk"');
-            await request.response.addStream(apkFile.openRead());
-          } else {
-            request.response.statusCode = HttpStatus.ok;
-            request.response.headers.contentType = ContentType.html;
-            request.response.write(
-              '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width">'
-              '<title>Jellyamp</title></head><body style="font-family:sans-serif;padding:2rem">'
-              '<h1>Jellyamp</h1>'
-              '<p><a href="/Jellyamp.apk?token=$_currentToken">Download Jellyamp.apk</a></p>'
-              '</body></html>',
-            );
-          }
-        } catch (e, st) {
-          _log.warning("APK server request error", e, st);
-        } finally {
+      unawaited(
+        server.forEach((request) async {
           try {
-            await request.response.close();
-          } catch (_) {}
-        }
-      }));
+            if (request.method != 'GET') {
+              request.response.statusCode = HttpStatus.methodNotAllowed;
+              await request.response.close();
+              return;
+            }
+
+            final token = request.uri.queryParameters['token'];
+            if (token != _currentToken) {
+              request.response.statusCode = HttpStatus.forbidden;
+              await request.response.close();
+              return;
+            }
+
+            if (request.uri.path.endsWith('.apk') || request.uri.path == '/') {
+              final length = await apkFile.length();
+              request.response.statusCode = HttpStatus.ok;
+              request.response.headers.contentType = ContentType('application', 'vnd.android.package-archive');
+              request.response.headers.set('Content-Length', length);
+              request.response.headers.set('Content-Disposition', 'attachment; filename="Jellyamp.apk"');
+              await request.response.addStream(apkFile.openRead());
+            } else {
+              request.response.statusCode = HttpStatus.ok;
+              request.response.headers.contentType = ContentType.html;
+              request.response.write(
+                '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width">'
+                '<title>Jellyamp</title></head><body style="font-family:sans-serif;padding:2rem">'
+                '<h1>Jellyamp</h1>'
+                '<p><a href="/Jellyamp.apk?token=$_currentToken">Download Jellyamp.apk</a></p>'
+                '</body></html>',
+              );
+            }
+          } catch (e, st) {
+            _log.warning("APK server request error", e, st);
+          } finally {
+            try {
+              await request.response.close();
+            } catch (_) {}
+          }
+        }),
+      );
 
       return _currentToken;
     } catch (e, st) {

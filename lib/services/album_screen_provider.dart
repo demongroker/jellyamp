@@ -68,9 +68,8 @@ Future<(List<BaseItemDto>, List<BaseItemDto>)> getSortedPlaylistTracks(
   final playlistPlayableTracks = result.$2;
 
   if (playlistSortBy == SortBy.defaultOrder) {
-    playlistAllTracksSorted = (playlistSortOrder == SortOrder.descending)
-        ? playlistAllTracks.reversed.toList()
-        : playlistAllTracks;
+    playlistAllTracksSorted =
+        (playlistSortOrder == SortOrder.descending) ? playlistAllTracks.reversed.toList() : playlistAllTracks;
   } else {
     // Unfortunately, the Jellyfin API does not support "sortBy"
     // for the "/Playlists/{playlistId}/Items" endpoint, so we
@@ -82,15 +81,17 @@ Future<(List<BaseItemDto>, List<BaseItemDto>)> getSortedPlaylistTracks(
   // The playlist api endpoint and fully downloaded playlists do not allow
   // to filter by genre, so we have to do that manually on device
   if (genreFilter != null && BaseItemDtoType.fromItem(parent) == BaseItemDtoType.playlist) {
-    playlistAllTracksSorted = playlistAllTracksSorted.where((track) {
-      return track.genreItems?.any((g) => g.id == genreFilter.id) ?? false;
-    }).toList();
+    playlistAllTracksSorted =
+        playlistAllTracksSorted.where((track) {
+          return track.genreItems?.any((g) => g.id == genreFilter.id) ?? false;
+        }).toList();
   }
 
   if (sortConfig.favoritesFilter) {
-    playlistAllTracksSorted = playlistAllTracksSorted.where((track) {
-      return track.userData?.isFavorite ?? true;
-    }).toList();
+    playlistAllTracksSorted =
+        playlistAllTracksSorted.where((track) {
+          return track.userData?.isFavorite ?? true;
+        }).toList();
   }
 
   // We now have to re-create a sorted playableItems from the new items order,

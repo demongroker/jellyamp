@@ -76,10 +76,7 @@ class _UpdateBannerState extends ConsumerState<UpdateBanner> {
               ),
               if (_status == _UpdateStatus.downloading) ...[
                 const SizedBox(height: 8),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: LinearProgressIndicator(value: _progress),
-                ),
+                ClipRRect(borderRadius: BorderRadius.circular(4), child: LinearProgressIndicator(value: _progress)),
                 const SizedBox(height: 4),
                 Text(
                   'Downloading… ${(_progress * 100).toStringAsFixed(0)}%',
@@ -88,10 +85,7 @@ class _UpdateBannerState extends ConsumerState<UpdateBanner> {
               ],
               if (_message != null) ...[
                 const SizedBox(height: 4),
-                Text(
-                  _message!,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
+                Text(_message!, style: Theme.of(context).textTheme.bodySmall),
               ],
             ],
           ),
@@ -107,19 +101,12 @@ class _UpdateBannerState extends ConsumerState<UpdateBanner> {
       case _UpdateStatus.downloading:
         return const Padding(
           padding: EdgeInsets.symmetric(horizontal: 12),
-          child: SizedBox(
-            width: 16,
-            height: 16,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          ),
+          child: SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
         );
       case _UpdateStatus.installing:
         return const TextButton(onPressed: null, child: Text('Installing…'));
       case _UpdateStatus.idle:
-        return TextButton(
-          onPressed: () => _downloadAndInstall(update),
-          child: const Text('Update'),
-        );
+        return TextButton(onPressed: () => _downloadAndInstall(update), child: const Text('Update'));
     }
   }
 
@@ -137,22 +124,17 @@ class _UpdateBannerState extends ConsumerState<UpdateBanner> {
       if (!canInstall) {
         final open = await showDialog<bool>(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: const Text('Allow installs'),
-            content: const Text(
-              'To update Jellyamp in-app, allow installing apps from this source, then tap Update again.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx, false),
-                child: const Text('Cancel'),
+          builder:
+              (ctx) => AlertDialog(
+                title: const Text('Allow installs'),
+                content: const Text(
+                  'To update Jellyamp in-app, allow installing apps from this source, then tap Update again.',
+                ),
+                actions: [
+                  TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+                  TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Open settings')),
+                ],
               ),
-              TextButton(
-                onPressed: () => Navigator.pop(ctx, true),
-                child: const Text('Open settings'),
-              ),
-            ],
-          ),
         );
         if (open ?? false) {
           await UpdateInstaller.openInstallPermissionSettings();
@@ -186,8 +168,7 @@ class _UpdateBannerState extends ConsumerState<UpdateBanner> {
         if (!ok) {
           setState(() {
             _status = _UpdateStatus.idle;
-            _message =
-                'Update verification failed — the download does not match the release. Tap Update to retry.';
+            _message = 'Update verification failed — the download does not match the release. Tap Update to retry.';
           });
           return;
         }

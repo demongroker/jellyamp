@@ -73,9 +73,10 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
     final sortSetting = ref.watch(resolveSortProvider(sortAndFilterController));
     final disableDownloads = sortSetting.filters.isNotEmpty && parentIsPlaylist;
 
-    final tracksAsync = parentIsPlaylist
-        ? ref.watch(getSortedPlaylistTracksProvider(widget.parent, sortSetting))
-        : ref.watch(getAlbumOrPlaylistTracksProvider(widget.parent));
+    final tracksAsync =
+        parentIsPlaylist
+            ? ref.watch(getSortedPlaylistTracksProvider(widget.parent, sortSetting))
+            : ref.watch(getAlbumOrPlaylistTracksProvider(widget.parent));
     final (allTracks, playableTracks) = tracksAsync.valueOrNull ?? (null, null);
     final isLoading = allTracks == null;
 
@@ -124,9 +125,8 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
                   item: downloadStub,
                   children: displayChildren,
                   downloadDisabled: disableDownloads,
-                  customTooltip: disableDownloads
-                      ? AppLocalizations.of(context)!.downloadButtonDisabledGenreFilterTooltip
-                      : null,
+                  customTooltip:
+                      disableDownloads ? AppLocalizations.of(context)!.downloadButtonDisabledGenreFilterTooltip : null,
                 ),
               IconButton(
                 icon: const Icon(Icons.more_vert),
@@ -162,39 +162,42 @@ class _AlbumScreenContentState extends ConsumerState<AlbumScreenContent> {
               title: AppLocalizations.of(context)!.discNumber(childrenOfThisDisc[0].parentIndexNumber!),
               actions: [
                 IconButtonWithSemantics(
-                  onPressed: () async => await GetIt.instance<QueueService>().startPlayback(
-                    items: childrenOfThisDisc,
-                    source: QueueItemSource.fromBaseItem(widget.parent),
-                    order: FinampPlaybackOrder.linear,
-                  ),
+                  onPressed:
+                      () async => await GetIt.instance<QueueService>().startPlayback(
+                        items: childrenOfThisDisc,
+                        source: QueueItemSource.fromBaseItem(widget.parent),
+                        order: FinampPlaybackOrder.linear,
+                      ),
                   label: AppLocalizations.of(context)!.playButtonLabel,
                   icon: TablerIcons.player_play,
                 ),
                 IconButtonWithSemantics(
-                  onPressed: () async => await GetIt.instance<QueueService>().startPlayback(
-                    items: childrenOfThisDisc,
-                    source: QueueItemSource.fromBaseItem(widget.parent),
-                    order: FinampPlaybackOrder.shuffled,
-                  ),
+                  onPressed:
+                      () async => await GetIt.instance<QueueService>().startPlayback(
+                        items: childrenOfThisDisc,
+                        source: QueueItemSource.fromBaseItem(widget.parent),
+                        order: FinampPlaybackOrder.shuffled,
+                      ),
                   label: AppLocalizations.of(context)!.shuffleButtonLabel,
                   icon: TablerIcons.arrows_shuffle,
                 ),
                 OverflowMenuButton(
-                  onPressed: () => showModalAlbumMenu(
-                    context: context,
-                    album: AlbumDisc(widget.parent, tracks: childrenOfThisDisc),
-                  ),
+                  onPressed:
+                      () => showModalAlbumMenu(
+                        context: context,
+                        album: AlbumDisc(widget.parent, tracks: childrenOfThisDisc),
+                      ),
                   label: AppLocalizations.of(context)!.moreActionsOnAlbumDisc,
                 ),
               ],
-              onTap: () => showModalAlbumMenu(
-                context: context,
-                album: AlbumDisc(widget.parent, tracks: childrenOfThisDisc),
-              ),
-              onDismiss: (followUpAction) => onConfirmPlayableDismiss(
-                followUpAction: followUpAction,
-                item: AlbumDisc(widget.parent, tracks: childrenOfThisDisc),
-              ),
+              onTap:
+                  () =>
+                      showModalAlbumMenu(context: context, album: AlbumDisc(widget.parent, tracks: childrenOfThisDisc)),
+              onDismiss:
+                  (followUpAction) => onConfirmPlayableDismiss(
+                    followUpAction: followUpAction,
+                    item: AlbumDisc(widget.parent, tracks: childrenOfThisDisc),
+                  ),
               sectionContentSliver: TracksSliverList(
                 childrenForList: childrenOfThisDisc,
                 childrenForQueue: queueChildren,

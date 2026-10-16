@@ -514,17 +514,18 @@ class HomeSectionInfo extends ConsumerWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               spacing: 10.0,
-              children: config.sortConfig.filters
-                  .map(
-                    (filter) => ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 150.0),
-                      child: IconAndText(
-                        iconData: TablerIcons.filter,
-                        textSpan: TextSpan(text: filter.getName(context.l10n)),
-                      ),
-                    ),
-                  )
-                  .toList(),
+              children:
+                  config.sortConfig.filters
+                      .map(
+                        (filter) => ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: 150.0),
+                          child: IconAndText(
+                            iconData: TablerIcons.filter,
+                            textSpan: TextSpan(text: filter.getName(context.l10n)),
+                          ),
+                        ),
+                      )
+                      .toList(),
             ),
           ),
         ],
@@ -689,9 +690,10 @@ Widget _getGenericMenuInfo(
         height: condensed ? infoHeaderCondensedInternalHeight : infoHeaderFullInternalHeight,
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
-          color: Theme.brightnessOf(context) == Brightness.dark
-              ? Colors.black.withOpacity(0.25)
-              : Colors.white.withOpacity(0.15),
+          color:
+              Theme.brightnessOf(context) == Brightness.dark
+                  ? Colors.black.withOpacity(0.25)
+                  : Colors.white.withOpacity(0.15),
           shape: shape,
         ),
         child: GestureDetector(
@@ -725,9 +727,7 @@ Widget _getGenericMenuInfo(
                 children: [
                   if (features.contains(MenuItemInfoHeaderFeatures.artwork) && featureImage != null)
                     AspectRatio(aspectRatio: 1.0, child: featureImage),
-                  Expanded(
-                    child: Container(padding: const EdgeInsets.only(left: 8.0, right: 26.0), child: child),
-                  ),
+                  Expanded(child: Container(padding: const EdgeInsets.only(left: 8.0, right: 26.0), child: child)),
                 ],
               ),
             ],

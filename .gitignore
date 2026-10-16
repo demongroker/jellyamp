@@ -60,6 +60,9 @@ unlinked_spec.ds
 **/android/**/GeneratedPluginRegistrant.java
 **/android/key.properties
 *.jks
+*.pfx
+*.p12
+*.cer
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
@@ -137,5 +140,4 @@ app.*.map.json
 # Integration testing artifacts
 integration_test/testing
 
-# MSIX signing certs (removed P1 #4)
-*.pfx
+# MSIX signing certs (removed P1 #4) — *.pfx / *.p12 / *.cer covered above

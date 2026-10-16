@@ -53,9 +53,10 @@ Future<void> showOutputMenu({required BuildContext context, bool usePlayerTheme 
               mainAxisSize: MainAxisSize.min,
               children: [
                 VolumeSlider(
-                  initialValue: volumeControlDisabled
-                      ? 1.0
-                      : (ref.watch(finampSettingsProvider.currentVolume) * 100).floor() / 100.0,
+                  initialValue:
+                      volumeControlDisabled
+                          ? 1.0
+                          : (ref.watch(finampSettingsProvider.currentVolume) * 100).floor() / 100.0,
                   enabled: !volumeControlDisabled,
                   onChange: (double currentValue) async {
                     final audioHandler = GetIt.instance<MusicPlayerBackgroundTask>();
@@ -81,15 +82,15 @@ Future<void> showOutputMenu({required BuildContext context, bool usePlayerTheme 
             final volumeControlDisabled = ref.watch(airPlayActiveProvider).valueOrNull ?? false;
             return isDesktop && !volumeControlDisabled
                 ? Center(
-                    child: Text(
-                      AppLocalizations.of(context)!.volumeControlHint(
-                        "${GlobalShortcuts.getDisplay(VolumeUpIntent)} / "
-                        "${GlobalShortcuts.getDisplay(VolumeDownIntent)}",
-                      ),
-                      style: Theme.of(context).textTheme.bodySmall,
-                      textAlign: TextAlign.center,
+                  child: Text(
+                    AppLocalizations.of(context)!.volumeControlHint(
+                      "${GlobalShortcuts.getDisplay(VolumeUpIntent)} / "
+                      "${GlobalShortcuts.getDisplay(VolumeDownIntent)}",
                     ),
-                  )
+                    style: Theme.of(context).textTheme.bodySmall,
+                    textAlign: TextAlign.center,
+                  ),
+                )
                 : SizedBox.shrink();
           },
         ),
@@ -97,10 +98,7 @@ Future<void> showOutputMenu({required BuildContext context, bool usePlayerTheme 
       ];
 
       var menu = [
-        SliverStickyHeader(
-          header: const OutputMenuHeader(),
-          sliver: SliverToBoxAdapter(child: SizedBox.shrink()),
-        ),
+        SliverStickyHeader(header: const OutputMenuHeader(), sliver: SliverToBoxAdapter(child: SizedBox.shrink())),
         SliverStickyHeader(
           header: Padding(
             padding: const EdgeInsets.only(top: 10.0, bottom: 8.0, left: 16.0, right: 16.0),
@@ -292,13 +290,14 @@ class OutputSelectorTile extends StatelessWidget {
     return ToggleableListTile(
       isLoading: isLoading,
       title: routeInfo.name,
-      subtitle: (routeInfo.isDeviceSpeaker
-          ? AppLocalizations.of(context)!.deviceType("speaker")
-          : switch (routeInfo.deviceType) {
-              1 => AppLocalizations.of(context)!.deviceType("tv"),
-              3 => AppLocalizations.of(context)!.deviceType("bluetooth"),
-              _ => AppLocalizations.of(context)!.deviceType("unknown"),
-            }),
+      subtitle:
+          (routeInfo.isDeviceSpeaker
+              ? AppLocalizations.of(context)!.deviceType("speaker")
+              : switch (routeInfo.deviceType) {
+                1 => AppLocalizations.of(context)!.deviceType("tv"),
+                3 => AppLocalizations.of(context)!.deviceType("bluetooth"),
+                _ => AppLocalizations.of(context)!.deviceType("unknown"),
+              }),
       // subtitle: AppLocalizations.of(context)!.songCount(childCount ?? 0),
       leading: Container(
         padding: const EdgeInsets.all(16.0),
@@ -403,17 +402,18 @@ class _VolumeSliderState extends ConsumerState<VolumeSlider> {
                     value: currentValue,
                     // A null callback disables the slider; used while AirPlay is
                     // active so the per-app volume stays pinned at 100%.
-                    onChanged: !widget.enabled
-                        ? null
-                        : (value) {
-                            setState(() {
-                              currentValue = value;
-                            });
-                            if (debounce?.isActive ?? false) debounce!.cancel();
-                            debounce = Timer(const Duration(milliseconds: 100), () {
-                              widget.onChange(value);
-                            });
-                          },
+                    onChanged:
+                        !widget.enabled
+                            ? null
+                            : (value) {
+                              setState(() {
+                                currentValue = value;
+                              });
+                              if (debounce?.isActive ?? false) debounce!.cancel();
+                              debounce = Timer(const Duration(milliseconds: 100), () {
+                                widget.onChange(value);
+                              });
+                            },
                     onChangeEnd: (value) async {
                       unawaited(widget.onChange(value));
                       if (widget.feedback) {
@@ -544,9 +544,10 @@ class VerticalSliderThumbShape extends SliderComponentShape {
     required double textScaleFactor,
     required Size sizeWithOverflow,
   }) {
-    final Paint paint = Paint()
-      ..color = sliderTheme.thumbColor!
-      ..style = PaintingStyle.fill;
+    final Paint paint =
+        Paint()
+          ..color = sliderTheme.thumbColor!
+          ..style = PaintingStyle.fill;
 
     final Rect thumbRect = Rect.fromCenter(
       center: center.translate(-offsetLeft * 2, 0),

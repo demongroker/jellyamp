@@ -177,9 +177,8 @@ class ServerInfo {
   /// Extracts server info from the current user's base URL.
   static Future<ServerInfo?> fromServer() async {
     final userHelper = GetIt.instance.isRegistered<FinampUserHelper>() ? GetIt.instance<FinampUserHelper>() : null;
-    final jellyfinApiHelper = GetIt.instance.isRegistered<JellyfinApiHelper>()
-        ? GetIt.instance<JellyfinApiHelper>()
-        : null;
+    final jellyfinApiHelper =
+        GetIt.instance.isRegistered<JellyfinApiHelper>() ? GetIt.instance<JellyfinApiHelper>() : null;
     final user = userHelper?.currentUser;
     if (user == null) {
       // without the user helper, we don't know the server URL
@@ -195,11 +194,12 @@ class ServerInfo {
 
     final uri = Uri.parse(user.baseURL);
     return ServerInfo(
-      serverAddressType: RegExp(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$').hasMatch(uri.host)
-          ? 'ipv4'
-          : RegExp(r'^[\da-fA-F:]+$').hasMatch(uri.host) && uri.host.contains(':')
-          ? 'ipv6'
-          : (uri.host.contains('.') ? 'domainWithTld' : 'customDomain'),
+      serverAddressType:
+          RegExp(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$').hasMatch(uri.host)
+              ? 'ipv4'
+              : RegExp(r'^[\da-fA-F:]+$').hasMatch(uri.host) && uri.host.contains(':')
+              ? 'ipv6'
+              : (uri.host.contains('.') ? 'domainWithTld' : 'customDomain'),
       serverPort: uri.hasPort ? uri.port : (uri.scheme == 'https' ? 443 : 80),
       serverProtocol: uri.scheme,
       serverVersion: serverInfo?.version ?? 'Unknown',

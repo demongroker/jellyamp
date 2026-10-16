@@ -20,9 +20,10 @@ class FinampLogsHelper {
 
   Future<void> openLog() async {
     WidgetsFlutterBinding.ensureInitialized();
-    final basePath = (Platform.isAndroid || Platform.isIOS)
-        ? await getApplicationDocumentsDirectory()
-        : await getApplicationSupportDirectory();
+    final basePath =
+        (Platform.isAndroid || Platform.isIOS)
+            ? await getApplicationDocumentsDirectory()
+            : await getApplicationSupportDirectory();
     final logFile = File(path_helper.join(basePath.path, "finamp-logs.txt"));
     if (logFile.existsSync() && logFile.lengthSync() >= 1024 * 1024 * 10) {
       logFile.renameSync(path_helper.join(basePath.path, "finamp-logs-old.txt"));
@@ -71,9 +72,10 @@ class FinampLogsHelper {
     fullLogsBuffer.writeln("=== LOGS ===");
 
     if (_logFileWriter != null) {
-      final basePath = (Platform.isAndroid || Platform.isIOS)
-          ? await getApplicationDocumentsDirectory()
-          : await getApplicationSupportDirectory();
+      final basePath =
+          (Platform.isAndroid || Platform.isIOS)
+              ? await getApplicationDocumentsDirectory()
+              : await getApplicationSupportDirectory();
       var oldLogs = File(path_helper.join(basePath.path, "finamp-logs-old.txt"));
       var newLogs = File(path_helper.join(basePath.path, "finamp-logs.txt"));
       if (oldLogs.existsSync()) {

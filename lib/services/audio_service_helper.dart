@@ -24,32 +24,34 @@ class AudioServiceHelper {
 
   /// Shuffles every track in the user's current view.
   Future<void> shuffleAll({required bool onlyShowFavorites, BaseItemDto? genreFilter, int? itemCount}) async {
-    List<jellyfin_models.BaseItemDto>? items = (await getShuffleAllTracks(
-      onlyShowFavorites: onlyShowFavorites,
-      library: _finampUserHelper.currentUser!.currentView!,
-      genreFilter: genreFilter,
-      itemCount: itemCount,
-    ))?.$1;
+    List<jellyfin_models.BaseItemDto>? items =
+        (await getShuffleAllTracks(
+          onlyShowFavorites: onlyShowFavorites,
+          library: _finampUserHelper.currentUser!.currentView!,
+          genreFilter: genreFilter,
+          itemCount: itemCount,
+        ))?.$1;
 
     if (items != null) {
-      QueueItemSource source = (genreFilter != null)
-          ? QueueItemSource(
-              type: QueueItemSourceType.genre,
-              name: QueueItemSourceName(
-                type: QueueItemSourceNameType.preTranslated,
-                pretranslatedName: genreFilter.name,
-              ),
-              id: genreFilter.id,
-              item: genreFilter,
-            )
-          : QueueItemSource.rawId(
-              type: onlyShowFavorites ? QueueItemSourceType.favorites : QueueItemSourceType.allTracks,
-              name: QueueItemSourceName(
-                type: onlyShowFavorites ? QueueItemSourceNameType.yourLikes : QueueItemSourceNameType.shuffleAll,
-              ),
-              id: "shuffleAll",
-              library: _finampUserHelper.currentUser!.currentView!.id,
-            );
+      QueueItemSource source =
+          (genreFilter != null)
+              ? QueueItemSource(
+                type: QueueItemSourceType.genre,
+                name: QueueItemSourceName(
+                  type: QueueItemSourceNameType.preTranslated,
+                  pretranslatedName: genreFilter.name,
+                ),
+                id: genreFilter.id,
+                item: genreFilter,
+              )
+              : QueueItemSource.rawId(
+                type: onlyShowFavorites ? QueueItemSourceType.favorites : QueueItemSourceType.allTracks,
+                name: QueueItemSourceName(
+                  type: onlyShowFavorites ? QueueItemSourceNameType.yourLikes : QueueItemSourceNameType.shuffleAll,
+                ),
+                id: "shuffleAll",
+                library: _finampUserHelper.currentUser!.currentView!.id,
+              );
 
       await _queueService.startPlayback(items: items, source: source, order: FinampPlaybackOrder.shuffled);
     }
@@ -66,12 +68,13 @@ class AudioServiceHelper {
       // This is a bit inefficient since we have to get all of the tracks and
       // shuffle them before making a sublist, but I couldn't think of a better
       // way.
-      final items = (await _isarDownloader.getAllTracks(
-        viewFilter: library.id,
-        genreFilter: genreFilter?.id,
-        onlyFavorites: onlyShowFavorites,
-        nullableViewFilters: FinampSettingsHelper.finampSettings.showDownloadsWithUnknownLibrary,
-      )).map((e) => e.baseItem!).toList();
+      final items =
+          (await _isarDownloader.getAllTracks(
+            viewFilter: library.id,
+            genreFilter: genreFilter?.id,
+            onlyFavorites: onlyShowFavorites,
+            nullableViewFilters: FinampSettingsHelper.finampSettings.showDownloadsWithUnknownLibrary,
+          )).map((e) => e.baseItem!).toList();
       items.shuffle();
       final count = itemCount ?? FinampSettingsHelper.finampSettings.trackShuffleItemCount;
       if (items.length - 1 > count) {
@@ -150,8 +153,9 @@ class AudioServiceHelper {
             id: artists.first.id,
             item: artists.first,
           ),
-          order: FinampPlaybackOrder
-              .linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
+          order:
+              FinampPlaybackOrder
+                  .linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
         );
         _jellyfinApiHelper.clearArtistMixBuilderList();
       }
@@ -179,8 +183,9 @@ class AudioServiceHelper {
             id: albums.first.id,
             item: albums.first,
           ),
-          order: FinampPlaybackOrder
-              .linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
+          order:
+              FinampPlaybackOrder
+                  .linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
         );
         _jellyfinApiHelper.clearAlbumMixBuilderList();
       }
@@ -208,8 +213,9 @@ class AudioServiceHelper {
             id: genres.first.id,
             item: genres.first,
           ),
-          order: FinampPlaybackOrder
-              .linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
+          order:
+              FinampPlaybackOrder
+                  .linear, // instant mixes should have their order determined by the server, especially to make sure the first item is the one that the mix is based off of
         );
         _jellyfinApiHelper.clearAlbumMixBuilderList();
       }
@@ -274,22 +280,23 @@ class AudioServiceHelper {
     audioServiceHelperLogger.info("Attempting to play random $contentType (favorite: $favoritesOnly)");
 
     // get random item (of the selected type)
-    final randomItem = (await _jellyfinApiHelper.getItems(
-      parentItem: contentType == ContentType.playlists ? null : _finampUserHelper.currentUser!.currentView,
-      filters: favoritesOnly ? "IsFavorite" : null,
-      // Jellyfin 10.10 and 10.11 use the [isFavorite] boolean filter instead of the list-based [filters] parameter for genres, so add that here
-      // I guess part of the reason for this is that it's not possible to favorite a genre through the Jellyfin Web UI at all...
-      // true = only favorites, false = exclude favorites, null = all items
-      isFavorite: contentType == ContentType.genres && favoritesOnly ? true : null,
-      includeItemTypes: contentType?.itemType?.jellyfinName,
-      artistType: switch (contentType) {
-        ContentType.albumArtists => ArtistType.albumArtist,
-        ContentType.performingArtists => ArtistType.artist,
-        _ => null,
-      },
-      sortBy: SortBy.random.jellyfinName(null),
-      limit: 1,
-    ))?.firstOrNull;
+    final randomItem =
+        (await _jellyfinApiHelper.getItems(
+          parentItem: contentType == ContentType.playlists ? null : _finampUserHelper.currentUser!.currentView,
+          filters: favoritesOnly ? "IsFavorite" : null,
+          // Jellyfin 10.10 and 10.11 use the [isFavorite] boolean filter instead of the list-based [filters] parameter for genres, so add that here
+          // I guess part of the reason for this is that it's not possible to favorite a genre through the Jellyfin Web UI at all...
+          // true = only favorites, false = exclude favorites, null = all items
+          isFavorite: contentType == ContentType.genres && favoritesOnly ? true : null,
+          includeItemTypes: contentType?.itemType?.jellyfinName,
+          artistType: switch (contentType) {
+            ContentType.albumArtists => ArtistType.albumArtist,
+            ContentType.performingArtists => ArtistType.artist,
+            _ => null,
+          },
+          sortBy: SortBy.random.jellyfinName(null),
+          limit: 1,
+        ))?.firstOrNull;
 
     if (randomItem == null) {
       final additionalContentType = limitContentTypes?.whereNot((x) => x == contentType).toSet() ?? <ContentType>{};

@@ -21,9 +21,10 @@ class ItemSwipeLeftToRightActionDropdownListTile extends ConsumerWidget {
         children: [
           Text(AppLocalizations.of(context)!.swipeLeftToRightActionSubtitle),
           FinampSettingsDropdown<ItemSwipeActions>(
-            dropdownItems: ItemSwipeActions.values
-                .map((e) => DropdownMenuEntry<ItemSwipeActions>(value: e, label: e.toLocalisedString(context.l10n)))
-                .toList(),
+            dropdownItems:
+                ItemSwipeActions.values
+                    .map((e) => DropdownMenuEntry<ItemSwipeActions>(value: e, label: e.toLocalisedString(context.l10n)))
+                    .toList(),
             selectedValue: action,
             onSelected: (value) {
               if (value != null) {
@@ -51,9 +52,10 @@ class ItemSwipeRightToLeftActionDropdownListTile extends ConsumerWidget {
         children: [
           Text(AppLocalizations.of(context)!.swipeRightToLeftActionSubtitle),
           FinampSettingsDropdown<ItemSwipeActions>(
-            dropdownItems: ItemSwipeActions.values
-                .map((e) => DropdownMenuEntry<ItemSwipeActions>(value: e, label: e.toLocalisedString(context.l10n)))
-                .toList(),
+            dropdownItems:
+                ItemSwipeActions.values
+                    .map((e) => DropdownMenuEntry<ItemSwipeActions>(value: e, label: e.toLocalisedString(context.l10n)))
+                    .toList(),
             selectedValue: action,
             onSelected: (value) {
               if (value != null) {

@@ -308,13 +308,14 @@ class IsarTaskQueue implements TaskQueue {
   Future<void> _advanceQueue() async {
     try {
       while (true) {
-        var nextTasks = _isar.downloadItems
-            .where()
-            .stateEqualTo(DownloadItemState.enqueued)
-            .filter()
-            .allOf(_activeDownloads, (q, element) => q.not().isarIdEqualTo(element))
-            .limit(20)
-            .findAllSync();
+        var nextTasks =
+            _isar.downloadItems
+                .where()
+                .stateEqualTo(DownloadItemState.enqueued)
+                .filter()
+                .allOf(_activeDownloads, (q, element) => q.not().isarIdEqualTo(element))
+                .limit(20)
+                .findAllSync();
         if (nextTasks.isEmpty || !_downloadsService.allowDownloads || FinampSettingsHelper.finampSettings.isOffline) {
           return;
         }
@@ -505,12 +506,13 @@ class IsarTaskQueue implements TaskQueue {
   /// normal re-sync, which re-runs [_initiateDownload].
   Future<void> retryFailedDownloads() async {
     _isar.writeTxnSync(() {
-      final failed = _isar.downloadItems
-          .where()
-          .stateEqualTo(DownloadItemState.failed)
-          .or()
-          .stateEqualTo(DownloadItemState.syncFailed)
-          .findAllSync();
+      final failed =
+          _isar.downloadItems
+              .where()
+              .stateEqualTo(DownloadItemState.failed)
+              .or()
+              .stateEqualTo(DownloadItemState.syncFailed)
+              .findAllSync();
       for (final item in failed) {
         if (item.type.hasFiles && item.path != null && item.state != DownloadItemState.enqueued) {
           _downloadsService.updateItemState(item, DownloadItemState.enqueued);
@@ -594,14 +596,15 @@ class DownloadsDeleteService {
       try {
         // This must be synchronous or we can get more than 5 threads and multiple threads
         // processing the same item
-        wrappedDeletes = _isar.isarTaskDatas
-            .where()
-            .typeEqualTo(type)
-            .filter()
-            .allOf(_activeDeletes, (q, value) => q.not().idEqualTo(value))
-            .sortByAge() // Try to process oldest deletes first as they are more likely to be deletable
-            .limit(_batchSize)
-            .findAllSync();
+        wrappedDeletes =
+            _isar.isarTaskDatas
+                .where()
+                .typeEqualTo(type)
+                .filter()
+                .allOf(_activeDeletes, (q, value) => q.not().idEqualTo(value))
+                .sortByAge() // Try to process oldest deletes first as they are more likely to be deletable
+                .limit(_batchSize)
+                .findAllSync();
         if (wrappedDeletes.isEmpty) {
           assert(_isar.isarTaskDatas.where().typeEqualTo(type).countSync() >= _activeDeletes.length);
           if (_activeDeletes.isEmpty && _callbacksComplete != null) {
@@ -813,12 +816,17 @@ class DownloadsSyncService {
   /// Add nodes to be synced at a later time.
   /// Must be called inside an Isar write transaction.
   void addAll(Iterable<int> required, Iterable<int> info, BaseItemId? viewId) {
-    var items = required
-        .map(
-          (e) =>
-              IsarTaskData.build("required $e", type, SyncNode(stubIsarId: e, required: true, viewId: viewId), age: 0),
-        )
-        .toList();
+    var items =
+        required
+            .map(
+              (e) => IsarTaskData.build(
+                "required $e",
+                type,
+                SyncNode(stubIsarId: e, required: true, viewId: viewId),
+                age: 0,
+              ),
+            )
+            .toList();
     items.addAll(
       info.map(
         (e) => IsarTaskData.build("info $e", type, SyncNode(stubIsarId: e, required: false, viewId: viewId), age: 1),
@@ -868,14 +876,15 @@ class DownloadsSyncService {
       try {
         // This must be synchronous or we can get more than 5 threads and multiple threads
         // processing the same item
-        wrappedSyncs = _isar.isarTaskDatas
-            .where()
-            .typeEqualTo(type)
-            .filter()
-            .allOf(_activeSyncs, (q, value) => q.not().idEqualTo(value))
-            .sortByAge() // Prioritize required nodes
-            .limit(_batchSize)
-            .findAllSync();
+        wrappedSyncs =
+            _isar.isarTaskDatas
+                .where()
+                .typeEqualTo(type)
+                .filter()
+                .allOf(_activeSyncs, (q, value) => q.not().idEqualTo(value))
+                .sortByAge() // Prioritize required nodes
+                .limit(_batchSize)
+                .findAllSync();
         if (wrappedSyncs.isEmpty ||
             !_downloadsService.allowSyncs ||
             FinampSettingsHelper.finampSettings.isOffline ||
@@ -1304,22 +1313,22 @@ class DownloadsSyncService {
     var missingChildIds = newChildIds.difference(oldChildIds);
     var childrenToUnlink = (_isar.downloadItems.getAllSync(childIdsToUnlink.toList())).nonNulls.toList();
     // anyOf filter allows all objects when given empty list, but we want no objects
-    var childIdsToLink = (missingChildIds.isEmpty)
-        ? <int>[]
-        : _isar.downloadItems
-              .where()
-              .anyOf(missingChildIds, (q, int id) => q.isarIdEqualTo(id))
-              .isarIdProperty()
-              .findAllSync();
+    var childIdsToLink =
+        (missingChildIds.isEmpty)
+            ? <int>[]
+            : _isar.downloadItems
+                .where()
+                .anyOf(missingChildIds, (q, int id) => q.isarIdEqualTo(id))
+                .isarIdProperty()
+                .findAllSync();
     // This is only used for IsarLink.update, which only cares about ID, so stubs are fine
-    var childrenToLink = children
-        .where((element) => childIdsToLink.contains(element.isarId))
-        .map((e) => e.asItem(null))
-        .toList();
-    var childrenToPutAndLink = children
-        .where((element) => missingChildIds.contains(element.isarId) && !childIdsToLink.contains(element.isarId))
-        .map((e) => e.asItem(parent.syncTranscodingProfile))
-        .toList();
+    var childrenToLink =
+        children.where((element) => childIdsToLink.contains(element.isarId)).map((e) => e.asItem(null)).toList();
+    var childrenToPutAndLink =
+        children
+            .where((element) => missingChildIds.contains(element.isarId) && !childIdsToLink.contains(element.isarId))
+            .map((e) => e.asItem(parent.syncTranscodingProfile))
+            .toList();
     assert(childIdsToLink.length + childrenToPutAndLink.length == missingChildIds.length);
     assert(missingChildIds.length + oldChildIds.length - childrenToUnlink.length == children.length);
     if (oldChildIds.isNotEmpty && newChildIds.isEmpty) {
@@ -1562,9 +1571,8 @@ class DownloadsSyncService {
           }
       }
       _downloadsService.resetConnectionErrors();
-      var stubList = outputItems
-          .map((e) => DownloadStub.fromItem(item: e, type: typeOverride ?? e.downloadType))
-          .toList();
+      var stubList =
+          outputItems.map((e) => DownloadStub.fromItem(item: e, type: typeOverride ?? e.downloadType)).toList();
       for (var element in stubList) {
         _metadataCache[BaseItemId(element.id)] = Future.value(element);
       }
@@ -1601,12 +1609,13 @@ class DownloadsSyncService {
   /// with a valid BaseItemDto referring to the given image.
   Future<BaseItemDto?> _updateImageBaseItem(DownloadStub parent) async {
     _syncLogger.finer("Attempting to update image item id for ${parent.name}");
-    final localParents = _isar.downloadItems
-        .filter()
-        .requires((q) => q.isarIdEqualTo(parent.isarId))
-        .or()
-        .info((q) => q.isarIdEqualTo(parent.isarId))
-        .findAllSync();
+    final localParents =
+        _isar.downloadItems
+            .filter()
+            .requires((q) => q.isarIdEqualTo(parent.isarId))
+            .or()
+            .info((q) => q.isarIdEqualTo(parent.isarId))
+            .findAllSync();
     final serverParents = await Future.wait(
       localParents.where((x) => x.type.requiresItem).map((x) => _getCollectionInfo(x.baseItem!.id, x.type, true)),
     );
@@ -1700,9 +1709,8 @@ class DownloadsSyncService {
       final indexNumber = item.indexNumber != null ? "[${item.indexNumber}] " : "";
       final artist = (item.artists?.isNotEmpty ?? false) ? "${item.artists?.first} - " : "";
       final originalFilename = item.mediaSources?.firstWhere((e) => e.type.toLowerCase() == "default").name;
-      fileName = _filesystemSafe(
-        "${originalFilename ?? "$indexNumber$artist${item.name}"}_${item.id.raw.substring(0, 8)}",
-      )!;
+      fileName =
+          _filesystemSafe("${originalFilename ?? "$indexNumber$artist${item.name}"}_${item.id.raw.substring(0, 8)}")!;
       final pathSegments = [_filesystemSafe(item.albumArtist), _filesystemSafe(item.album)];
       // if (item.parentIndexNumber != null) {
       //   pathSegments.add(_filesystemSafe("Disc ${item.parentIndexNumber}"));

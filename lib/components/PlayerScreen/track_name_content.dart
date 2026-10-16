@@ -48,11 +48,7 @@ class TrackNameContent extends ConsumerWidget {
                     controller.shouldShow(PlayerHideable.twoLineTitle) &&
                     !(MediaQuery.textScalerOf(context).scale(18) > 18 * 1.11);
 
-                final textStyle = TextStyle(
-                  fontSize: 22,
-                  height: 1.2,
-                  fontWeight: FontWeight.w600,
-                );
+                final textStyle = TextStyle(fontSize: 22, height: 1.2, fontWeight: FontWeight.w600);
 
                 final textSpan = TextSpan(text: text, style: textStyle);
                 final textPainter = TextPainter(text: textSpan, textDirection: TextDirection.ltr, maxLines: 2)

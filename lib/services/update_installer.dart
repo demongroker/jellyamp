@@ -9,15 +9,11 @@ import 'package:path_provider/path_provider.dart';
 class UpdateInstaller {
   UpdateInstaller._();
 
-  static const MethodChannel _channel =
-      MethodChannel('com.unicornsonlsd.finamp/update_installer');
+  static const MethodChannel _channel = MethodChannel('com.unicornsonlsd.finamp/update_installer');
 
   /// Downloads the APK at [url] to app-private cache, reporting [onProgress]
   /// as a fraction in [0, 1].
-  static Future<File> downloadApk(
-    String url, {
-    void Function(double progress)? onProgress,
-  }) async {
+  static Future<File> downloadApk(String url, {void Function(double progress)? onProgress}) async {
     final dir = await getTemporaryDirectory();
     final file = File('${dir.path}/jellyamp-update.apk');
 
@@ -75,15 +71,7 @@ class UpdateInstaller {
   }
 
   /// Posts a system notification that an update is available.
-  static Future<void> showUpdateNotification(
-    String version,
-    String? note,
-    String? url,
-  ) async {
-    await _channel.invokeMethod<void>('showUpdateNotification', {
-      'version': version,
-      'note': note,
-      'url': url,
-    });
+  static Future<void> showUpdateNotification(String version, String? note, String? url) async {
+    await _channel.invokeMethod<void>('showUpdateNotification', {'version': version, 'note': note, 'url': url});
   }
 }

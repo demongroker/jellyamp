@@ -41,9 +41,12 @@ class VolumeNormalizationModeSelector extends ConsumerWidget {
             dialogContent: AppLocalizations.of(context)!.volumeNormalizationModeSelectorDescription,
           ),
           FinampSettingsDropdown<VolumeNormalizationMode>(
-            dropdownItems: VolumeNormalizationMode.values
-                .map((e) => DropdownMenuEntry<VolumeNormalizationMode>(value: e, label: e.toLocalizedString(context)))
-                .toList(),
+            dropdownItems:
+                VolumeNormalizationMode.values
+                    .map(
+                      (e) => DropdownMenuEntry<VolumeNormalizationMode>(value: e, label: e.toLocalizedString(context)),
+                    )
+                    .toList(),
             selectedValue: volumeNormalizationMode,
             onSelected: FinampSetters.setVolumeNormalizationMode.ifNonNull,
           ),

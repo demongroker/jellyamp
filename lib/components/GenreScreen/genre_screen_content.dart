@@ -94,20 +94,21 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
     }
     Navigator.of(context).push(
       MaterialPageRoute<MusicScreen>(
-        builder: (context) => MusicScreen(
-          singleTabConfig: HomeScreenSectionConfiguration(
-            base: TabsHomeSection(libraryId: currentLibraryPlaceholder, contentType: tabContentType),
-            customSectionTitle: widget.parent.name,
-            sortConfig: SortAndFilterController.trackSettings(tabContentType).resolveConfig().copyWith(
-              sortBy: sortByOverride,
-              sortOrder: sortOrderOverride,
-              favoriteFilter: isFavoriteOverride ? true : null,
-              genreFilter: widget.parent,
+        builder:
+            (context) => MusicScreen(
+              singleTabConfig: HomeScreenSectionConfiguration(
+                base: TabsHomeSection(libraryId: currentLibraryPlaceholder, contentType: tabContentType),
+                customSectionTitle: widget.parent.name,
+                sortConfig: SortAndFilterController.trackSettings(tabContentType).resolveConfig().copyWith(
+                  sortBy: sortByOverride,
+                  sortOrder: sortOrderOverride,
+                  favoriteFilter: isFavoriteOverride ? true : null,
+                  genreFilter: widget.parent,
+                ),
+              ),
+              allowFilters:
+                  (filter) => filter.type != ItemFilterType.artistFilter && filter.type != ItemFilterType.genreFilter,
             ),
-          ),
-          allowFilters: (filter) =>
-              filter.type != ItemFilterType.artistFilter && filter.type != ItemFilterType.genreFilter,
-        ),
       ),
     );
   }
@@ -311,12 +312,16 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                     tracks: tracks,
                     childrenForQueue: tracks,
                     lazyAddMoreTracksToQueue: true,
-                    tracksText: (genreCuratedItemSelectionTypeTracks != null)
-                        ? genreCuratedItemSelectionTypeTracks.toLocalisedSectionTitle(context, BaseItemDtoType.track)
-                        : loc.tracks,
+                    tracksText:
+                        (genreCuratedItemSelectionTypeTracks != null)
+                            ? genreCuratedItemSelectionTypeTracks.toLocalisedSectionTitle(
+                              context,
+                              BaseItemDtoType.track,
+                            )
+                            : loc.tracks,
                     isOnGenreScreen: true,
-                    seeAllCallbackFunction: () =>
-                        openSeeAll(ContentType.tracks, itemSelectionType: genreCuratedItemSelectionTypeTracks),
+                    seeAllCallbackFunction:
+                        () => openSeeAll(ContentType.tracks, itemSelectionType: genreCuratedItemSelectionTypeTracks),
                     includeFilterRow: true,
                     customFilterOrder: genreCuratedItemSectionFilterOrder,
                     selectedFilter: genreCuratedItemSelectionTypeTracks,
@@ -335,12 +340,16 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                   padding: const EdgeInsets.only(bottom: 12.0),
                   sliver: CollectionsSection(
                     parent: widget.parent,
-                    itemsText: (genreCuratedItemSelectionTypeAlbums != null)
-                        ? genreCuratedItemSelectionTypeAlbums.toLocalisedSectionTitle(context, BaseItemDtoType.album)
-                        : loc.albums,
+                    itemsText:
+                        (genreCuratedItemSelectionTypeAlbums != null)
+                            ? genreCuratedItemSelectionTypeAlbums.toLocalisedSectionTitle(
+                              context,
+                              BaseItemDtoType.album,
+                            )
+                            : loc.albums,
                     items: albums,
-                    seeAllCallbackFunction: () =>
-                        openSeeAll(ContentType.albums, itemSelectionType: genreCuratedItemSelectionTypeAlbums),
+                    seeAllCallbackFunction:
+                        () => openSeeAll(ContentType.albums, itemSelectionType: genreCuratedItemSelectionTypeAlbums),
                     includeFilterRowFor: BaseItemDtoType.album,
                     customFilterOrder: genreCuratedItemSectionFilterOrder,
                     selectedFilter: genreCuratedItemSelectionTypeAlbums,
@@ -356,15 +365,20 @@ class _GenreScreenContentState extends ConsumerState<GenreScreenContent> {
                   padding: const EdgeInsets.only(bottom: 12.0),
                   sliver: CollectionsSection(
                     parent: widget.parent,
-                    itemsText: (genreCuratedItemSelectionTypeArtists != null)
-                        ? genreCuratedItemSelectionTypeArtists.toLocalisedSectionTitle(context, BaseItemDtoType.artist)
-                        : loc.artists,
+                    itemsText:
+                        (genreCuratedItemSelectionTypeArtists != null)
+                            ? genreCuratedItemSelectionTypeArtists.toLocalisedSectionTitle(
+                              context,
+                              BaseItemDtoType.artist,
+                            )
+                            : loc.artists,
                     items: artists,
                     // TODO should there be an album artist option?
-                    seeAllCallbackFunction: () => openSeeAll(
-                      ContentType.performingArtists,
-                      itemSelectionType: genreCuratedItemSelectionTypeArtists,
-                    ),
+                    seeAllCallbackFunction:
+                        () => openSeeAll(
+                          ContentType.performingArtists,
+                          itemSelectionType: genreCuratedItemSelectionTypeArtists,
+                        ),
                     genreFilter: widget.parent,
                     includeFilterRowFor: BaseItemDtoType.artist,
                     customFilterOrder: genreCuratedItemSectionFilterOrder,

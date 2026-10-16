@@ -67,27 +67,28 @@ class LyricsAlignmentSelector extends ConsumerWidget {
         children: [
           Text(AppLocalizations.of(context)!.lyricsAlignmentSubtitle),
           FinampSettingsDropdown<LyricsAlignment>(
-            dropdownItems: LyricsAlignment.values
-                .map(
-                  (e) => DropdownMenuEntry<LyricsAlignment>(
-                    value: e,
-                    label: e.toLocalisedString(context.l10n),
-                    leadingIcon: switch (e) {
-                      LyricsAlignment.start => Icon(
-                        Directionality.of(context) == TextDirection.rtl
-                            ? TablerIcons.align_right
-                            : TablerIcons.align_left,
+            dropdownItems:
+                LyricsAlignment.values
+                    .map(
+                      (e) => DropdownMenuEntry<LyricsAlignment>(
+                        value: e,
+                        label: e.toLocalisedString(context.l10n),
+                        leadingIcon: switch (e) {
+                          LyricsAlignment.start => Icon(
+                            Directionality.of(context) == TextDirection.rtl
+                                ? TablerIcons.align_right
+                                : TablerIcons.align_left,
+                          ),
+                          LyricsAlignment.center => const Icon(TablerIcons.align_center),
+                          LyricsAlignment.end => Icon(
+                            Directionality.of(context) == TextDirection.rtl
+                                ? TablerIcons.align_left
+                                : TablerIcons.align_right,
+                          ),
+                        },
                       ),
-                      LyricsAlignment.center => const Icon(TablerIcons.align_center),
-                      LyricsAlignment.end => Icon(
-                        Directionality.of(context) == TextDirection.rtl
-                            ? TablerIcons.align_left
-                            : TablerIcons.align_right,
-                      ),
-                    },
-                  ),
-                )
-                .toList(),
+                    )
+                    .toList(),
             selectedValue: ref.watch(finampSettingsProvider.lyricsAlignment),
             onSelected: FinampSetters.setLyricsAlignment.ifNonNull,
           ),
@@ -110,9 +111,10 @@ class LyricsFontSizeSelector extends ConsumerWidget {
         children: [
           Text(AppLocalizations.of(context)!.lyricsFontSizeSubtitle),
           FinampSettingsDropdown<LyricsFontSize>(
-            dropdownItems: LyricsFontSize.values
-                .map((e) => DropdownMenuEntry<LyricsFontSize>(value: e, label: e.toLocalisedString(context.l10n)))
-                .toList(),
+            dropdownItems:
+                LyricsFontSize.values
+                    .map((e) => DropdownMenuEntry<LyricsFontSize>(value: e, label: e.toLocalisedString(context.l10n)))
+                    .toList(),
             selectedValue: ref.watch(finampSettingsProvider.lyricsFontSize),
             onSelected: FinampSetters.setLyricsFontSize.ifNonNull,
           ),

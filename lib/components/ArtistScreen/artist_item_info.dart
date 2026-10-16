@@ -36,9 +36,10 @@ class ArtistItemInfo extends ConsumerWidget {
         IconAndText(
           iconData: Icons.music_note,
           textSpan: TextSpan(
-            text: ref.watch(finampSettingsProvider.isOffline)
-                ? AppLocalizations.of(context)!.offlineTrackCountArtist(itemTracks)
-                : AppLocalizations.of(context)!.trackCount(itemTracks),
+            text:
+                ref.watch(finampSettingsProvider.isOffline)
+                    ? AppLocalizations.of(context)!.offlineTrackCountArtist(itemTracks)
+                    : AppLocalizations.of(context)!.trackCount(itemTracks),
           ),
         ),
         IconAndText(

@@ -29,19 +29,20 @@ class ThemeSelector extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.theme),
       subtitle: FinampSettingsDropdown<ThemeMode>(
-        dropdownItems: ThemeMode.values
-            .map(
-              (e) => DropdownMenuEntry<ThemeMode>(
-                value: e,
-                label: e.toLocalisedString(context),
-                leadingIcon: switch (e) {
-                  ThemeMode.system => const Icon(TablerIcons.brightness_auto),
-                  ThemeMode.light => const Icon(TablerIcons.brightness_2),
-                  ThemeMode.dark => const Icon(TablerIcons.moon_stars),
-                },
-              ),
-            )
-            .toList(),
+        dropdownItems:
+            ThemeMode.values
+                .map(
+                  (e) => DropdownMenuEntry<ThemeMode>(
+                    value: e,
+                    label: e.toLocalisedString(context),
+                    leadingIcon: switch (e) {
+                      ThemeMode.system => const Icon(TablerIcons.brightness_auto),
+                      ThemeMode.light => const Icon(TablerIcons.brightness_2),
+                      ThemeMode.dark => const Icon(TablerIcons.moon_stars),
+                    },
+                  ),
+                )
+                .toList(),
         selectedValue: themeMode,
         onSelected: (value) {
           if (value != null) {

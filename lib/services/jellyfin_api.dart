@@ -696,11 +696,12 @@ Future<String> getAuthHeader({required String deviceId}) async {
 Future<DeviceInfo> getDeviceInfo({required String deviceId}) async {
   DeviceInfo info;
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  String idExtension = kDebugMode
-      ? "debug"
-      : kProfileMode
-      ? "profile"
-      : "";
+  String idExtension =
+      kDebugMode
+          ? "debug"
+          : kProfileMode
+          ? "profile"
+          : "";
   if (Platform.isAndroid) {
     AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
     info = DeviceInfo(name: androidDeviceInfo.name, id: "$deviceId-$idExtension");

@@ -68,15 +68,17 @@ class _LoginFlowState extends State<LoginFlow> {
               final pushingNext = secondaryAnimation.status == AnimationStatus.forward;
               final poppingNext = secondaryAnimation.status == AnimationStatus.reverse;
               final pushingOrPoppingNext = pushingNext || poppingNext;
-              late final Tween<Offset> offsetTween = pushingOrPoppingNext
-                  ? Tween<Offset>(begin: const Offset(0.0, 0.0), end: const Offset(-1.0, 0.0))
-                  : Tween<Offset>(begin: const Offset(1.0, 0.0), end: const Offset(0.0, 0.0));
+              late final Tween<Offset> offsetTween =
+                  pushingOrPoppingNext
+                      ? Tween<Offset>(begin: const Offset(0.0, 0.0), end: const Offset(-1.0, 0.0))
+                      : Tween<Offset>(begin: const Offset(1.0, 0.0), end: const Offset(0.0, 0.0));
 
               final curveOffsetTween = offsetTween.chain(CurveTween(curve: Curves.ease));
 
-              late final Animation<Offset> slidingAnimation = pushingOrPoppingNext
-                  ? curveOffsetTween.animate(secondaryAnimation)
-                  : curveOffsetTween.animate(animation);
+              late final Animation<Offset> slidingAnimation =
+                  pushingOrPoppingNext
+                      ? curveOffsetTween.animate(secondaryAnimation)
+                      : curveOffsetTween.animate(animation);
               return SlideTransition(position: slidingAnimation, child: child);
             },
           );
@@ -85,8 +87,8 @@ class _LoginFlowState extends State<LoginFlow> {
             case LoginSplashPage.routeName:
               route = createRoute(
                 LoginSplashPage(
-                  onGetStartedPressed: () =>
-                      loginNavigatorKey.currentState!.pushNamed(LoginServerSelectionPage.routeName),
+                  onGetStartedPressed:
+                      () => loginNavigatorKey.currentState!.pushNamed(LoginServerSelectionPage.routeName),
                 ),
               );
               break;

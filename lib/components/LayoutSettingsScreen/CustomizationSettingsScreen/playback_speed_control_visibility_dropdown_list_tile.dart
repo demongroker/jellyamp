@@ -30,11 +30,15 @@ class PlaybackSpeedControlVisibilityDropdownListTile extends ConsumerWidget {
             ),
           ),
           FinampSettingsDropdown<PlaybackSpeedVisibility>(
-            dropdownItems: PlaybackSpeedVisibility.values
-                .map(
-                  (e) => DropdownMenuEntry<PlaybackSpeedVisibility>(value: e, label: e.toLocalisedString(context.l10n)),
-                )
-                .toList(),
+            dropdownItems:
+                PlaybackSpeedVisibility.values
+                    .map(
+                      (e) => DropdownMenuEntry<PlaybackSpeedVisibility>(
+                        value: e,
+                        label: e.toLocalisedString(context.l10n),
+                      ),
+                    )
+                    .toList(),
             selectedValue: ref.watch(finampSettingsProvider.playbackSpeedVisibility),
             onSelected: (value) {
               if (value != null) {

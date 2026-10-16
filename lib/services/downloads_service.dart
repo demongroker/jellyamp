@@ -135,11 +135,8 @@ class DownloadsService {
   ) {
     // Refresh lists when addDownload or removeDownload is called.
     ref.watch(_anchorProvider);
-    final allItems = _isar.downloadItems
-        .filter()
-        .requiredBy((q) => q.isarIdEqualTo(_anchor.isarId))
-        .sortByName()
-        .findAllSync();
+    final allItems =
+        _isar.downloadItems.filter().requiredBy((q) => q.isarIdEqualTo(_anchor.isarId)).sortByName().findAllSync();
 
     return allItems
         .where(
@@ -171,15 +168,16 @@ class DownloadsService {
     // that state.  Calls to updateItemState will keep this up to date as the
     // state of an item is changed.
     for (var state in DownloadItemState.values) {
-      downloadStatuses[state] = _isar.downloadItems
-          .where()
-          .optional(
-            state != DownloadItemState.syncFailed,
-            (q) => q.typeEqualTo(DownloadItemType.track).or().typeEqualTo(DownloadItemType.image),
-          )
-          .filter()
-          .stateEqualTo(state)
-          .countSync();
+      downloadStatuses[state] =
+          _isar.downloadItems
+              .where()
+              .optional(
+                state != DownloadItemState.syncFailed,
+                (q) => q.typeEqualTo(DownloadItemType.track).or().typeEqualTo(DownloadItemType.image),
+              )
+              .filter()
+              .stateEqualTo(state)
+              .countSync();
     }
 
     downloadStatusesStream = _downloadStatusesStreamController.stream.throttleTime(
@@ -418,20 +416,22 @@ class DownloadsService {
   /// while on downloads screen to update overview.
   void updateDownloadCounts() {
     _isar.txnSync(() {
-      downloadCounts["track"] = _isar.downloadItems
-          .where()
-          .typeEqualTo(DownloadItemType.track)
-          .filter()
-          .not()
-          .stateEqualTo(DownloadItemState.notDownloaded)
-          .countSync();
+      downloadCounts["track"] =
+          _isar.downloadItems
+              .where()
+              .typeEqualTo(DownloadItemType.track)
+              .filter()
+              .not()
+              .stateEqualTo(DownloadItemState.notDownloaded)
+              .countSync();
       downloadCounts["image"] = _isar.downloadItems.where().typeEqualTo(DownloadItemType.image).countSync();
-      downloadCounts["sync"] = _isar.isarTaskDatas
-          .where()
-          .typeEqualTo(IsarTaskDataType.syncNode)
-          .or()
-          .typeEqualTo(IsarTaskDataType.deleteNode)
-          .countSync();
+      downloadCounts["sync"] =
+          _isar.isarTaskDatas
+              .where()
+              .typeEqualTo(IsarTaskDataType.syncNode)
+              .or()
+              .typeEqualTo(IsarTaskDataType.deleteNode)
+              .countSync();
       _downloadCountsStreamController.add(downloadCounts);
     });
   }
@@ -608,18 +608,19 @@ class DownloadsService {
       // Objects matching a require filter cannot require elements matching earlier filters or the current filter.
       // This enforces a strict object hierarchy with no possibility of loops.
       for (int i = 0; i < requireFilters.length; i++) {
-        var items = _isar.downloadItems
-            .where()
-            .typeEqualTo(requireFilters[i].$1)
-            .filter()
-            .optional(requireFilters[i].$2 != null, (q) => requireFilters[i].$2!(q))
-            .requires(
-              (q) => q.anyOf(
-                requireFilters.slice(0, i + 1),
-                (q, element) => q.typeEqualTo(element.$1).optional(element.$2 != null, (q) => element.$2!(q)),
-              ),
-            )
-            .findAllSync();
+        var items =
+            _isar.downloadItems
+                .where()
+                .typeEqualTo(requireFilters[i].$1)
+                .filter()
+                .optional(requireFilters[i].$2 != null, (q) => requireFilters[i].$2!(q))
+                .requires(
+                  (q) => q.anyOf(
+                    requireFilters.slice(0, i + 1),
+                    (q, element) => q.typeEqualTo(element.$1).optional(element.$2 != null, (q) => element.$2!(q)),
+                  ),
+                )
+                .findAllSync();
         for (var item in items) {
           _downloadsLogger.severe("Unlinking invalid requires on node ${item.name}.");
           _downloadsLogger.severe("Current children: ${item.requires.filter().findAllSync()}.");
@@ -659,19 +660,20 @@ class DownloadsService {
       // Objects matching an info filter cannot require elements matching earlier filters or the current filter.
       // This only applies to info-only items - required items can have any info links they want
       for (int i = 0; i < infoFilters.length; i++) {
-        var items = _isar.downloadItems
-            .where()
-            .typeEqualTo(infoFilters[i].$1)
-            .filter()
-            .requiredByIsEmpty()
-            .optional(infoFilters[i].$2 != null, (q) => infoFilters[i].$2!(q))
-            .info(
-              (q) => q.anyOf(
-                infoFilters.slice(0, i + 1),
-                (q, element) => q.typeEqualTo(element.$1).optional(element.$2 != null, (q) => element.$2!(q)),
-              ),
-            )
-            .findAllSync();
+        var items =
+            _isar.downloadItems
+                .where()
+                .typeEqualTo(infoFilters[i].$1)
+                .filter()
+                .requiredByIsEmpty()
+                .optional(infoFilters[i].$2 != null, (q) => infoFilters[i].$2!(q))
+                .info(
+                  (q) => q.anyOf(
+                    infoFilters.slice(0, i + 1),
+                    (q, element) => q.typeEqualTo(element.$1).optional(element.$2 != null, (q) => element.$2!(q)),
+                  ),
+                )
+                .findAllSync();
         for (var item in items) {
           _downloadsLogger.severe("Unlinking invalid requires on node ${item.name}.");
           _downloadsLogger.severe("Current children: ${item.requires.filter().findAllSync()}.");
@@ -685,12 +687,13 @@ class DownloadsService {
     // Step 2 - Get all items into correct state matching filesystem and downloader.
     _downloadsLogger.info("Starting downloads repair step 2");
     downloadCounts[repairStepTrackingName] = 2;
-    var itemsWithFiles = _isar.downloadItems
-        .where()
-        .typeEqualTo(DownloadItemType.track)
-        .or()
-        .typeEqualTo(DownloadItemType.image)
-        .findAllSync();
+    var itemsWithFiles =
+        _isar.downloadItems
+            .where()
+            .typeEqualTo(DownloadItemType.track)
+            .or()
+            .typeEqualTo(DownloadItemType.image)
+            .findAllSync();
     for (var item in itemsWithFiles) {
       switch (item.state) {
         case DownloadItemState.complete:
@@ -738,24 +741,26 @@ class DownloadsService {
     });
 
     _isar.writeTxnSync(() {
-      var itemsWithChildren = _isar.downloadItems
-          .where()
-          .typeEqualTo(DownloadItemType.collection)
-          .or()
-          .typeEqualTo(DownloadItemType.finampCollection)
-          .findAllSync();
+      var itemsWithChildren =
+          _isar.downloadItems
+              .where()
+              .typeEqualTo(DownloadItemType.collection)
+              .or()
+              .typeEqualTo(DownloadItemType.finampCollection)
+              .findAllSync();
       for (var item in itemsWithChildren) {
         syncItemState(item);
         syncItemDownloadSettings(item, syncImages: true);
       }
     });
     _isar.writeTxnSync(() {
-      var itemsWithFiles = _isar.downloadItems
-          .where()
-          .typeEqualTo(DownloadItemType.track)
-          .or()
-          .typeEqualTo(DownloadItemType.image)
-          .findAllSync();
+      var itemsWithFiles =
+          _isar.downloadItems
+              .where()
+              .typeEqualTo(DownloadItemType.track)
+              .or()
+              .typeEqualTo(DownloadItemType.image)
+              .findAllSync();
       for (var item in itemsWithFiles) {
         syncItemDownloadSettings(item, syncImages: true);
       }
@@ -772,12 +777,13 @@ class DownloadsService {
     _downloadsLogger.info("Starting downloads repair step 4");
     downloadCounts[repairStepTrackingName] = 4;
     final Map<int, LyricDto?> idsWithLyrics = HashMap();
-    var allItems = _isar.downloadItems
-        .where()
-        .stateNotEqualTo(DownloadItemState.notDownloaded)
-        .filter()
-        .typeEqualTo(DownloadItemType.track)
-        .findAllSync();
+    var allItems =
+        _isar.downloadItems
+            .where()
+            .stateNotEqualTo(DownloadItemState.notDownloaded)
+            .filter()
+            .typeEqualTo(DownloadItemType.track)
+            .findAllSync();
     final JellyfinApiHelper jellyfinApiData = GetIt.instance<JellyfinApiHelper>();
     for (var item in allItems) {
       if (item.baseItem?.mediaStreams?.any((stream) => stream.type == "Lyric") ?? false) {
@@ -820,19 +826,19 @@ class DownloadsService {
     _downloadsLogger.info("Starting downloads repair step 6");
     downloadCounts[repairStepTrackingName] = 6;
     // This cleans internalSupport/images
-    var imageFilePaths =
-        Directory(path_helper.join(FinampSettingsHelper.finampSettings.internalTrackDir.currentPath, "images"))
-            .list()
-            .handleError((e) => _downloadsLogger.info("Error while cleaning image directories: $e"))
-            .where((event) => event is File)
-            .map((event) => path_helper.canonicalize(event.path));
+    var imageFilePaths = Directory(
+          path_helper.join(FinampSettingsHelper.finampSettings.internalTrackDir.currentPath, "images"),
+        )
+        .list()
+        .handleError((e) => _downloadsLogger.info("Error while cleaning image directories: $e"))
+        .where((event) => event is File)
+        .map((event) => path_helper.canonicalize(event.path));
     var filePaths = await imageFilePaths.toSet();
     // This cleans FINAMP_BASE_DOWNLOAD_DIRECTORY in internalSupport
     // and internalDocuments
-    for (var trackBasePath
-        in FinampSettingsHelper.finampSettings.downloadLocationsMap.values
-            .where((element) => !element.baseDirectory.needsPath)
-            .map((e) => e.currentPath)) {
+    for (var trackBasePath in FinampSettingsHelper.finampSettings.downloadLocationsMap.values
+        .where((element) => !element.baseDirectory.needsPath)
+        .map((e) => e.currentPath)) {
       var trackFilePaths = Directory(path_helper.join(trackBasePath, FINAMP_BASE_DOWNLOAD_DIRECTORY))
           .list()
           .handleError((e) => _downloadsLogger.info("Error while cleaning track directories: $e"))
@@ -853,8 +859,7 @@ class DownloadsService {
       // `failed`/`needsRedownload` track after an offline or flaky re-sync).
       // Only truly orphaned files (no metadata node, or a removed/incidental
       // cache node) are candidates for deletion.
-      if (item.file != null &&
-          (item.state == DownloadItemState.complete || isExplicitUserDownload(item))) {
+      if (item.file != null && (item.state == DownloadItemState.complete || isExplicitUserDownload(item))) {
         filePaths.remove(path_helper.canonicalize(item.file!.path));
       }
     }
@@ -959,14 +964,15 @@ class DownloadsService {
       }
       item.state = newState;
       _isar.downloadItems.putSync(item, saveLinks: false);
-      List<DownloadItem> parents = _isar.downloadItems
-          .where()
-          .typeNotEqualTo(DownloadItemType.track)
-          .filter()
-          .requires((q) => q.isarIdEqualTo(item.isarId))
-          .or()
-          .info((q) => q.isarIdEqualTo(item.isarId))
-          .findAllSync();
+      List<DownloadItem> parents =
+          _isar.downloadItems
+              .where()
+              .typeNotEqualTo(DownloadItemType.track)
+              .filter()
+              .requires((q) => q.isarIdEqualTo(item.isarId))
+              .or()
+              .info((q) => q.isarIdEqualTo(item.isarId))
+              .findAllSync();
       for (var parent in parents) {
         syncItemState(parent);
       }
@@ -1051,9 +1057,8 @@ class DownloadsService {
     }
 
     // Prioritize original quality if allowed, otherwise choose highest quality approximation
-    DownloadProfile? bestProfile = transcodeProfiles.nonNulls
-        .sorted((i, j) => ((j.quality - i.quality) * 1000).toInt())
-        .firstOrNull;
+    DownloadProfile? bestProfile =
+        transcodeProfiles.nonNulls.sorted((i, j) => ((j.quality - i.quality) * 1000).toInt()).firstOrNull;
     if (doNullUpdate ??
         (!transcodeProfiles.nonNulls.contains(item.syncTranscodingProfile) ||
             (bestProfile!.quality > (item.syncTranscodingProfile!.quality + 2000) &&
@@ -1089,16 +1094,17 @@ class DownloadsService {
   /// and mark them for deletion, then resync to delete and redownload them.
   void markOutdatedTranscodes() {
     _isar.writeTxnSync(() {
-      var items = _isar.downloadItems
-          .where()
-          .typeEqualTo(DownloadItemType.track)
-          .or()
-          .typeEqualTo(DownloadItemType.image)
-          .filter()
-          .not()
-          .stateEqualTo(DownloadItemState.notDownloaded)
-          .requiredByIsNotEmpty()
-          .findAllSync();
+      var items =
+          _isar.downloadItems
+              .where()
+              .typeEqualTo(DownloadItemType.track)
+              .or()
+              .typeEqualTo(DownloadItemType.image)
+              .filter()
+              .not()
+              .stateEqualTo(DownloadItemState.notDownloaded)
+              .requiredByIsNotEmpty()
+              .findAllSync();
       for (var item in items) {
         if (item.fileTranscodingProfile != item.syncTranscodingProfile) {
           if (item.state == DownloadItemState.complete) {
@@ -1162,8 +1168,8 @@ class DownloadsService {
     // ignore: deprecated_member_use_from_same_package
     final downloadedItemsBox = Hive.box<DownloadedTrack>("DownloadedItems");
     final downloadedParentsBox =
-        // ignore: deprecated_member_use_from_same_package
-        Hive.box<DownloadedParent>("DownloadedParents");
+    // ignore: deprecated_member_use_from_same_package
+    Hive.box<DownloadedParent>("DownloadedParents");
     // ignore: deprecated_member_use_from_same_package
     final downloadedImagesBox = Hive.box<DownloadedImage>("DownloadedImages");
 
@@ -1190,12 +1196,12 @@ class DownloadsService {
       ).asItem(DownloadProfile(downloadLocationId: image.downloadLocationId));
       isarItem.path =
           (image.downloadLocationId ==
-              FinampSettingsHelper.finampSettings.downloadLocationsMap.values
-                  .where((element) => element.baseDirectory == DownloadLocationType.internalDocuments)
-                  .first
-                  .id)
-          ? path_helper.join(FINAMP_BASE_DOWNLOAD_DIRECTORY, image.path)
-          : image.path;
+                  FinampSettingsHelper.finampSettings.downloadLocationsMap.values
+                      .where((element) => element.baseDirectory == DownloadLocationType.internalDocuments)
+                      .first
+                      .id)
+              ? path_helper.join(FINAMP_BASE_DOWNLOAD_DIRECTORY, image.path)
+              : image.path;
       isarItem.state = DownloadItemState.complete;
       isarItem.fileTranscodingProfile = DownloadProfile(downloadLocationId: image.downloadLocationId);
       nodes.add(isarItem);
@@ -1279,8 +1285,8 @@ class DownloadsService {
   void _migrateParents() {
     _downloadsLogger.info("Migrating parents from Hive");
     final downloadedParentsBox =
-        // ignore: deprecated_member_use_from_same_package
-        Hive.box<DownloadedParent>("DownloadedParents");
+    // ignore: deprecated_member_use_from_same_package
+    Hive.box<DownloadedParent>("DownloadedParents");
     // ignore: deprecated_member_use_from_same_package
     final downloadedItemsBox = Hive.box<DownloadedTrack>("DownloadedItems");
 
@@ -1303,9 +1309,10 @@ class DownloadsService {
         downloadLocationId: track.downloadLocationId,
       );
       // This should only be used for IDs/links and does not need real download items.
-      List<DownloadItem> required = parent.downloadedChildren.values
-          .map((e) => DownloadStub.fromItem(type: DownloadItemType.track, item: e).asItem(null))
-          .toList();
+      List<DownloadItem> required =
+          parent.downloadedChildren.values
+              .map((e) => DownloadStub.fromItem(type: DownloadItemType.track, item: e).asItem(null))
+              .toList();
       isarItem.orderedChildren = required.map((e) => e.isarId).toList();
 
       if (parent.item.blurHash != null || parent.item.imageId != null) {
@@ -1503,20 +1510,20 @@ class DownloadsService {
   Future<void> _backfillFinampCollectionLibraryIds() async {
     if (_finampCollectionLibraryIdBackfilled) return;
     try {
-      final legacyRows = _isar.downloadItems
-          .where()
-          .typeEqualTo(DownloadItemType.finampCollection)
-          .filter()
-          .finampCollectionLibraryIdIsNull()
-          .jsonItemIsNotNull()
-          .findAllSync();
+      final legacyRows =
+          _isar.downloadItems
+              .where()
+              .typeEqualTo(DownloadItemType.finampCollection)
+              .filter()
+              .finampCollectionLibraryIdIsNull()
+              .jsonItemIsNotNull()
+              .findAllSync();
       if (legacyRows.isNotEmpty) {
         final toUpdate = <DownloadItem>[];
         for (final row in legacyRows) {
           // jsonItem is non-null (filtered above), so decoding is safe.
           final fc = row.finampCollection;
-          if (fc == null ||
-              fc.type != FinampCollectionType.collectionWithLibraryFilter) {
+          if (fc == null || fc.type != FinampCollectionType.collectionWithLibraryFilter) {
             continue;
           }
           final raw = fc.library?.id.raw;
@@ -1597,21 +1604,22 @@ class DownloadsService {
       // collectionWithLibraryFilter rows, so this exactly matches the old
       // client-side filter) instead of materializing every finampCollection row
       // with findAllSync and filtering in Dart.
-      libraryFilteredIds = libraryId == null
-          ? <int>[]
-          : _isar.downloadItems
-              .where()
-              .finampCollectionLibraryIdEqualTo(libraryId)
-              .filter()
-              .typeEqualTo(DownloadItemType.finampCollection)
-              .not()
-              .stateEqualTo(DownloadItemState.notDownloaded)
-              .findAllSync()
-              .map(
-                (collection) => DownloadStub.getHash(
-                    collection.finampCollection!.item!.id.raw, DownloadItemType.collection),
-              )
-              .toList();
+      libraryFilteredIds =
+          libraryId == null
+              ? <int>[]
+              : _isar.downloadItems
+                  .where()
+                  .finampCollectionLibraryIdEqualTo(libraryId)
+                  .filter()
+                  .typeEqualTo(DownloadItemType.finampCollection)
+                  .not()
+                  .stateEqualTo(DownloadItemState.notDownloaded)
+                  .findAllSync()
+                  .map(
+                    (collection) =>
+                        DownloadStub.getHash(collection.finampCollection!.item!.id.raw, DownloadItemType.collection),
+                  )
+                  .toList();
     }
 
     return _isar.downloadItems
@@ -1893,15 +1901,16 @@ class DownloadsService {
   ///   VERIFYING→filesystem verification in initializeQueue/_verifyDownload,
   ///   DOWNLOADED→complete, FAILED→failed/syncFailed, STALE→needsRedownload*,
   ///   REMOVED→notDownloaded.
-  List<DownloadItem> _itemsInState(DownloadItemState state) => _isar.downloadItems
-      .where()
-      .stateEqualTo(state)
-      .filter()
-      .optional(
-        state != DownloadItemState.syncFailed,
-        (q) => q.typeEqualTo(DownloadItemType.track).or().typeEqualTo(DownloadItemType.image),
-      )
-      .findAllSync();
+  List<DownloadItem> _itemsInState(DownloadItemState state) =>
+      _isar.downloadItems
+          .where()
+          .stateEqualTo(state)
+          .filter()
+          .optional(
+            state != DownloadItemState.syncFailed,
+            (q) => q.typeEqualTo(DownloadItemType.track).or().typeEqualTo(DownloadItemType.image),
+          )
+          .findAllSync();
 
   /// Counts of every [DownloadItemState] (downloading/enqueued/paused/complete/
   /// failed/syncFailed/needsRedownload*).  Live-updated by [updateItemState].
@@ -1911,12 +1920,14 @@ class DownloadsService {
   List<DownloadItem> get queuedDownloads => _itemsInState(DownloadItemState.enqueued);
   List<DownloadItem> get pausedDownloads => _itemsInState(DownloadItemState.paused);
   List<DownloadItem> get completedDownloads => _itemsInState(DownloadItemState.complete);
-  List<DownloadItem> get failedDownloads =>
-      [..._itemsInState(DownloadItemState.failed), ..._itemsInState(DownloadItemState.syncFailed)];
+  List<DownloadItem> get failedDownloads => [
+    ..._itemsInState(DownloadItemState.failed),
+    ..._itemsInState(DownloadItemState.syncFailed),
+  ];
   List<DownloadItem> get staleDownloads => [
-        ..._itemsInState(DownloadItemState.needsRedownload),
-        ..._itemsInState(DownloadItemState.needsRedownloadComplete),
-      ];
+    ..._itemsInState(DownloadItemState.needsRedownload),
+    ..._itemsInState(DownloadItemState.needsRedownloadComplete),
+  ];
 
   /// Pause a single download.  No-op if it is not currently downloading.
   Future<void> pauseDownload(DownloadStub stub) async {

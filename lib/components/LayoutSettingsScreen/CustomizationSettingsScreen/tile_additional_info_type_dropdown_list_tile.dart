@@ -49,9 +49,12 @@ class TileAdditionalInfoTypeDropdownListTile extends ConsumerWidget {
     return ListTile(
       title: Text(tabContentType.toLocalisedString(context.l10n)),
       subtitle: FinampSettingsDropdown<TileAdditionalInfoType>(
-        dropdownItems: dropdownItems
-            .map((e) => DropdownMenuEntry<TileAdditionalInfoType>(value: e, label: e.toLocalisedString(context.l10n)))
-            .toList(),
+        dropdownItems:
+            dropdownItems
+                .map(
+                  (e) => DropdownMenuEntry<TileAdditionalInfoType>(value: e, label: e.toLocalisedString(context.l10n)),
+                )
+                .toList(),
         selectedValue: currentType,
         onSelected: (value) {
           if (value != null) {

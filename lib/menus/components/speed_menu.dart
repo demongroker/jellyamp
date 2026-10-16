@@ -46,9 +46,10 @@ class _SpeedSliderState extends State<SpeedSlider> {
         thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 24 / 2.0),
         trackHeight: 24.0,
         inactiveTrackColor: widget.iconColor.withOpacity(0.3),
-        activeTrackColor: FinampSettingsHelper.finampSettings.playbackSpeed > speedSliderMax
-            ? widget.iconColor.withOpacity(0.4)
-            : widget.iconColor.withOpacity(0.6),
+        activeTrackColor:
+            FinampSettingsHelper.finampSettings.playbackSpeed > speedSliderMax
+                ? widget.iconColor.withOpacity(0.4)
+                : widget.iconColor.withOpacity(0.6),
         showValueIndicator: ShowValueIndicator.always,
         valueIndicatorColor: Color.lerp(Theme.of(context).cardColor, widget.iconColor, 0.6),
         valueIndicatorTextStyle: Theme.of(context).textTheme.labelLarge,
@@ -207,9 +208,7 @@ class _SpeedMenuState extends State<SpeedMenu> {
                       visualDensity: VisualDensity(horizontal: -4, vertical: -4),
                       tooltip: AppLocalizations.of(context)!.playbackSpeedDecreaseLabel,
                     ),
-                    Expanded(
-                      child: SpeedSlider(iconColor: widget.iconColor, saveSpeedInput: saveSpeedInput),
-                    ),
+                    Expanded(child: SpeedSlider(iconColor: widget.iconColor, saveSpeedInput: saveSpeedInput)),
                     IconButton(
                       icon: Icon(TablerIcons.plus, color: widget.iconColor),
                       onPressed: () {

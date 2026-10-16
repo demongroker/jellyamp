@@ -43,11 +43,7 @@ class ArtistItemListTile extends StatelessWidget {
               ),
               alignment: PlaceholderAlignment.top,
             ),
-            if (subtitle != null)
-              TextSpan(
-                text: subtitle,
-                style: TextStyle(color: Theme.of(context).disabledColor),
-              ),
+            if (subtitle != null) TextSpan(text: subtitle, style: TextStyle(color: Theme.of(context).disabledColor)),
           ],
         ),
         overflow: TextOverflow.ellipsis,

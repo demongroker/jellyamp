@@ -11,7 +11,7 @@ part of 'item_by_id_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$itemByIdHash() => r'95079a488f7c131f183de0d61ec6d3c463d88969';
+String _$itemByIdHash() => r'2047acd482219fc90c69e874eaa60aa7b03ccefa';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -76,9 +76,10 @@ class ItemByIdProvider extends AutoDisposeFutureProvider<BaseItemDto?> {
         (ref) => itemById(ref as ItemByIdRef, baseItemId),
         from: itemByIdProvider,
         name: r'itemByIdProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$itemByIdHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$itemByIdHash,
         dependencies: ItemByIdFamily._dependencies,
         allTransitiveDependencies: ItemByIdFamily._allTransitiveDependencies,
         baseItemId: baseItemId,

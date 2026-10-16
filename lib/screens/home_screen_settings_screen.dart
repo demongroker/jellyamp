@@ -103,12 +103,15 @@ class QuickActionsSelector extends ConsumerWidget {
                     title: _ResponsiveListTile(
                       index: index,
                       title: action.getTitle(context.l10n),
-                      subtitleWidgets: action.itemTypes
-                          ?.map(
-                            (itemType) =>
-                                Text(itemType.toLocalisedString(context.l10n), style: TextTheme.of(context).labelSmall),
-                          )
-                          .toList(),
+                      subtitleWidgets:
+                          action.itemTypes
+                              ?.map(
+                                (itemType) => Text(
+                                  itemType.toLocalisedString(context.l10n),
+                                  style: TextTheme.of(context).labelSmall,
+                                ),
+                              )
+                              .toList(),
                       key: ValueKey("quick-action-$action"),
                       useInlineLayout: useInlineLayout,
                       actions: [
@@ -315,13 +318,14 @@ class SectionPreview extends ConsumerWidget {
       children: [
         Text(
           sectionTitle,
-          style: hasTitle
-              ? TextTheme.of(context).titleSmall?.copyWith(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
-                  color: Theme.brightnessOf(context) == Brightness.light ? Colors.black : Colors.white,
-                )
-              : Theme.of(context).textTheme.bodyMedium,
+          style:
+              hasTitle
+                  ? TextTheme.of(context).titleSmall?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                    color: Theme.brightnessOf(context) == Brightness.light ? Colors.black : Colors.white,
+                  )
+                  : Theme.of(context).textTheme.bodyMedium,
         ),
         SizedBox(
           height: calculateItemCollectionCardHeight(
@@ -330,9 +334,10 @@ class SectionPreview extends ConsumerWidget {
             itemType: sectionInfo == null ? BaseItemDtoType.track : null,
             forHomeScreen: true,
           ),
-          child: sectionInfo != null
-              ? HomeScreenSectionContent(sectionInfo: sectionInfo!)
-              : Center(child: Text(context.l10n.sectionConfigInvalid)),
+          child:
+              sectionInfo != null
+                  ? HomeScreenSectionContent(sectionInfo: sectionInfo!)
+                  : Center(child: Text(context.l10n.sectionConfigInvalid)),
         ),
       ],
     );
@@ -408,10 +413,11 @@ class _GlobalSearchBoxState extends ConsumerState<GlobalSearchBox> {
             floatingLabelBehavior: FloatingLabelBehavior.never,
             border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
           ),
-          onSubmitted: (value) => setState(() {
-            searchTerm = value;
-            widget.notifier.value = null;
-          }),
+          onSubmitted:
+              (value) => setState(() {
+                searchTerm = value;
+                widget.notifier.value = null;
+              }),
         ),
         if (dropdown != null) Padding(padding: EdgeInsets.only(top: 12), child: dropdown),
         ValueListenableBuilder(
@@ -461,24 +467,25 @@ class _GlobalSearchBoxState extends ConsumerState<GlobalSearchBox> {
       return _placeholderText(context, Text(context.l10n.noSearchResults));
     }
 
-    final dropdownEntries = items.value!.map((collection) {
-      final label = collection.name ?? context.l10n.unnamedCollection;
-      return DropdownMenuEntry<BaseItemDto>(
-        value: collection,
-        label: label,
-        labelWidget: Row(
-          spacing: 10.0,
-          children: [
-            Expanded(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis)),
-            Text("(${BaseItemDtoType.fromItem(collection).localized(context.l10n)})"),
-          ],
-        ),
-        enabled: true,
-        style: ButtonStyle(
-          padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0)),
-        ),
-      );
-    }).toList();
+    final dropdownEntries =
+        items.value!.map((collection) {
+          final label = collection.name ?? context.l10n.unnamedCollection;
+          return DropdownMenuEntry<BaseItemDto>(
+            value: collection,
+            label: label,
+            labelWidget: Row(
+              spacing: 10.0,
+              children: [
+                Expanded(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis)),
+                Text("(${BaseItemDtoType.fromItem(collection).localized(context.l10n)})"),
+              ],
+            ),
+            enabled: true,
+            style: ButtonStyle(
+              padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0)),
+            ),
+          );
+        }).toList();
 
     return DropdownMenu<BaseItemDto>(
       menuHeight: widget.height,
@@ -653,42 +660,44 @@ class _TargetItemTypesSelectorState extends ConsumerState<TargetItemTypesSelecto
     return Wrap(
       spacing: 6.0,
       runSpacing: 6.0,
-      children: itemTypes.map((itemType) {
-        final isSelected = selected.contains(itemType);
-        return Theme(
-          data: Theme.of(context).copyWith(
-            splashColor: ColorScheme.of(context).primary.withOpacity(0.15),
-            highlightColor: ColorScheme.of(context).primary.withOpacity(0.05),
-          ),
-          child: FilterChip(
-            label: Text(itemType.toLocalisedString(context.l10n)),
-            selected: isSelected,
-            //selectedColor: Color.alphaBlend(ColorScheme.of(context).primary.withOpacity(0.15), Colors.transparent),
-            backgroundColor: Colors.transparent,
-            side: BorderSide(
-              color: isSelected
-                  ? ColorScheme.of(context).primary.withOpacity(0.5)
-                  : ColorScheme.of(context).outline.withOpacity(0.3),
-              width: 1.25,
-            ),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-            showCheckmark: false,
-            onSelected: (selected) {
-              setState(() {
-                if (selected) {
-                  this.selected.add(itemType);
-                } else {
-                  this.selected.remove(itemType);
-                }
-                widget.notifier.value = Set.of(this.selected);
-              });
-            },
-            labelPadding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-            padding: EdgeInsets.zero,
-            visualDensity: VisualDensity(horizontal: -4.0, vertical: -4.0),
-          ),
-        );
-      }).toList(),
+      children:
+          itemTypes.map((itemType) {
+            final isSelected = selected.contains(itemType);
+            return Theme(
+              data: Theme.of(context).copyWith(
+                splashColor: ColorScheme.of(context).primary.withOpacity(0.15),
+                highlightColor: ColorScheme.of(context).primary.withOpacity(0.05),
+              ),
+              child: FilterChip(
+                label: Text(itemType.toLocalisedString(context.l10n)),
+                selected: isSelected,
+                //selectedColor: Color.alphaBlend(ColorScheme.of(context).primary.withOpacity(0.15), Colors.transparent),
+                backgroundColor: Colors.transparent,
+                side: BorderSide(
+                  color:
+                      isSelected
+                          ? ColorScheme.of(context).primary.withOpacity(0.5)
+                          : ColorScheme.of(context).outline.withOpacity(0.3),
+                  width: 1.25,
+                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                showCheckmark: false,
+                onSelected: (selected) {
+                  setState(() {
+                    if (selected) {
+                      this.selected.add(itemType);
+                    } else {
+                      this.selected.remove(itemType);
+                    }
+                    widget.notifier.value = Set.of(this.selected);
+                  });
+                },
+                labelPadding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+                padding: EdgeInsets.zero,
+                visualDensity: VisualDensity(horizontal: -4.0, vertical: -4.0),
+              ),
+            );
+          }).toList(),
     );
   }
 }

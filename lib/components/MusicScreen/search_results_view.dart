@@ -26,12 +26,13 @@ class SearchResultsView extends ConsumerWidget {
 
     return async.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, _) => Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Text('${l10n.searchError}: $error', textAlign: TextAlign.center),
-        ),
-      ),
+      error:
+          (error, _) => Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Text('${l10n.searchError}: $error', textAlign: TextAlign.center),
+            ),
+          ),
       data: (results) {
         if (results.isEmpty) {
           return Center(
@@ -42,13 +43,14 @@ class SearchResultsView extends ConsumerWidget {
           );
         }
 
-        final sections = <(String, List<BaseItemDto>)>[
-          (l10n.artists, results.artists),
-          (l10n.albums, results.albums),
-          (l10n.tracks, results.tracks),
-          (l10n.playlists, results.playlists),
-          (l10n.genres, results.genres),
-        ].where((section) => section.$2.isNotEmpty).toList();
+        final sections =
+            <(String, List<BaseItemDto>)>[
+              (l10n.artists, results.artists),
+              (l10n.albums, results.albums),
+              (l10n.tracks, results.tracks),
+              (l10n.playlists, results.playlists),
+              (l10n.genres, results.genres),
+            ].where((section) => section.$2.isNotEmpty).toList();
 
         return ListView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -58,9 +60,9 @@ class SearchResultsView extends ConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(16, 18, 16, 4),
                 child: Text(
                   '$title · ${items.length}',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
               _SectionItems(items: items, previewCount: _previewCount),
@@ -92,8 +94,7 @@ class _SectionItemsState extends State<_SectionItems> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final showAll = _expanded || widget.items.length <= widget.previewCount;
-    final visible =
-        showAll ? widget.items : widget.items.sublist(0, widget.previewCount);
+    final visible = showAll ? widget.items : widget.items.sublist(0, widget.previewCount);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

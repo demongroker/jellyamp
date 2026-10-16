@@ -88,9 +88,10 @@ class FinampUser {
   // We only need 1 user, the current user
   final Id isarId = 0;
   String get isarViews => jsonEncode(views);
-  set isarViews(String json) => views = (jsonDecode(json) as Map<BaseItemId, dynamic>).map(
-    (k, v) => MapEntry(k, BaseItemDto.fromJson(v as Map<String, dynamic>)),
-  );
+  set isarViews(String json) =>
+      views = (jsonDecode(json) as Map<BaseItemId, dynamic>).map(
+        (k, v) => MapEntry(k, BaseItemDto.fromJson(v as Map<String, dynamic>)),
+      );
 
   @ignore
   BaseItemDto? get currentView => views[currentViewId];
@@ -111,6 +112,7 @@ class DefaultSettings {
   static const themeMode = ThemeMode.system;
   static const amoledTheme = false;
   static const Locale? locale = null;
+
   /// Jellyamp default: ice cyan (liquid glass brand).
   static const Color? accentColor = Color(0xFF7DD3FC);
   static const shouldTranscode = false;
@@ -153,6 +155,7 @@ class DefaultSettings {
     ContentType.tracks,
     ContentType.genres,
   ];
+
   /// Jellyamp: fewer default tabs — Genres still available in Tabs settings.
   static const showTabs = {
     ContentType.home: true,
@@ -171,11 +174,13 @@ class DefaultSettings {
   static const playbackPitch = 1.0;
   static const syncPlaybackSpeedAndPitch = false;
   static const autoLoadLastQueueOnStartup = true;
-  static const shouldTranscodeDownloads = TranscodeDownloadsSetting.never; // lossless-first: default to original, no transcode
+  static const shouldTranscodeDownloads =
+      TranscodeDownloadsSetting.never; // lossless-first: default to original, no transcode
   static const multichannelHandlingSetting = MultichannelHandlingSetting.stereoDownmixLossy;
   static const shouldRedownloadTranscodes = false;
   static const resyncOnStartup = true;
   static const splitScreenPlayerWidth = 400.0;
+
   /// Jellyamp privacy: no vibration permission / no haptics by default.
   static const enableVibration = false;
   static const prioritizeCoverFactor = 8.0;
@@ -202,13 +207,11 @@ class DefaultSettings {
   static const keepScreenOnWhilePluggedIn = false;
   static const hasDownloadedPlaylistInfo = false;
   static const transcodingStreamingFormat = FinampTranscodingStreamingFormat.aacFragmentedMp4;
+
   /// Slim player chips — essentials only (codec + explicit). Rest still available in settings.
   static const featureChipsConfiguration = FinampFeatureChipsConfiguration(
     enabled: true,
-    features: [
-      FinampFeatureChipType.explicit,
-      FinampFeatureChipType.codec,
-    ],
+    features: [FinampFeatureChipType.explicit, FinampFeatureChipType.codec],
     migrated: true,
   );
   static const showCoversOnAlbumScreen = false;
@@ -274,6 +277,7 @@ class DefaultSettings {
   static const forceAudioOffloadingOnAndroid = false;
   static const verboseLogging = false;
   static const previousTracksPersistenceMode = PreviousTracksPersistenceMode.persistent;
+
   /// Jellyamp clean home: 3 quick actions (full row) + 4 focused sections.
   /// Less scroll, less chrome — customize anytime in Home settings.
   static final homeScreenConfiguration = FinampHomeScreenConfiguration(
@@ -1522,25 +1526,29 @@ class DownloadStub {
   final String? jsonItem;
 
   @ignore
-  BaseItemDto? get baseItem => _baseItemCached ??= ((jsonItem == null || !type.requiresItem)
-      ? null
-      : BaseItemDto.fromJson(jsonDecode(jsonItem!) as Map<String, dynamic>));
+  BaseItemDto? get baseItem =>
+      _baseItemCached ??=
+          ((jsonItem == null || !type.requiresItem)
+              ? null
+              : BaseItemDto.fromJson(jsonDecode(jsonItem!) as Map<String, dynamic>));
 
   @ignore
   BaseItemDto? _baseItemCached;
 
   @ignore
-  FinampCollection? get finampCollection => _finampCollectionCached ??= (type != DownloadItemType.finampCollection
-      ? null
-      : jsonItem == null
-      // Switch on ID to allow legacy collections to continue syncing
-      ? switch (id) {
-          "Favorites" => FinampCollection(type: FinampCollectionType.favorites),
-          "All Playlists" => FinampCollection(type: FinampCollectionType.allPlaylists),
-          "5 Latest Albums" => FinampCollection(type: FinampCollectionType.latest5Albums),
-          _ => throw "Invalid FinampCollection DownloadItem: no attached collection",
-        }
-      : FinampCollection.fromJson(jsonDecode(jsonItem!) as Map<String, dynamic>));
+  FinampCollection? get finampCollection =>
+      _finampCollectionCached ??=
+          (type != DownloadItemType.finampCollection
+              ? null
+              : jsonItem == null
+              // Switch on ID to allow legacy collections to continue syncing
+              ? switch (id) {
+                "Favorites" => FinampCollection(type: FinampCollectionType.favorites),
+                "All Playlists" => FinampCollection(type: FinampCollectionType.allPlaylists),
+                "5 Latest Albums" => FinampCollection(type: FinampCollectionType.latest5Albums),
+                _ => throw "Invalid FinampCollection DownloadItem: no attached collection",
+              }
+              : FinampCollection.fromJson(jsonDecode(jsonItem!) as Map<String, dynamic>));
 
   @ignore
   FinampCollection? _finampCollectionCached;
@@ -2209,12 +2217,13 @@ class QueueItemSource {
 
     return QueueItemSource(
       type: type ?? defaultType,
-      name: nameType != null
-          ? QueueItemSourceName(type: nameType, localizationParameter: baseItem.name ?? "")
-          : QueueItemSourceName(
-              type: QueueItemSourceNameType.preTranslated,
-              pretranslatedName: baseItem.name ?? GlobalSnackbar.requireL10n.placeholderSource,
-            ),
+      name:
+          nameType != null
+              ? QueueItemSourceName(type: nameType, localizationParameter: baseItem.name ?? "")
+              : QueueItemSourceName(
+                type: QueueItemSourceNameType.preTranslated,
+                pretranslatedName: baseItem.name ?? GlobalSnackbar.requireL10n.placeholderSource,
+              ),
       id: baseItem.id,
       item: baseItem,
       contextNormalizationGain: gain,
@@ -2355,9 +2364,9 @@ class QueueItemSourceName {
       case QueueItemSourceNameType.homeScreenSection:
         return localizationParameter != null
             ? HomeScreenSectionConfiguration.getTitleForPreset(
-                l10n: localizations,
-                presetType: HomeScreenSectionPresetType.values.byName(localizationParameter!),
-              )
+              l10n: localizations,
+              presetType: HomeScreenSectionPresetType.values.byName(localizationParameter!),
+            )
             : pretranslatedName ?? "";
       case QueueItemSourceNameType.musicScreenTracks:
         return localizations.allTracks(localizationParameter ?? "");
@@ -2760,9 +2769,9 @@ class DownloadedLyrics {
   final String? jsonItem;
 
   @ignore
-  LyricDto? get lyricDto => _lyricDtoCached ??= ((jsonItem == null)
-      ? null
-      : LyricDto.fromJson(jsonDecode(jsonItem!) as Map<String, dynamic>));
+  LyricDto? get lyricDto =>
+      _lyricDtoCached ??=
+          ((jsonItem == null) ? null : LyricDto.fromJson(jsonDecode(jsonItem!) as Map<String, dynamic>));
   @ignore
   LyricDto? _lyricDtoCached;
 }
@@ -3896,9 +3905,10 @@ class FinampStorableQueueInfo extends FinampStorableQueueInfoLegacy {
     assert(sourceList.isNotEmpty);
 
     // BitBuffer throws exception attempting to write 0 bit entries, so create empty buffer manually.
-    final buffer = sourceList.length == 1
-        ? BitBuffer()
-        : BitBuffer.fromBits(sourceIndexes, bitsPerIndex: (sourceList.length - 1).bitLength);
+    final buffer =
+        sourceList.length == 1
+            ? BitBuffer()
+            : BitBuffer.fromBits(sourceIndexes, bitsPerIndex: (sourceList.length - 1).bitLength);
 
     // Validate shuffle order matches queue tracks
     assert(shuffleOrder.length == info.trackCount);
@@ -3919,9 +3929,10 @@ class FinampStorableQueueInfo extends FinampStorableQueueInfoLegacy {
 
     assert(validateNextUp(), shuffleOrder.toString());
 
-    final packedOrder = info.trackCount <= 1
-        ? BitBuffer()
-        : BitBuffer.fromBits(shuffleOrder, bitsPerIndex: (info.trackCount - 1).bitLength);
+    final packedOrder =
+        info.trackCount <= 1
+            ? BitBuffer()
+            : BitBuffer.fromBits(shuffleOrder, bitsPerIndex: (info.trackCount - 1).bitLength);
     return FinampStorableQueueInfo(
       packedPreviousTracks: packIds(info.previousTracks.map<BaseItemId>((track) => track.baseItemId).toList()),
       packedCurrentTrack: info.currentTrack == null ? Uint8List(0) : packIds([info.currentTrack!.baseItemId]),

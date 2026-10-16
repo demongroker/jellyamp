@@ -77,20 +77,21 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
     return await showDialog<bool>(
           context: context,
           barrierDismissible: false,
-          builder: (ctx) => AlertDialog(
-            title: Text(AppLocalizations.of(context)!.discardChangesTitle),
-            content: Text(AppLocalizations.of(context)!.discardChangesDescription),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(false),
-                child: Text(AppLocalizations.of(context)!.genericCancel),
+          builder:
+              (ctx) => AlertDialog(
+                title: Text(AppLocalizations.of(context)!.discardChangesTitle),
+                content: Text(AppLocalizations.of(context)!.discardChangesDescription),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(ctx).pop(false),
+                    child: Text(AppLocalizations.of(context)!.genericCancel),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(ctx).pop(true),
+                    child: Text(AppLocalizations.of(context)!.discardChangesConfirmButton),
+                  ),
+                ],
               ),
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(true),
-                child: Text(AppLocalizations.of(context)!.discardChangesConfirmButton),
-              ),
-            ],
-          ),
         ) ??
         false;
   }
@@ -222,18 +223,20 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
     final bool isOffline = ref.watch(finampSettingsProvider.isOffline);
 
     final playlistTracksCount = playlistTracks.length;
-    final trackCountString = (playlistTracks.length == playlist.childCount || !isOffline)
-        ? AppLocalizations.of(context)!.trackCount(playlistTracksCount)
-        : AppLocalizations.of(context)!.offlineTrackCount(playlist.childCount!, playlistTracksCount);
-    final trackDurationString = (playlistTracks.length == playlist.childCount)
-        ? printDuration(playlist.runTimeTicksDuration(), leadingZeroes: false)
-        : printDuration(
-            playlistTracks
-                .map((t) => t.runTimeTicksDuration())
-                .whereType<Duration>()
-                .fold<Duration>(Duration.zero, (sum, dur) => sum + dur),
-            leadingZeroes: false,
-          );
+    final trackCountString =
+        (playlistTracks.length == playlist.childCount || !isOffline)
+            ? AppLocalizations.of(context)!.trackCount(playlistTracksCount)
+            : AppLocalizations.of(context)!.offlineTrackCount(playlist.childCount!, playlistTracksCount);
+    final trackDurationString =
+        (playlistTracks.length == playlist.childCount)
+            ? printDuration(playlist.runTimeTicksDuration(), leadingZeroes: false)
+            : printDuration(
+              playlistTracks
+                  .map((t) => t.runTimeTicksDuration())
+                  .whereType<Duration>()
+                  .fold<Duration>(Duration.zero, (sum, dur) => sum + dur),
+              leadingZeroes: false,
+            );
 
     return PopScope(
       canPop: !_isDirty,
@@ -347,16 +350,17 @@ class _PlaylistEditScreenState extends ConsumerState<PlaylistEditScreen> {
             ],
           ],
         ),
-        floatingActionButton: _isDirty
-            ? ItemTheme(
-                item: playlist,
-                child: _PlaylistSaveFAB(
-                  isSaving: _isUpdating,
-                  onPressed: _isUpdating ? null : () async => await _saveOrUpdatePlaylist(),
-                  controller: _playlistSaveFeedbackController,
-                ),
-              )
-            : null,
+        floatingActionButton:
+            _isDirty
+                ? ItemTheme(
+                  item: playlist,
+                  child: _PlaylistSaveFAB(
+                    isSaving: _isUpdating,
+                    onPressed: _isUpdating ? null : () async => await _saveOrUpdatePlaylist(),
+                    controller: _playlistSaveFeedbackController,
+                  ),
+                )
+                : null,
       ),
     );
   }
@@ -413,11 +417,12 @@ class _HeaderSection extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: canEdit
-                        ? onPickImage
-                        : () => GlobalSnackbar.message(
-                            (context) => AppLocalizations.of(context)!.noPermissionToEditMetadata,
-                          ),
+                    onTap:
+                        canEdit
+                            ? onPickImage
+                            : () => GlobalSnackbar.message(
+                              (context) => AppLocalizations.of(context)!.noPermissionToEditMetadata,
+                            ),
                     child: SizedBox(
                       height: coverSize,
                       width: coverSize,
@@ -475,35 +480,38 @@ class _HeaderSection extends ConsumerWidget {
                               labelText: AppLocalizations.of(context)!.name,
                               floatingLabelBehavior: FloatingLabelBehavior.never,
                               filled: true,
-                              fillColor: Theme.brightnessOf(context) == Brightness.dark
-                                  ? Colors.black.withOpacity(0.8)
-                                  : Colors.white.withOpacity(0.8),
+                              fillColor:
+                                  Theme.brightnessOf(context) == Brightness.dark
+                                      ? Colors.black.withOpacity(0.8)
+                                      : Colors.white.withOpacity(0.8),
                               border: OutlineInputBorder(
                                 borderSide: BorderSide.none,
                                 borderRadius: BorderRadius.circular(6),
                               ),
                             ),
                             textInputAction: TextInputAction.done,
-                            validator: (value) =>
-                                (value == null || value.isEmpty) ? AppLocalizations.of(context)!.required : null,
+                            validator:
+                                (value) =>
+                                    (value == null || value.isEmpty) ? AppLocalizations.of(context)!.required : null,
                             onFieldSubmitted: (_) async => await onSubmit(),
                             onChanged: onNameChanged,
                             onSaved: (newValue) => onNameChanged(newValue ?? ''),
                           ),
                         ),
                         FormField<bool>(
-                          builder: (state) => CheckboxListTile(
-                            value: publicVisibility,
-                            title: Text(
-                              AppLocalizations.of(context)!.publiclyVisiblePlaylist,
-                              textAlign: TextAlign.left,
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 4.0),
-                            onChanged: (value) {
-                              state.didChange(value);
-                              if (value != null) onVisibilityChanged(value);
-                            },
-                          ),
+                          builder:
+                              (state) => CheckboxListTile(
+                                value: publicVisibility,
+                                title: Text(
+                                  AppLocalizations.of(context)!.publiclyVisiblePlaylist,
+                                  textAlign: TextAlign.left,
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 4.0),
+                                onChanged: (value) {
+                                  state.didChange(value);
+                                  if (value != null) onVisibilityChanged(value);
+                                },
+                              ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -538,29 +546,30 @@ class _RemovedTracksSection extends StatelessWidget {
         padding: const EdgeInsets.only(left: 12.0, top: 16.0, bottom: 2.0),
         child: Text(AppLocalizations.of(context)!.removedTracks, style: Theme.of(context).textTheme.titleMedium),
       ),
-      sliver: removedTracks.isEmpty
-          ? SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: Center(child: Text(AppLocalizations.of(context)!.removedTracksEmptyListPlaceholder)),
+      sliver:
+          removedTracks.isEmpty
+              ? SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Center(child: Text(AppLocalizations.of(context)!.removedTracksEmptyListPlaceholder)),
+                ),
+              )
+              : SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final item = removedTracks[index];
+                  return Material(
+                    type: MaterialType.transparency,
+                    key: ValueKey(item.id),
+                    child: EditListTile(
+                      item: item,
+                      listIndex: index,
+                      restoreInsteadOfRemove: true,
+                      onRemoveOrRestore: () => onRestore(index),
+                      onTap: (bool playable) {},
+                    ),
+                  );
+                }, childCount: removedTracks.length),
               ),
-            )
-          : SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                final item = removedTracks[index];
-                return Material(
-                  type: MaterialType.transparency,
-                  key: ValueKey(item.id),
-                  child: EditListTile(
-                    item: item,
-                    listIndex: index,
-                    restoreInsteadOfRemove: true,
-                    onRemoveOrRestore: () => onRestore(index),
-                    onTap: (bool playable) {},
-                  ),
-                );
-              }, childCount: removedTracks.length),
-            ),
     );
   }
 }
@@ -635,11 +644,12 @@ class _PlaylistSaveFABState extends State<_PlaylistSaveFAB> with SingleTickerPro
     final isSaving = widget.isSaving && !showingSuccess; // freeze spinner during success flash if already done
     final l10n = AppLocalizations.of(context)!; // assume localization is always available
     return Tooltip(
-      message: isSaving
-          ? l10n.savingChanges
-          : showingSuccess
-          ? l10n.playlistUpdated
-          : l10n.updatePlaylistButtonLabel,
+      message:
+          isSaving
+              ? l10n.savingChanges
+              : showingSuccess
+              ? l10n.playlistUpdated
+              : l10n.updatePlaylistButtonLabel,
       waitDuration: const Duration(milliseconds: 400),
       child: Semantics(
         button: true,
@@ -651,34 +661,35 @@ class _PlaylistSaveFABState extends State<_PlaylistSaveFAB> with SingleTickerPro
             duration: const Duration(milliseconds: 250),
             switchInCurve: Curves.easeOut,
             switchOutCurve: Curves.easeIn,
-            transitionBuilder: (child, anim) => FadeTransition(
-              opacity: anim,
-              child: ScaleTransition(scale: anim, child: child),
-            ),
-            child: showingSuccess
-                ? const Icon(TablerIcons.check, key: ValueKey('success-icon'))
-                : isSaving
-                ? const SizedBox(
-                    key: ValueKey('saving-icon'),
-                    height: 22,
-                    width: 22,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Icon(TablerIcons.device_floppy, key: ValueKey('save-icon')),
+            transitionBuilder:
+                (child, anim) => FadeTransition(opacity: anim, child: ScaleTransition(scale: anim, child: child)),
+            child:
+                showingSuccess
+                    ? const Icon(TablerIcons.check, key: ValueKey('success-icon'))
+                    : isSaving
+                    ? const SizedBox(
+                      key: ValueKey('saving-icon'),
+                      height: 22,
+                      width: 22,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                    : const Icon(TablerIcons.device_floppy, key: ValueKey('save-icon')),
           ),
           label: AnimatedSwitcher(
             duration: const Duration(milliseconds: 250),
             switchInCurve: Curves.easeOut,
             switchOutCurve: Curves.easeIn,
-            transitionBuilder: (child, anim) => FadeTransition(
-              opacity: anim,
-              child: SizeTransition(sizeFactor: anim, axis: Axis.horizontal, child: child),
-            ),
-            child: showingSuccess
-                ? Text(l10n.playlistUpdated, key: const ValueKey('success-label'))
-                : isSaving
-                ? Text(l10n.savingChanges, key: const ValueKey('saving-label'))
-                : Text(l10n.updatePlaylistButtonLabel, key: const ValueKey('save-label')),
+            transitionBuilder:
+                (child, anim) => FadeTransition(
+                  opacity: anim,
+                  child: SizeTransition(sizeFactor: anim, axis: Axis.horizontal, child: child),
+                ),
+            child:
+                showingSuccess
+                    ? Text(l10n.playlistUpdated, key: const ValueKey('success-label'))
+                    : isSaving
+                    ? Text(l10n.savingChanges, key: const ValueKey('saving-label'))
+                    : Text(l10n.updatePlaylistButtonLabel, key: const ValueKey('save-label')),
           ),
         ),
       ),

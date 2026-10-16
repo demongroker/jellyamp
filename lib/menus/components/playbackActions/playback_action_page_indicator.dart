@@ -45,16 +45,18 @@ class PlaybackActionPageIndicator extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 4.0),
                     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                     decoration: BoxDecoration(
-                      color: (pageController.page ?? pageController.initialPage).round() == index
-                          ? buttonColorSelected
-                          : buttonColor,
+                      color:
+                          (pageController.page ?? pageController.initialPage).round() == index
+                              ? buttonColorSelected
+                              : buttonColor,
                       borderRadius: BorderRadius.circular(9999.0),
                     ),
                     child: Text(
                       pages.keys.elementAt(index).toLocalisedString(context.l10n),
-                      style: (pageController.page ?? pageController.initialPage).round() == index
-                          ? textColorSelected
-                          : textColor,
+                      style:
+                          (pageController.page ?? pageController.initialPage).round() == index
+                              ? textColorSelected
+                              : textColor,
                     ),
                   ),
                 );

@@ -336,15 +336,14 @@ class PlayOnService {
             // This is particularly useful to stop agressively reporting playback when it's not needed
             await _isControlledSubscription?.cancel();
             isControlled = true;
-            _isControlledSubscription =
-                Stream.periodic(
-                  Duration(seconds: FinampSettingsHelper.finampSettings.playOnStaleDelay),
-                  (count) => count,
-                ).listen((event) {
-                  _playOnServiceLogger.info("Mark remote controlling as stale");
-                  isControlled = false;
-                  _isControlledSubscription?.cancel();
-                });
+            _isControlledSubscription = Stream.periodic(
+              Duration(seconds: FinampSettingsHelper.finampSettings.playOnStaleDelay),
+              (count) => count,
+            ).listen((event) {
+              _playOnServiceLogger.info("Mark remote controlling as stale");
+              isControlled = false;
+              _isControlledSubscription?.cancel();
+            });
             switch (request['Data']['Command']) {
               case "Stop":
                 await _audioHandler.stop();
@@ -363,9 +362,10 @@ class PlayOnService {
                 break;
               case "Seek":
                 // val to = message.data?.seekPositionTicks?.ticks ?: Duration.ZERO
-                final seekPosition = request['Data']['SeekPositionTicks'] != null
-                    ? Duration(milliseconds: ((request['Data']['SeekPositionTicks'] as int) / 10000).round())
-                    : Duration.zero;
+                final seekPosition =
+                    request['Data']['SeekPositionTicks'] != null
+                        ? Duration(milliseconds: ((request['Data']['SeekPositionTicks'] as int) / 10000).round())
+                        : Duration.zero;
                 await _audioHandler.seek(seekPosition);
                 break;
               case "Rewind":
