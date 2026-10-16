@@ -85,9 +85,10 @@ class IsFavoriteProvider
         () => IsFavorite()..item = item,
         from: isFavoriteProvider,
         name: r'isFavoriteProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$isFavoriteHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$isFavoriteHash,
         dependencies: IsFavoriteFamily._dependencies,
         allTransitiveDependencies: IsFavoriteFamily._allTransitiveDependencies,
         item: item,

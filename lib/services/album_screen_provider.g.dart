@@ -84,9 +84,10 @@ class GetAlbumOrPlaylistTracksProvider
         ),
         from: getAlbumOrPlaylistTracksProvider,
         name: r'getAlbumOrPlaylistTracksProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$getAlbumOrPlaylistTracksHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$getAlbumOrPlaylistTracksHash,
         dependencies: GetAlbumOrPlaylistTracksFamily._dependencies,
         allTransitiveDependencies:
             GetAlbumOrPlaylistTracksFamily._allTransitiveDependencies,
@@ -217,9 +218,10 @@ class GetDefaultSortedPlaylistTracksProvider
         ),
         from: getDefaultSortedPlaylistTracksProvider,
         name: r'getDefaultSortedPlaylistTracksProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$getDefaultSortedPlaylistTracksHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$getDefaultSortedPlaylistTracksHash,
         dependencies: GetDefaultSortedPlaylistTracksFamily._dependencies,
         allTransitiveDependencies:
             GetDefaultSortedPlaylistTracksFamily._allTransitiveDependencies,
@@ -357,9 +359,10 @@ class GetSortedPlaylistTracksProvider
         ),
         from: getSortedPlaylistTracksProvider,
         name: r'getSortedPlaylistTracksProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$getSortedPlaylistTracksHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$getSortedPlaylistTracksHash,
         dependencies: GetSortedPlaylistTracksFamily._dependencies,
         allTransitiveDependencies:
             GetSortedPlaylistTracksFamily._allTransitiveDependencies,

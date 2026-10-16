@@ -78,9 +78,10 @@ class ArtistItemProvider extends AutoDisposeFutureProvider<BaseItemDto?> {
         (ref) => artistItem(ref as ArtistItemRef, id),
         from: artistItemProvider,
         name: r'artistItemProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$artistItemHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$artistItemHash,
         dependencies: ArtistItemFamily._dependencies,
         allTransitiveDependencies: ArtistItemFamily._allTransitiveDependencies,
         id: id,

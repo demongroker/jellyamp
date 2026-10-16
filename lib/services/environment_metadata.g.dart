@@ -32,15 +32,18 @@ AppInfo _$AppInfoFromJson(Map<String, dynamic> json) => AppInfo(
   source: json['source'] as String?,
   version: json['version'] as String,
   buildNumber: json['buildNumber'] as String,
-  installTime: json['installTime'] == null
-      ? null
-      : DateTime.parse(json['installTime'] as String),
-  updateTime: json['updateTime'] == null
-      ? null
-      : DateTime.parse(json['updateTime'] as String),
-  versionHistory: (json['versionHistory'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  installTime:
+      json['installTime'] == null
+          ? null
+          : DateTime.parse(json['installTime'] as String),
+  updateTime:
+      json['updateTime'] == null
+          ? null
+          : DateTime.parse(json['updateTime'] as String),
+  versionHistory:
+      (json['versionHistory'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
 );
 
 Map<String, dynamic> _$AppInfoToJson(AppInfo instance) => <String, dynamic>{
@@ -75,9 +78,10 @@ EnvironmentMetadata _$EnvironmentMetadataFromJson(Map<String, dynamic> json) =>
         json['deviceInfo'] as Map<String, dynamic>,
       ),
       appInfo: AppInfo.fromJson(json['appInfo'] as Map<String, dynamic>),
-      serverInfo: json['serverInfo'] == null
-          ? null
-          : ServerInfo.fromJson(json['serverInfo'] as Map<String, dynamic>),
+      serverInfo:
+          json['serverInfo'] == null
+              ? null
+              : ServerInfo.fromJson(json['serverInfo'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$EnvironmentMetadataToJson(

@@ -679,21 +679,26 @@ class DeviceProfileAdapter extends TypeAdapter<DeviceProfile> {
       maxStaticBitrate: (fields[22] as num?)?.toInt(),
       musicStreamingTranscodingBitrate: (fields[23] as num?)?.toInt(),
       maxStaticMusicBitrate: (fields[24] as num?)?.toInt(),
-      directPlayProfiles: fields[33] == null
-          ? const []
-          : (fields[33] as List).cast<DirectPlayProfile>(),
-      transcodingProfiles: fields[34] == null
-          ? const []
-          : (fields[34] as List).cast<TranscodingProfile>(),
-      containerProfiles: fields[35] == null
-          ? const []
-          : (fields[35] as List).cast<ContainerProfile>(),
-      codecProfiles: fields[36] == null
-          ? const []
-          : (fields[36] as List).cast<CodecProfile>(),
-      subtitleProfiles: fields[38] == null
-          ? const []
-          : (fields[38] as List).cast<SubtitleProfile>(),
+      directPlayProfiles:
+          fields[33] == null
+              ? const []
+              : (fields[33] as List).cast<DirectPlayProfile>(),
+      transcodingProfiles:
+          fields[34] == null
+              ? const []
+              : (fields[34] as List).cast<TranscodingProfile>(),
+      containerProfiles:
+          fields[35] == null
+              ? const []
+              : (fields[35] as List).cast<ContainerProfile>(),
+      codecProfiles:
+          fields[36] == null
+              ? const []
+              : (fields[36] as List).cast<CodecProfile>(),
+      subtitleProfiles:
+          fields[38] == null
+              ? const []
+              : (fields[38] as List).cast<SubtitleProfile>(),
     );
   }
 
@@ -938,13 +943,13 @@ class TranscodingProfileAdapter extends TypeAdapter<TranscodingProfile> {
       copyTimestamps: fields[8] == null ? true : fields[8] as bool?,
       segmentLength: fields[12] == null ? 0 : (fields[12] as num?)?.toInt(),
       breakOnNonKeyFrames: fields[13] == null ? false : fields[13] as bool?,
-      enableSubtitlesInManifest: fields[14] == null
-          ? true
-          : fields[14] as bool?,
+      enableSubtitlesInManifest:
+          fields[14] == null ? true : fields[14] as bool?,
       maxAudioChannels: fields[10] as String?,
-      conditions: fields[15] == null
-          ? const []
-          : (fields[15] as List).cast<ProfileCondition>(),
+      conditions:
+          fields[15] == null
+              ? const []
+              : (fields[15] as List).cast<ProfileCondition>(),
     );
   }
 
@@ -3007,16 +3012,20 @@ UserDto _$UserDtoFromJson(Map json) => UserDto(
   enableAutoLogin: json['EnableAutoLogin'] as bool?,
   lastLoginDate: json['LastLoginDate'] as String?,
   lastActivityDate: json['LastActivityDate'] as String?,
-  configuration: json['Configuration'] == null
-      ? null
-      : UserConfiguration.fromJson(
-          Map<String, dynamic>.from(json['Configuration'] as Map),
-        ),
-  policy: json['Policy'] == null
-      ? null
-      : UserPolicy.fromJson(Map<String, dynamic>.from(json['Policy'] as Map)),
-  primaryImageAspectRatio: (json['PrimaryImageAspectRatio'] as num?)
-      ?.toDouble(),
+  configuration:
+      json['Configuration'] == null
+          ? null
+          : UserConfiguration.fromJson(
+            Map<String, dynamic>.from(json['Configuration'] as Map),
+          ),
+  policy:
+      json['Policy'] == null
+          ? null
+          : UserPolicy.fromJson(
+            Map<String, dynamic>.from(json['Policy'] as Map),
+          ),
+  primaryImageAspectRatio:
+      (json['PrimaryImageAspectRatio'] as num?)?.toDouble(),
 );
 
 Map<String, dynamic> _$UserDtoToJson(UserDto instance) => <String, dynamic>{
@@ -3041,21 +3050,25 @@ UserConfiguration _$UserConfigurationFromJson(Map json) => UserConfiguration(
   playDefaultAudioTrack: json['PlayDefaultAudioTrack'] as bool,
   subtitleLanguagePreference: json['SubtitleLanguagePreference'] as String?,
   displayMissingEpisodes: json['DisplayMissingEpisodes'] as bool,
-  groupedFolders: (json['GroupedFolders'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  groupedFolders:
+      (json['GroupedFolders'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
   subtitleMode: json['SubtitleMode'] as String,
   displayCollectionsView: json['DisplayCollectionsView'] as bool,
   enableLocalPassword: json['EnableLocalPassword'] as bool,
-  orderedViews: (json['OrderedViews'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
-  latestItemsExcludes: (json['LatestItemsExcludes'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
-  myMediaExcludes: (json['MyMediaExcludes'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  orderedViews:
+      (json['OrderedViews'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+  latestItemsExcludes:
+      (json['LatestItemsExcludes'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+  myMediaExcludes:
+      (json['MyMediaExcludes'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
   hidePlayedInLatest: json['HidePlayedInLatest'] as bool,
   rememberAudioSelections: json['RememberAudioSelections'] as bool,
   rememberSubtitleSelections: json['RememberSubtitleSelections'] as bool,
@@ -3086,16 +3099,19 @@ UserPolicy _$UserPolicyFromJson(Map json) => UserPolicy(
   isHidden: json['IsHidden'] as bool,
   isDisabled: json['IsDisabled'] as bool,
   maxParentalRating: (json['MaxParentalRating'] as num?)?.toInt(),
-  blockedTags: (json['BlockedTags'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  blockedTags:
+      (json['BlockedTags'] as List<dynamic>?)?.map((e) => e as String).toList(),
   enableUserPreferenceAccess: json['EnableUserPreferenceAccess'] as bool,
-  accessSchedules: (json['AccessSchedules'] as List<dynamic>?)
-      ?.map((e) => AccessSchedule.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
-  blockUnratedItems: (json['BlockUnratedItems'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  accessSchedules:
+      (json['AccessSchedules'] as List<dynamic>?)
+          ?.map(
+            (e) => AccessSchedule.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
+  blockUnratedItems:
+      (json['BlockUnratedItems'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
   enableRemoteControlOfOtherUsers:
       json['EnableRemoteControlOfOtherUsers'] as bool,
   enableSharedDeviceControl: json['EnableSharedDeviceControl'] as bool,
@@ -3117,29 +3133,34 @@ UserPolicy _$UserPolicyFromJson(Map json) => UserPolicy(
   enableContentDownloading: json['EnableContentDownloading'] as bool,
   enableSyncTranscoding: json['EnableSyncTranscoding'] as bool,
   enableMediaConversion: json['EnableMediaConversion'] as bool,
-  enabledDevices: (json['EnabledDevices'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  enabledDevices:
+      (json['EnabledDevices'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
   enableAllDevices: json['EnableAllDevices'] as bool,
-  enabledChannels: (json['EnabledChannels'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  enabledChannels:
+      (json['EnabledChannels'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
   enableAllChannels: json['EnableAllChannels'] as bool,
-  enabledFolders: (json['EnabledFolders'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  enabledFolders:
+      (json['EnabledFolders'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
   enableAllFolders: json['EnableAllFolders'] as bool,
   invalidLoginAttemptCount: (json['InvalidLoginAttemptCount'] as num).toInt(),
-  loginAttemptsBeforeLockout: (json['LoginAttemptsBeforeLockout'] as num?)
-      ?.toInt(),
+  loginAttemptsBeforeLockout:
+      (json['LoginAttemptsBeforeLockout'] as num?)?.toInt(),
   maxActiveSessions: (json['MaxActiveSessions'] as num?)?.toInt(),
   enablePublicSharing: json['EnablePublicSharing'] as bool,
-  blockedMediaFolders: (json['BlockedMediaFolders'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
-  blockedChannels: (json['BlockedChannels'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  blockedMediaFolders:
+      (json['BlockedMediaFolders'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+  blockedChannels:
+      (json['BlockedChannels'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
   remoteClientBitrateLimit: (json['RemoteClientBitrateLimit'] as num).toInt(),
   authenticationProviderId: json['AuthenticationProviderId'] as String?,
   passwordResetProviderId: json['PasswordResetProviderId'] as String?,
@@ -3209,14 +3230,18 @@ Map<String, dynamic> _$AccessScheduleToJson(AccessSchedule instance) =>
 
 AuthenticationResult _$AuthenticationResultFromJson(Map json) =>
     AuthenticationResult(
-      user: json['User'] == null
-          ? null
-          : UserDto.fromJson(Map<String, dynamic>.from(json['User'] as Map)),
-      sessionInfo: json['SessionInfo'] == null
-          ? null
-          : SessionInfo.fromJson(
-              Map<String, dynamic>.from(json['SessionInfo'] as Map),
-            ),
+      user:
+          json['User'] == null
+              ? null
+              : UserDto.fromJson(
+                Map<String, dynamic>.from(json['User'] as Map),
+              ),
+      sessionInfo:
+          json['SessionInfo'] == null
+              ? null
+              : SessionInfo.fromJson(
+                Map<String, dynamic>.from(json['SessionInfo'] as Map),
+              ),
       accessToken: json['AccessToken'] as String?,
       serverId: json['ServerId'] as String?,
     );
@@ -3231,25 +3256,30 @@ Map<String, dynamic> _$AuthenticationResultToJson(
 };
 
 SessionInfo _$SessionInfoFromJson(Map json) => SessionInfo(
-  playState: json['PlayState'] == null
-      ? null
-      : PlayerStateInfo.fromJson(
-          Map<String, dynamic>.from(json['PlayState'] as Map),
-        ),
-  additionalUsers: (json['AdditionalUsers'] as List<dynamic>?)
-      ?.map(
-        (e) => SessionUserInfo.fromJson(Map<String, dynamic>.from(e as Map)),
-      )
-      .toList(),
-  capabilities: json['Capabilities'] == null
-      ? null
-      : ClientCapabilities.fromJson(
-          Map<String, dynamic>.from(json['Capabilities'] as Map),
-        ),
+  playState:
+      json['PlayState'] == null
+          ? null
+          : PlayerStateInfo.fromJson(
+            Map<String, dynamic>.from(json['PlayState'] as Map),
+          ),
+  additionalUsers:
+      (json['AdditionalUsers'] as List<dynamic>?)
+          ?.map(
+            (e) =>
+                SessionUserInfo.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
+  capabilities:
+      json['Capabilities'] == null
+          ? null
+          : ClientCapabilities.fromJson(
+            Map<String, dynamic>.from(json['Capabilities'] as Map),
+          ),
   remoteEndPoint: json['RemoteEndPoint'] as String?,
-  playableMediaTypes: (json['PlayableMediaTypes'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  playableMediaTypes:
+      (json['PlayableMediaTypes'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
   playlistItemId: json['PlaylistItemId'] as String?,
   id: json['Id'] as String?,
   serverId: json['ServerId'] as String?,
@@ -3260,38 +3290,44 @@ SessionInfo _$SessionInfoFromJson(Map json) => SessionInfo(
   lastActivityDate: json['LastActivityDate'] as String,
   deviceName: json['DeviceName'] as String?,
   deviceType: json['DeviceType'] as String?,
-  nowPlayingItem: json['NowPlayingItem'] == null
-      ? null
-      : BaseItemDto.fromJson(
-          Map<String, dynamic>.from(json['NowPlayingItem'] as Map),
-        ),
+  nowPlayingItem:
+      json['NowPlayingItem'] == null
+          ? null
+          : BaseItemDto.fromJson(
+            Map<String, dynamic>.from(json['NowPlayingItem'] as Map),
+          ),
   deviceId: json['DeviceId'] as String?,
-  supportedCommands: (json['SupportedCommands'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
-  transcodingInfo: json['TranscodingInfo'] == null
-      ? null
-      : TranscodingInfo.fromJson(
-          Map<String, dynamic>.from(json['TranscodingInfo'] as Map),
-        ),
+  supportedCommands:
+      (json['SupportedCommands'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+  transcodingInfo:
+      json['TranscodingInfo'] == null
+          ? null
+          : TranscodingInfo.fromJson(
+            Map<String, dynamic>.from(json['TranscodingInfo'] as Map),
+          ),
   supportsRemoteControl: json['SupportsRemoteControl'] as bool,
   lastPlaybackCheckIn: json['LastPlaybackCheckIn'] as String?,
-  fullNowPlayingItem: json['FullNowPlayingItem'] == null
-      ? null
-      : BaseItem.fromJson(
-          Map<String, dynamic>.from(json['FullNowPlayingItem'] as Map),
-        ),
-  nowViewingItem: json['NowViewingItem'] == null
-      ? null
-      : BaseItemDto.fromJson(
-          Map<String, dynamic>.from(json['NowViewingItem'] as Map),
-        ),
+  fullNowPlayingItem:
+      json['FullNowPlayingItem'] == null
+          ? null
+          : BaseItem.fromJson(
+            Map<String, dynamic>.from(json['FullNowPlayingItem'] as Map),
+          ),
+  nowViewingItem:
+      json['NowViewingItem'] == null
+          ? null
+          : BaseItemDto.fromJson(
+            Map<String, dynamic>.from(json['NowViewingItem'] as Map),
+          ),
   applicationVersion: json['ApplicationVersion'] as String?,
   isActive: json['IsActive'] as bool,
   supportsMediaControl: json['SupportsMediaControl'] as bool,
-  nowPlayingQueue: (json['NowPlayingQueue'] as List<dynamic>?)
-      ?.map((e) => QueueItem.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
+  nowPlayingQueue:
+      (json['NowPlayingQueue'] as List<dynamic>?)
+          ?.map((e) => QueueItem.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList(),
   hasCustomDeviceName: json['HasCustomDeviceName'] as bool,
 );
 
@@ -3340,9 +3376,10 @@ TranscodingInfo _$TranscodingInfoFromJson(Map json) => TranscodingInfo(
   width: (json['Width'] as num?)?.toInt(),
   height: (json['Height'] as num?)?.toInt(),
   audioChannels: (json['AudioChannels'] as num?)?.toInt(),
-  transcodeReasons: (json['TranscodeReasons'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  transcodeReasons:
+      (json['TranscodeReasons'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
 );
 
 Map<String, dynamic> _$TranscodingInfoToJson(TranscodingInfo instance) =>
@@ -3397,19 +3434,22 @@ Map<String, dynamic> _$SessionUserInfoToJson(SessionUserInfo instance) =>
     <String, dynamic>{'UserId': instance.userId, 'UserName': instance.userName};
 
 ClientCapabilities _$ClientCapabilitiesFromJson(Map json) => ClientCapabilities(
-  playableMediaTypes: (json['PlayableMediaTypes'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
-  supportedCommands: (json['SupportedCommands'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  playableMediaTypes:
+      (json['PlayableMediaTypes'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+  supportedCommands:
+      (json['SupportedCommands'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
   supportsMediaControl: json['SupportsMediaControl'] as bool?,
   supportsPersistentIdentifier: json['SupportsPersistentIdentifier'] as bool?,
-  deviceProfile: json['DeviceProfile'] == null
-      ? null
-      : DeviceProfile.fromJson(
-          Map<String, dynamic>.from(json['DeviceProfile'] as Map),
-        ),
+  deviceProfile:
+      json['DeviceProfile'] == null
+          ? null
+          : DeviceProfile.fromJson(
+            Map<String, dynamic>.from(json['DeviceProfile'] as Map),
+          ),
   appStoreUrl: json['AppStoreUrl'] as String?,
   iconUrl: json['IconUrl'] as String?,
 );
@@ -3484,35 +3524,34 @@ Map<String, dynamic> _$DeviceProfileToJson(
   'MaxStaticBitrate': instance.maxStaticBitrate,
   'MusicStreamingTranscodingBitrate': instance.musicStreamingTranscodingBitrate,
   'MaxStaticMusicBitrate': instance.maxStaticMusicBitrate,
-  'DirectPlayProfiles': instance.directPlayProfiles
-      .map((e) => e.toJson())
-      .toList(),
-  'TranscodingProfiles': instance.transcodingProfiles
-      .map((e) => e.toJson())
-      .toList(),
-  'ContainerProfiles': instance.containerProfiles
-      .map((e) => e.toJson())
-      .toList(),
+  'DirectPlayProfiles':
+      instance.directPlayProfiles.map((e) => e.toJson()).toList(),
+  'TranscodingProfiles':
+      instance.transcodingProfiles.map((e) => e.toJson()).toList(),
+  'ContainerProfiles':
+      instance.containerProfiles.map((e) => e.toJson()).toList(),
   'CodecProfiles': instance.codecProfiles.map((e) => e.toJson()).toList(),
   'SubtitleProfiles': instance.subtitleProfiles.map((e) => e.toJson()).toList(),
 };
 
-DeviceIdentification _$DeviceIdentificationFromJson(Map json) =>
-    DeviceIdentification(
-      friendlyName: json['FriendlyName'] as String?,
-      modelNumber: json['ModelNumber'] as String?,
-      serialNumber: json['SerialNumber'] as String?,
-      modelName: json['ModelName'] as String?,
-      modelDescription: json['ModelDescription'] as String?,
-      modelUrl: json['ModelUrl'] as String?,
-      manufacturer: json['Manufacturer'] as String?,
-      manufacturerUrl: json['ManufacturerUrl'] as String?,
-      headers: (json['Headers'] as List<dynamic>?)
+DeviceIdentification _$DeviceIdentificationFromJson(
+  Map json,
+) => DeviceIdentification(
+  friendlyName: json['FriendlyName'] as String?,
+  modelNumber: json['ModelNumber'] as String?,
+  serialNumber: json['SerialNumber'] as String?,
+  modelName: json['ModelName'] as String?,
+  modelDescription: json['ModelDescription'] as String?,
+  modelUrl: json['ModelUrl'] as String?,
+  manufacturer: json['Manufacturer'] as String?,
+  manufacturerUrl: json['ManufacturerUrl'] as String?,
+  headers:
+      (json['Headers'] as List<dynamic>?)
           ?.map(
             (e) => HttpHeaderInfo.fromJson(Map<String, dynamic>.from(e as Map)),
           )
           .toList(),
-    );
+);
 
 Map<String, dynamic> _$DeviceIdentificationToJson(
   DeviceIdentification instance,
@@ -3620,11 +3659,13 @@ Map<String, dynamic> _$TranscodingProfileToJson(TranscodingProfile instance) =>
 
 ContainerProfile _$ContainerProfileFromJson(Map json) => ContainerProfile(
   type: json['Type'] as String,
-  conditions: (json['Conditions'] as List<dynamic>?)
-      ?.map(
-        (e) => ProfileCondition.fromJson(Map<String, dynamic>.from(e as Map)),
-      )
-      .toList(),
+  conditions:
+      (json['Conditions'] as List<dynamic>?)
+          ?.map(
+            (e) =>
+                ProfileCondition.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
   container: json['Container'] as String?,
 );
 
@@ -3652,16 +3693,20 @@ Map<String, dynamic> _$ProfileConditionToJson(ProfileCondition instance) =>
 
 CodecProfile _$CodecProfileFromJson(Map json) => CodecProfile(
   type: json['Type'] as String,
-  conditions: (json['Conditions'] as List<dynamic>?)
-      ?.map(
-        (e) => ProfileCondition.fromJson(Map<String, dynamic>.from(e as Map)),
-      )
-      .toList(),
-  applyConditions: (json['ApplyConditions'] as List<dynamic>?)
-      ?.map(
-        (e) => ProfileCondition.fromJson(Map<String, dynamic>.from(e as Map)),
-      )
-      .toList(),
+  conditions:
+      (json['Conditions'] as List<dynamic>?)
+          ?.map(
+            (e) =>
+                ProfileCondition.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
+  applyConditions:
+      (json['ApplyConditions'] as List<dynamic>?)
+          ?.map(
+            (e) =>
+                ProfileCondition.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
   codec: json['Codec'] as String?,
   container: json['Container'] as String?,
 );
@@ -3683,11 +3728,13 @@ ResponseProfile _$ResponseProfileFromJson(Map json) => ResponseProfile(
   type: json['Type'] as String,
   orgPn: json['OrgPn'] as String?,
   mimeType: json['MimeType'] as String?,
-  conditions: (json['Conditions'] as List<dynamic>?)
-      ?.map(
-        (e) => ProfileCondition.fromJson(Map<String, dynamic>.from(e as Map)),
-      )
-      .toList(),
+  conditions:
+      (json['Conditions'] as List<dynamic>?)
+          ?.map(
+            (e) =>
+                ProfileCondition.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
 );
 
 Map<String, dynamic> _$ResponseProfileToJson(ResponseProfile instance) =>
@@ -3741,27 +3788,32 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
   forcedSortName: json['ForcedSortName'] as String?,
   video3DFormat: json['Video3DFormat'] as String?,
   premiereDate: json['PremiereDate'] as String?,
-  externalUrls: (json['ExternalUrls'] as List<dynamic>?)
-      ?.map((e) => ExternalUrl.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
-  mediaSources: (json['MediaSources'] as List<dynamic>?)
-      ?.map(
-        (e) => MediaSourceInfo.fromJson(Map<String, dynamic>.from(e as Map)),
-      )
-      .toList(),
+  externalUrls:
+      (json['ExternalUrls'] as List<dynamic>?)
+          ?.map(
+            (e) => ExternalUrl.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
+  mediaSources:
+      (json['MediaSources'] as List<dynamic>?)
+          ?.map(
+            (e) =>
+                MediaSourceInfo.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
   criticRating: (json['CriticRating'] as num?)?.toDouble(),
-  productionLocations: (json['ProductionLocations'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  productionLocations:
+      (json['ProductionLocations'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
   path: json['Path'] as String?,
   officialRating: json['OfficialRating'] as String?,
   customRating: json['CustomRating'] as String?,
   channelId: json['ChannelId'] as String?,
   channelName: json['ChannelName'] as String?,
   overview: json['Overview'] as String?,
-  taglines: (json['Taglines'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  taglines:
+      (json['Taglines'] as List<dynamic>?)?.map((e) => e as String).toList(),
   genres: (json['Genres'] as List<dynamic>?)?.map((e) => e as String).toList(),
   communityRating: (json['CommunityRating'] as num?)?.toDouble(),
   runTimeTicks: (json['RunTimeTicks'] as num?)?.toInt(),
@@ -3773,9 +3825,10 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
   indexNumber: (json['IndexNumber'] as num?)?.toInt(),
   indexNumberEnd: (json['IndexNumberEnd'] as num?)?.toInt(),
   parentIndexNumber: (json['ParentIndexNumber'] as num?)?.toInt(),
-  remoteTrailers: (json['RemoteTrailers'] as List<dynamic>?)
-      ?.map((e) => MediaUrl.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
+  remoteTrailers:
+      (json['RemoteTrailers'] as List<dynamic>?)
+          ?.map((e) => MediaUrl.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList(),
   providerIds: (json['ProviderIds'] as Map?)?.map(
     (k, e) => MapEntry(k as String, e),
   ),
@@ -3785,26 +3838,37 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
     const BaseItemIdConverter().fromJson,
   ),
   type: json['Type'] as String?,
-  people: (json['People'] as List<dynamic>?)
-      ?.map((e) => BaseItemPerson.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
-  studios: (json['Studios'] as List<dynamic>?)
-      ?.map((e) => NameLongIdPair.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
-  genreItems: (json['GenreItems'] as List<dynamic>?)
-      ?.map((e) => NameLongIdPair.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
+  people:
+      (json['People'] as List<dynamic>?)
+          ?.map(
+            (e) => BaseItemPerson.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
+  studios:
+      (json['Studios'] as List<dynamic>?)
+          ?.map(
+            (e) => NameLongIdPair.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
+  genreItems:
+      (json['GenreItems'] as List<dynamic>?)
+          ?.map(
+            (e) => NameLongIdPair.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
   parentLogoItemId: json['ParentLogoItemId'] as String?,
   parentBackdropItemId: json['ParentBackdropItemId'] as String?,
-  parentBackdropImageTags: (json['ParentBackdropImageTags'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  parentBackdropImageTags:
+      (json['ParentBackdropImageTags'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
   localTrailerCount: (json['LocalTrailerCount'] as num?)?.toInt(),
-  userData: json['UserData'] == null
-      ? null
-      : UserItemDataDto.fromJson(
-          Map<String, dynamic>.from(json['UserData'] as Map),
-        ),
+  userData:
+      json['UserData'] == null
+          ? null
+          : UserItemDataDto.fromJson(
+            Map<String, dynamic>.from(json['UserData'] as Map),
+          ),
   recursiveItemCount: (json['RecursiveItemCount'] as num?)?.toInt(),
   childCount: (json['ChildCount'] as num?)?.toInt(),
   seriesName: json['SeriesName'] as String?,
@@ -3814,18 +3878,17 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
   displayPreferencesId: json['DisplayPreferencesId'] as String?,
   status: json['Status'] as String?,
   airTime: json['AirTime'] as String?,
-  airDays: (json['AirDays'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  airDays:
+      (json['AirDays'] as List<dynamic>?)?.map((e) => e as String).toList(),
   tags: (json['Tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
-  primaryImageAspectRatio: (json['PrimaryImageAspectRatio'] as num?)
-      ?.toDouble(),
-  artists: (json['Artists'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
-  artistItems: (json['ArtistItems'] as List<dynamic>?)
-      ?.map((e) => NameIdPair.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
+  primaryImageAspectRatio:
+      (json['PrimaryImageAspectRatio'] as num?)?.toDouble(),
+  artists:
+      (json['Artists'] as List<dynamic>?)?.map((e) => e as String).toList(),
+  artistItems:
+      (json['ArtistItems'] as List<dynamic>?)
+          ?.map((e) => NameIdPair.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList(),
   album: json['Album'] as String?,
   collectionType: json['CollectionType'] as String?,
   displayOrder: json['DisplayOrder'] as String?,
@@ -3836,17 +3899,19 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
   albumPrimaryImageTag: json['AlbumPrimaryImageTag'] as String?,
   seriesPrimaryImageTag: json['SeriesPrimaryImageTag'] as String?,
   albumArtist: json['AlbumArtist'] as String?,
-  albumArtists: (json['AlbumArtists'] as List<dynamic>?)
-      ?.map((e) => NameIdPair.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
+  albumArtists:
+      (json['AlbumArtists'] as List<dynamic>?)
+          ?.map((e) => NameIdPair.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList(),
   seasonName: json['SeasonName'] as String?,
   partCount: (json['PartCount'] as num?)?.toInt(),
   imageTags: (json['ImageTags'] as Map?)?.map(
     (k, e) => MapEntry(k, e as String),
   ),
-  backdropImageTags: (json['BackdropImageTags'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  backdropImageTags:
+      (json['BackdropImageTags'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
   parentLogoImageTag: json['ParentLogoImageTag'] as String?,
   parentArtItemId: json['ParentArtItemId'] as String?,
   parentArtImageTag: json['ParentArtImageTag'] as String?,
@@ -3856,15 +3921,19 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
   parentThumbImageTag: json['ParentThumbImageTag'] as String?,
   parentPrimaryImageItemId: json['ParentPrimaryImageItemId'] as String?,
   parentPrimaryImageTag: json['ParentPrimaryImageTag'] as String?,
-  chapters: (json['Chapters'] as List<dynamic>?)
-      ?.map((e) => ChapterInfo.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
+  chapters:
+      (json['Chapters'] as List<dynamic>?)
+          ?.map(
+            (e) => ChapterInfo.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
   locationType: json['LocationType'] as String?,
   mediaType: json['MediaType'] as String?,
   endDate: json['EndDate'] as String?,
-  lockedFields: (json['LockedFields'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  lockedFields:
+      (json['LockedFields'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
   lockData: json['LockData'] as bool?,
   width: (json['Width'] as num?)?.toInt(),
   height: (json['Height'] as num?)?.toInt(),
@@ -3908,14 +3977,16 @@ BaseItemDto _$BaseItemDtoFromJson(Map json) => BaseItemDto(
   isHD: json['IsHD'] as bool?,
   videoType: json['VideoType'] as String?,
   mediaSourceCount: (json['MediaSourceCount'] as num?)?.toInt(),
-  screenshotImageTags: (json['ScreenshotImageTags'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
-  imageBlurHashes: json['ImageBlurHashes'] == null
-      ? null
-      : ImageBlurHashes.fromJson(
-          Map<String, dynamic>.from(json['ImageBlurHashes'] as Map),
-        ),
+  screenshotImageTags:
+      (json['ScreenshotImageTags'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+  imageBlurHashes:
+      json['ImageBlurHashes'] == null
+          ? null
+          : ImageBlurHashes.fromJson(
+            Map<String, dynamic>.from(json['ImageBlurHashes'] as Map),
+          ),
   isoType: json['IsoType'] as String?,
   trailerCount: (json['TrailerCount'] as num?)?.toInt(),
   programCount: (json['ProgramCount'] as num?)?.toInt(),
@@ -4178,12 +4249,12 @@ MediaSourceInfo _$MediaSourceInfoFromJson(Map json) => MediaSourceInfo(
   requiresLooping: json['RequiresLooping'] as bool,
   supportsProbing: json['SupportsProbing'] as bool,
   video3DFormat: json['Video3DFormat'] as String?,
-  mediaStreams: (json['MediaStreams'] as List<dynamic>)
-      .map((e) => MediaStream.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
-  formats: (json['Formats'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  mediaStreams:
+      (json['MediaStreams'] as List<dynamic>)
+          .map((e) => MediaStream.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList(),
+  formats:
+      (json['Formats'] as List<dynamic>?)?.map((e) => e as String).toList(),
   bitrate: (json['Bitrate'] as num?)?.toInt(),
   timestamp: json['Timestamp'] as String?,
   requiredHttpHeaders: (json['RequiredHttpHeaders'] as Map?)?.map(
@@ -4195,19 +4266,21 @@ MediaSourceInfo _$MediaSourceInfoFromJson(Map json) => MediaSourceInfo(
   analyzeDurationMs: (json['AnalyzeDurationMs'] as num?)?.toInt(),
   readAtNativeFramerate: json['ReadAtNativeFramerate'] as bool,
   defaultAudioStreamIndex: (json['DefaultAudioStreamIndex'] as num?)?.toInt(),
-  defaultSubtitleStreamIndex: (json['DefaultSubtitleStreamIndex'] as num?)
-      ?.toInt(),
+  defaultSubtitleStreamIndex:
+      (json['DefaultSubtitleStreamIndex'] as num?)?.toInt(),
   etag: json['Etag'] as String?,
   ignoreDts: json['IgnoreDts'] as bool,
   ignoreIndex: json['IgnoreIndex'] as bool,
   genPtsInput: json['GenPtsInput'] as bool,
   videoType: json['VideoType'] as String?,
   isoType: json['IsoType'] as String?,
-  mediaAttachments: (json['MediaAttachments'] as List<dynamic>?)
-      ?.map(
-        (e) => MediaAttachment.fromJson(Map<String, dynamic>.from(e as Map)),
-      )
-      .toList(),
+  mediaAttachments:
+      (json['MediaAttachments'] as List<dynamic>?)
+          ?.map(
+            (e) =>
+                MediaAttachment.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
 );
 
 Map<String, dynamic> _$MediaSourceInfoToJson(
@@ -4381,19 +4454,19 @@ Map<String, dynamic> _$MediaUrlToJson(MediaUrl instance) => <String, dynamic>{
   'Name': instance.name,
 };
 
-BaseItemPerson _$BaseItemPersonFromJson(Map json) =>
-    BaseItemPerson(
-        name: json['Name'] as String?,
-        id: json['Id'] as String?,
-        role: json['Role'] as String?,
-        type: json['Type'] as String?,
-        primaryImageTag: json['PrimaryImageTag'] as String?,
-      )
-      ..imageBlurHashes = json['ImageBlurHashes'] == null
+BaseItemPerson _$BaseItemPersonFromJson(Map json) => BaseItemPerson(
+    name: json['Name'] as String?,
+    id: json['Id'] as String?,
+    role: json['Role'] as String?,
+    type: json['Type'] as String?,
+    primaryImageTag: json['PrimaryImageTag'] as String?,
+  )
+  ..imageBlurHashes =
+      json['ImageBlurHashes'] == null
           ? null
           : ImageBlurHashes.fromJson(
-              Map<String, dynamic>.from(json['ImageBlurHashes'] as Map),
-            );
+            Map<String, dynamic>.from(json['ImageBlurHashes'] as Map),
+          );
 
 Map<String, dynamic> _$BaseItemPersonToJson(BaseItemPerson instance) =>
     <String, dynamic>{
@@ -4476,11 +4549,13 @@ Map<String, dynamic> _$ChapterInfoToJson(ChapterInfo instance) =>
 
 QueryResult_BaseItemDto _$QueryResult_BaseItemDtoFromJson(Map json) =>
     QueryResult_BaseItemDto(
-      items: (json['Items'] as List<dynamic>?)
-          ?.map(
-            (e) => BaseItemDto.fromJson(Map<String, dynamic>.from(e as Map)),
-          )
-          .toList(),
+      items:
+          (json['Items'] as List<dynamic>?)
+              ?.map(
+                (e) =>
+                    BaseItemDto.fromJson(Map<String, dynamic>.from(e as Map)),
+              )
+              .toList(),
       totalRecordCount: (json['TotalRecordCount'] as num).toInt(),
       startIndex: (json['StartIndex'] as num).toInt(),
     );
@@ -4495,12 +4570,14 @@ Map<String, dynamic> _$QueryResult_BaseItemDtoToJson(
 
 PlaybackInfoResponse _$PlaybackInfoResponseFromJson(Map json) =>
     PlaybackInfoResponse(
-      mediaSources: (json['MediaSources'] as List<dynamic>?)
-          ?.map(
-            (e) =>
-                MediaSourceInfo.fromJson(Map<String, dynamic>.from(e as Map)),
-          )
-          .toList(),
+      mediaSources:
+          (json['MediaSources'] as List<dynamic>?)
+              ?.map(
+                (e) => MediaSourceInfo.fromJson(
+                  Map<String, dynamic>.from(e as Map),
+                ),
+              )
+              .toList(),
       playSessionId: json['PlaySessionId'] as String?,
       errorCode: json['ErrorCode'] as String?,
     );
@@ -4516,11 +4593,12 @@ Map<String, dynamic> _$PlaybackInfoResponseToJson(
 PlaybackProgressInfo _$PlaybackProgressInfoFromJson(Map json) =>
     PlaybackProgressInfo(
       canSeek: json['CanSeek'] as bool? ?? true,
-      item: json['Item'] == null
-          ? null
-          : BaseItemDto.fromJson(
-              Map<String, dynamic>.from(json['Item'] as Map),
-            ),
+      item:
+          json['Item'] == null
+              ? null
+              : BaseItemDto.fromJson(
+                Map<String, dynamic>.from(json['Item'] as Map),
+              ),
       itemId: const BaseItemIdConverter().fromJson(json['ItemId'] as String),
       sessionId: json['SessionId'] as String?,
       mediaSourceId: json['MediaSourceId'] as String?,
@@ -4538,9 +4616,12 @@ PlaybackProgressInfo _$PlaybackProgressInfoFromJson(Map json) =>
       playSessionId: json['PlaySessionId'] as String?,
       repeatMode: json['RepeatMode'] as String,
       playbackOrder: json['PlaybackOrder'] as String? ?? "Default",
-      nowPlayingQueue: (json['NowPlayingQueue'] as List<dynamic>?)
-          ?.map((e) => QueueItem.fromJson(Map<String, dynamic>.from(e as Map)))
-          .toList(),
+      nowPlayingQueue:
+          (json['NowPlayingQueue'] as List<dynamic>?)
+              ?.map(
+                (e) => QueueItem.fromJson(Map<String, dynamic>.from(e as Map)),
+              )
+              .toList(),
       playlistItemId: json['PlaylistItemId'] as String?,
     );
 
@@ -4650,17 +4731,17 @@ BaseItem _$BaseItemFromJson(Map json) => BaseItem(
   size: (json['Size'] as num?)?.toInt(),
   container: json['Container'] as String?,
   dateLastSaved: json['DateLastSaved'] as String?,
-  remoteTrailers: (json['RemoteTrailers'] as List<dynamic>?)
-      ?.map((e) => MediaUrl.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
+  remoteTrailers:
+      (json['RemoteTrailers'] as List<dynamic>?)
+          ?.map((e) => MediaUrl.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList(),
   isHD: json['IsHD'] as bool,
   isShortcut: json['IsShortcut'] as bool,
   shortcutPath: json['ShortcutPath'] as String?,
   width: (json['Width'] as num?)?.toInt(),
   height: (json['Height'] as num?)?.toInt(),
-  extraIds: (json['ExtraIds'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  extraIds:
+      (json['ExtraIds'] as List<dynamic>?)?.map((e) => e as String).toList(),
   supportsExternalTransfer: json['SupportsExternalTransfer'] as bool,
 );
 
@@ -4690,9 +4771,10 @@ Map<String, dynamic> _$QueueItemToJson(QueueItem instance) => <String, dynamic>{
 
 NewPlaylist _$NewPlaylistFromJson(Map json) => NewPlaylist(
   name: json['Name'] as String?,
-  ids: (json['Ids'] as List<dynamic>?)
-      ?.map((e) => const BaseItemIdConverter().fromJson(e as String))
-      .toList(),
+  ids:
+      (json['Ids'] as List<dynamic>?)
+          ?.map((e) => const BaseItemIdConverter().fromJson(e as String))
+          .toList(),
   userId: json['UserId'] as String?,
   mediaType: json['MediaType'] as String?,
   isPublic: json['IsPublic'] as bool?,
@@ -4817,9 +4899,12 @@ Map<String, dynamic> _$LyricMetadataToJson(LyricMetadata instance) =>
 LyricLine _$LyricLineFromJson(Map json) => LyricLine(
   text: json['Text'] as String?,
   start: (json['Start'] as num?)?.toInt(),
-  cues: (json['Cues'] as List<dynamic>?)
-      ?.map((e) => LyricLineCue.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
+  cues:
+      (json['Cues'] as List<dynamic>?)
+          ?.map(
+            (e) => LyricLineCue.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
 );
 
 Map<String, dynamic> _$LyricLineToJson(LyricLine instance) => <String, dynamic>{
@@ -4829,14 +4914,16 @@ Map<String, dynamic> _$LyricLineToJson(LyricLine instance) => <String, dynamic>{
 };
 
 LyricDto _$LyricDtoFromJson(Map json) => LyricDto(
-  metadata: json['Metadata'] == null
-      ? null
-      : LyricMetadata.fromJson(
-          Map<String, dynamic>.from(json['Metadata'] as Map),
-        ),
-  lyrics: (json['Lyrics'] as List<dynamic>?)
-      ?.map((e) => LyricLine.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
+  metadata:
+      json['Metadata'] == null
+          ? null
+          : LyricMetadata.fromJson(
+            Map<String, dynamic>.from(json['Metadata'] as Map),
+          ),
+  lyrics:
+      (json['Lyrics'] as List<dynamic>?)
+          ?.map((e) => LyricLine.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList(),
 );
 
 Map<String, dynamic> _$LyricDtoToJson(LyricDto instance) => <String, dynamic>{
@@ -4862,11 +4949,12 @@ Map<String, dynamic> _$LyricLineCueToJson(LyricLineCue instance) =>
 PlaybackInfoRequest _$PlaybackInfoRequestFromJson(Map json) =>
     PlaybackInfoRequest(
       userId: json['UserId'] as String?,
-      deviceProfile: json['DeviceProfile'] == null
-          ? null
-          : DeviceProfile.fromJson(
-              Map<String, dynamic>.from(json['DeviceProfile'] as Map),
-            ),
+      deviceProfile:
+          json['DeviceProfile'] == null
+              ? null
+              : DeviceProfile.fromJson(
+                Map<String, dynamic>.from(json['DeviceProfile'] as Map),
+              ),
       startTimeTicks: (json['StartTimeTicks'] as num?)?.toInt(),
       maxStreamingBitrate: (json['MaxStreamingBitrate'] as num?)?.toInt(),
       audioStreamIndex: (json['AudioStreamIndex'] as num?)?.toInt(),
@@ -4908,12 +4996,16 @@ Map<String, dynamic> _$PlaybackInfoRequestToJson(
 
 PlaylistInfo _$PlaylistInfoFromJson(Map json) => PlaylistInfo(
   openAccess: json['OpenAccess'] as bool?,
-  shares: (json['Shares'] as List<dynamic>?)
-      ?.map((e) => PlaylistUser.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
-  itemIds: (json['ItemIds'] as List<dynamic>?)
-      ?.map((e) => const BaseItemIdConverter().fromJson(e as String))
-      .toList(),
+  shares:
+      (json['Shares'] as List<dynamic>?)
+          ?.map(
+            (e) => PlaylistUser.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
+  itemIds:
+      (json['ItemIds'] as List<dynamic>?)
+          ?.map((e) => const BaseItemIdConverter().fromJson(e as String))
+          .toList(),
 );
 
 Map<String, dynamic> _$PlaylistInfoToJson(
@@ -4933,9 +5025,12 @@ Map<String, dynamic> _$PlaylistUserToJson(PlaylistUser instance) =>
     <String, dynamic>{'UserId': instance.userId, 'CanEdit': instance.canEdit};
 
 PlaylistUsers _$PlaylistUsersFromJson(Map json) => PlaylistUsers(
-  users: (json['Users'] as List<dynamic>?)
-      ?.map((e) => PlaylistUser.fromJson(Map<String, dynamic>.from(e as Map)))
-      .toList(),
+  users:
+      (json['Users'] as List<dynamic>?)
+          ?.map(
+            (e) => PlaylistUser.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
 );
 
 Map<String, dynamic> _$PlaylistUsersToJson(PlaylistUsers instance) =>

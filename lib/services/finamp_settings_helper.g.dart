@@ -876,8 +876,8 @@ extension FinampSetters on FinampSettingsHelper {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     if (finampSettingsTemp.genreItemSectionFilterChipOrder ==
         newGenreItemSectionFilterChipOrder) {
-      newGenreItemSectionFilterChipOrder = newGenreItemSectionFilterChipOrder
-          .toList();
+      newGenreItemSectionFilterChipOrder =
+          newGenreItemSectionFilterChipOrder.toList();
     }
     finampSettingsTemp.genreItemSectionFilterChipOrder =
         newGenreItemSectionFilterChipOrder;
@@ -911,8 +911,8 @@ extension FinampSetters on FinampSettingsHelper {
     FinampSettings finampSettingsTemp = FinampSettingsHelper.finampSettings;
     if (finampSettingsTemp.artistItemSectionFilterChipOrder ==
         newArtistItemSectionFilterChipOrder) {
-      newArtistItemSectionFilterChipOrder = newArtistItemSectionFilterChipOrder
-          .toList();
+      newArtistItemSectionFilterChipOrder =
+          newArtistItemSectionFilterChipOrder.toList();
     }
     finampSettingsTemp.artistItemSectionFilterChipOrder =
         newArtistItemSectionFilterChipOrder;
@@ -1777,9 +1777,10 @@ String _$finampSettingsHash() => r'298d6dcfef9bacbabf1c0d39f1b0c4155f511639';
 final finampSettingsProvider = StreamProvider<FinampSettings>.internal(
   finampSettings,
   name: r'finampSettingsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$finampSettingsHash,
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$finampSettingsHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

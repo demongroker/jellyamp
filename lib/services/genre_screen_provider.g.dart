@@ -110,9 +110,10 @@ class GenreCuratedItemsProvider
         ),
         from: genreCuratedItemsProvider,
         name: r'genreCuratedItemsProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$genreCuratedItemsHash,
+        debugGetCreateSourceHash:
+            const bool.fromEnvironment('dart.vm.product')
+                ? null
+                : _$genreCuratedItemsHash,
         dependencies: GenreCuratedItemsFamily._dependencies,
         allTransitiveDependencies:
             GenreCuratedItemsFamily._allTransitiveDependencies,

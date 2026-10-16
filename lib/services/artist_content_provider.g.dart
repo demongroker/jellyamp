@@ -117,9 +117,10 @@ class GetArtistTracksSectionProvider
          ),
          from: getArtistTracksSectionProvider,
          name: r'getArtistTracksSectionProvider',
-         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-             ? null
-             : _$getArtistTracksSectionHash,
+         debugGetCreateSourceHash:
+             const bool.fromEnvironment('dart.vm.product')
+                 ? null
+                 : _$getArtistTracksSectionHash,
          dependencies: GetArtistTracksSectionFamily._dependencies,
          allTransitiveDependencies:
              GetArtistTracksSectionFamily._allTransitiveDependencies,
@@ -323,9 +324,10 @@ class GetArtistAlbumsProvider
          ),
          from: getArtistAlbumsProvider,
          name: r'getArtistAlbumsProvider',
-         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-             ? null
-             : _$getArtistAlbumsHash,
+         debugGetCreateSourceHash:
+             const bool.fromEnvironment('dart.vm.product')
+                 ? null
+                 : _$getArtistAlbumsHash,
          dependencies: GetArtistAlbumsFamily._dependencies,
          allTransitiveDependencies:
              GetArtistAlbumsFamily._allTransitiveDependencies,
@@ -523,9 +525,10 @@ class GetPerformingArtistAlbumsProvider
          ),
          from: getPerformingArtistAlbumsProvider,
          name: r'getPerformingArtistAlbumsProvider',
-         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-             ? null
-             : _$getPerformingArtistAlbumsHash,
+         debugGetCreateSourceHash:
+             const bool.fromEnvironment('dart.vm.product')
+                 ? null
+                 : _$getPerformingArtistAlbumsHash,
          dependencies: GetPerformingArtistAlbumsFamily._dependencies,
          allTransitiveDependencies:
              GetPerformingArtistAlbumsFamily._allTransitiveDependencies,
@@ -722,9 +725,10 @@ class GetPerformingArtistTracksProvider
          ),
          from: getPerformingArtistTracksProvider,
          name: r'getPerformingArtistTracksProvider',
-         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-             ? null
-             : _$getPerformingArtistTracksHash,
+         debugGetCreateSourceHash:
+             const bool.fromEnvironment('dart.vm.product')
+                 ? null
+                 : _$getPerformingArtistTracksHash,
          dependencies: GetPerformingArtistTracksFamily._dependencies,
          allTransitiveDependencies:
              GetPerformingArtistTracksFamily._allTransitiveDependencies,
@@ -923,9 +927,10 @@ class GetArtistTracksProvider
          ),
          from: getArtistTracksProvider,
          name: r'getArtistTracksProvider',
-         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-             ? null
-             : _$getArtistTracksHash,
+         debugGetCreateSourceHash:
+             const bool.fromEnvironment('dart.vm.product')
+                 ? null
+                 : _$getArtistTracksHash,
          dependencies: GetArtistTracksFamily._dependencies,
          allTransitiveDependencies:
              GetArtistTracksFamily._allTransitiveDependencies,
