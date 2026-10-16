@@ -1,0 +1,56 @@
+name: Apply formatting + lock (CI)
+
+# Scratch maintainer utility: runs the SAME Flutter version as the healthcheck
+# (3.44.9) to reformat lib/ and regenerate pubspec.lock, then commits the result
+# back to the branch. Exists so the formatting/lock fix is produced by CI, not a
+# local build. Removed once the branch is clean.
+
+on:
+  push:
+    branches:
+      - fix/1.1.1-sha256-ci-hardening
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    # Guard against self-triggering loops: skip our own follow-up commit.
+    if: "!contains(github.event.head_commit.message, '[ci-format]')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.9'
+          channel: 'stable'
+
+      - name: Resolve dependencies (regenerate pubspec.lock)
+        run: flutter pub get
+
+      - name: Format lib/
+        run: dart format lib/
+
+      - name: Commit changes if any
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pubspec.lock lib/
+          if git diff --cached --quiet; then
+            echo "Nothing to change — already formatted and lock up to date."
+          else
+            git diff --cached --stat
+            git commit -m "style: dart format lib/ + refresh pubspec.lock (Flutter 3.44.9) [ci-format]"
+            git push
+          fi
