@@ -206,9 +206,11 @@ class __PlaybackProgressSliderState extends ConsumerState<_PlaybackProgressSlide
           widget.allowSeeking
               // ? _sliderThemeData.copyWith(
               ? SliderTheme.of(context).copyWith(
+                trackHeight: 5,
                 inactiveTrackColor: IconTheme.of(context).color!.withOpacity(0.35),
                 secondaryActiveTrackColor: IconTheme.of(context).color!.withOpacity(0.6),
-                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
+                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8, elevation: 2, pressedElevation: 4),
+                overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
               )
               // )
               // : _sliderThemeData.copyWith(

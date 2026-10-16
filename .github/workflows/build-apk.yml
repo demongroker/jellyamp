@@ -8,15 +8,16 @@ on:
     branches: [ features/*, main ]
   workflow_dispatch:
 
-# Needed by the "Create Draft Release" step (softprops/action-gh-release):
-# the default GITHUB_TOKEN is read-only, which fails release creation with
-# "Resource not accessible by integration" (403).
+# Read-only by default. Only the `release` job escalates to write, and it runs
+# exclusively on tag pushes — a branch/PR build can never touch a release.
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      apk_name: ${{ steps.filename.outputs.name }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -57,23 +58,15 @@ jobs:
         run: |
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
             # Tagged release: the in-app update checker looks for
-            # jellyamp-<version>.apk, so a tag build must use that name (not
-            # the branch-sha form).
+            # jellyamp-<version>.apk, so a tag build must use that name.
             VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}' | cut -d'+' -f1)
             echo "name=jellyamp-${VERSION}.apk" >> $GITHUB_OUTPUT
           else
-            # Branch build: keep the unique branch-sha name so drafts from
-            # different branches never collide.
+            # Branch build: unique branch-sha name, artifact only.
             BRANCH=$(echo "${GITHUB_REF#refs/heads/}" | sed 's|features/||' | tr '[:upper:]' '[:lower:]' | tr '/' '-')
             SHORT_SHA=$(git rev-parse --short HEAD)
             echo "name=jellyamp-${BRANCH}-${SHORT_SHA}.apk" >> $GITHUB_OUTPUT
           fi
-
-      - name: Determine version tag
-        id: version
-        run: |
-          VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}' | cut -d'+' -f1)
-          echo "tag=v${VERSION}" >> $GITHUB_OUTPUT
 
       - name: Rename APK
         run: |
@@ -91,7 +84,7 @@ jobs:
           cd build/app/outputs/flutter-apk
           HASH=$(awk '{print $1}' "${{ steps.filename.outputs.name }}.sha256")
           {
-            echo "JellyAmp ${{ steps.version.outputs.tag }}"
+            echo "JellyAmp ${GITHUB_REF_NAME}"
             echo ""
             # Consumed by the in-app update checker, which parses
             # 'SHA-256: <hex>' out of the release body to verify the download.
@@ -101,27 +94,38 @@ jobs:
           } > release-body.md
           cat release-body.md
 
-      - name: Upload APK + checksum
+      - name: Upload APK + checksum + body
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.filename.outputs.name }}
           path: |
             build/app/outputs/flutter-apk/${{ steps.filename.outputs.name }}
             build/app/outputs/flutter-apk/${{ steps.filename.outputs.name }}.sha256
+            build/app/outputs/flutter-apk/release-body.md
           retention-days: 30
 
-      # Feature branches -> draft release (agent publishes). Tag push ->
-      # published release, so a tag ships the signed APK + .sha256 directly.
-      - name: Create / update Release
-        if: startsWith(github.ref, 'refs/heads/features/') || startsWith(github.ref, 'refs/tags/')
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download built APK
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.apk_name }}
+          path: dist
+
+      - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.version.outputs.tag }}
-          name: Jellyamp ${{ steps.version.outputs.tag }}
-          draft: ${{ startsWith(github.ref, 'refs/heads/') }}
-          body_path: build/app/outputs/flutter-apk/release-body.md
+          tag_name: ${{ github.ref_name }}
+          name: Jellyamp ${{ github.ref_name }}
+          draft: false
+          body_path: dist/release-body.md
           files: |
-            build/app/outputs/flutter-apk/${{ steps.filename.outputs.name }}
-            build/app/outputs/flutter-apk/${{ steps.filename.outputs.name }}.sha256
+            dist/*.apk
+            dist/*.apk.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -161,17 +161,28 @@ class _UpdateBannerState extends ConsumerState<UpdateBanner> {
       if (!mounted) return;
 
       // Verify integrity before install (SHA-256 published with the release).
-      if (update.sha256 != null) {
-        setState(() => _message = 'Verifying package…');
-        final ok = await UpdateInstaller.verifySha256(file, update.sha256!);
-        if (!mounted) return;
-        if (!ok) {
-          setState(() {
-            _status = _UpdateStatus.idle;
-            _message = 'Update verification failed — the download does not match the release. Tap Update to retry.';
-          });
-          return;
-        }
+      // A release with no published checksum cannot be verified, so refuse to
+      // install it in-app rather than silently skipping the integrity check.
+      final expectedSha256 = update.sha256;
+      if (expectedSha256 == null) {
+        setState(() {
+          _status = _UpdateStatus.idle;
+          _message =
+              'This update has no checksum to verify, so it can’t be installed '
+              'in-app. Open the release page to update manually.';
+        });
+        return;
+      }
+
+      setState(() => _message = 'Verifying package…');
+      final ok = await UpdateInstaller.verifySha256(file, expectedSha256);
+      if (!mounted) return;
+      if (!ok) {
+        setState(() {
+          _status = _UpdateStatus.idle;
+          _message = 'Update verification failed — the download does not match the release. Tap Update to retry.';
+        });
+        return;
       }
 
       setState(() {

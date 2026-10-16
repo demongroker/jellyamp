@@ -30,26 +30,8 @@ TextTheme jellyAmpTextTheme(TextTheme base) => base.copyWith(
   labelLarge: base.labelLarge?.copyWith(fontWeight: FontWeight.w600, letterSpacing: 0.2),
 );
 
-/// 1.2 redesign — a clear, easy-to-grab seek bar with a visible rounded thumb,
-/// a chunky rounded track and a soft halo, replacing the hairline default.
-SliderThemeData _seekBarTheme(ColorScheme scheme) => SliderThemeData(
-  trackHeight: 6,
-  activeTrackColor: scheme.primary,
-  inactiveTrackColor: scheme.surfaceContainerHighest,
-  secondaryActiveTrackColor: scheme.primary.withValues(alpha: 0.35),
-  disabledActiveTrackColor: scheme.onSurface.withValues(alpha: 0.24),
-  disabledInactiveTrackColor: scheme.onSurface.withValues(alpha: 0.12),
-  thumbColor: scheme.primary,
-  overlayColor: scheme.primary.withValues(alpha: 0.16),
-  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8, elevation: 2, pressedElevation: 4),
-  overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
-  trackShape: const RoundedRectSliderTrackShape(),
-  // Snap the value bubble to the thumb, keep it readable over any artwork.
-  valueIndicatorColor: scheme.primary,
-  valueIndicatorTextStyle: TextStyle(color: scheme.onPrimary, fontWeight: FontWeight.w600),
-);
-
-/// Rounded, evenly-padded tiles — used by the library, downloads and queue lists.
+/// Applies the JellyAmp component system (cards/chips/buttons/inputs/sheets/
+/// lists/navigation).
 ListTileThemeData _listTileTheme(ColorScheme scheme) => ListTileThemeData(
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(jRadiusCard)),
   contentPadding: const EdgeInsets.symmetric(horizontal: jSpaceMd, vertical: jSpaceXs),
@@ -106,7 +88,6 @@ ThemeData applyJellyAmpTheme(ThemeData theme) {
       color: scheme.surfaceContainerLow,
     ),
     listTileTheme: _listTileTheme(scheme),
-    sliderTheme: _seekBarTheme(scheme),
     navigationBarTheme: _navBarTheme(scheme),
     navigationRailTheme: _navRailTheme(scheme),
     progressIndicatorTheme: ProgressIndicatorThemeData(
