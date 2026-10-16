@@ -56,7 +56,7 @@
       <caption>Album view on mobile</caption>
     </screenshot>
   </screenshots>
-  <launchable type="desktop-id">com.unicornsonlsd.finamp.desktop</launchable>
+  <launchable type="desktop-id">com.demongroker.jellyamp.desktop</launchable>
   <releases>
     <release version="0.9.25-beta" date="2026-08-01">
       <url
