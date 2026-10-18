@@ -6,6 +6,19 @@ Tags are semver (`vX.Y.Z`) — the in-app update checker parses them.
 
 ## [Unreleased]
 
+## [1.2.3] - 2026-10-18
+
+### Fixed
+- **Library requests failed right after login over plain http.** Logging in
+  worked, then every library GET returned "Could not fetch the response for
+  GET" / "Error loading items" / "Connection interrupted, pausing downloads".
+  The access token is stored in secure storage and blanked in Isar by design;
+  the foreground isolate keeps it cached in memory, but the background request
+  isolate started with an empty cache and read the blanked record, so it built
+  an `Authorization` header with no `Token` and every request 401'd.
+  `setAuthHeader()` now hydrates tokens from secure storage first, and the
+  worker isolate re-runs it when the current user changes.
+
 ## [1.2.2] - 2026-10-17
 ### Fixed
 - **Updater**: installing in-app now requires a published SHA-256. A release
