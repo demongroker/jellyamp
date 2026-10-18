@@ -6,6 +6,28 @@ Tags are semver (`vX.Y.Z`) — the in-app update checker parses them.
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-10-17
+### Fixed
+- **Updater**: installing in-app now requires a published SHA-256. A release
+  with no checksum line is refused with a clear message instead of installing
+  unverified; the mismatch block is unchanged.
+- **Release workflow**: branch pushes can no longer target a `v*` release —
+  only tag pushes create/publish one. `contents: write` is scoped to the
+  tag-only release jobs, so build jobs run read-only.
+- **Desktop assets**: Windows `.msix`/`.zip` now get matching `.sha256` files
+  on tag builds, and the release body always carries the `SHA-256:` line the
+  in-app updater parses.
+- **Version string**: app reports 1.2.2, so the updater stops offering the
+  already-installed build.
+
+## [1.2.1] - 2026-10-17
+### Changed
+- **Branding**: desktop outputs and Linux bundle files renamed `finamp` →
+  `jellyamp` — asset names `jellyamp-v<version>-linux-<arch>.tar.gz`,
+  `Jellyamp-v<version>-Windows.msix/.zip`, plus the `.desktop` file and the
+  metainfo id. Finamp credit and the MPL-2.0 licence are unchanged.
+- v1.2.0 release `target_commitish` corrected to `features/jellyamp-1.1`.
+
 ## [1.2.0] - 2026-10-16
 ### Added
 - **CI**: every APK build now publishes a matching `<apk>.sha256` alongside the
