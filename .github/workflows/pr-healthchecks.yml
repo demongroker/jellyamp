@@ -38,6 +38,8 @@ jobs:
           dart format --output=none --set-exit-if-changed lib/
   check-codegen:
     name: Ensure correct code generation
+    # Guard #3: regenerates .g.dart and fails if the committed files differ,
+    # i.e. generated code is stale after build_runner.
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

@@ -23,6 +23,21 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Guard #1 (tag vs pubspec). Stops the class of bug where a release is
+      # tagged vX.Y.Z while pubspec still says something else — the app then
+      # keeps offering the update it just installed.
+      - name: Verify tag matches pubspec version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME#v}"
+          VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}' | cut -d'+' -f1)
+          echo "tag=$TAG  pubspec=$VERSION"
+          if [ "$TAG" != "$VERSION" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match pubspec version $VERSION"
+            exit 1
+          fi
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -129,3 +144,25 @@ jobs:
             dist/*.apk.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Guard #2 (release contract). The in-app updater is only as good as the
+      # release it reads: it needs a `SHA-256:` line in the body and an asset
+      # literally named jellyamp-<version>.apk. Fail the tag build if either
+      # is missing instead of shipping a release the updater can't use.
+      - name: Verify release contract
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          VERSION="${GITHUB_REF_NAME#v}"
+          BODY=$(gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --json body -q .body)
+          if ! printf '%s' "$BODY" | grep -q 'SHA-256:'; then
+            echo "::error::Release body has no 'SHA-256:' line"; exit 1
+          fi
+          ASSETS=$(gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --json assets -q '.assets[].name')
+          for want in "jellyamp-${VERSION}.apk" "jellyamp-${VERSION}.apk.sha256"; do
+            if ! printf '%s\n' "$ASSETS" | grep -qx "$want"; then
+              echo "::error::Missing release asset: $want"; exit 1
+            fi
+          done
+          echo "Release contract OK for $GITHUB_REF_NAME"
