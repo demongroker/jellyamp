@@ -10,6 +10,15 @@ You are looking at **[demongroker/jellyamp](https://github.com/demongroker/jelly
 
 The rest of this file is the original Finamp contributor guide (mostly still accurate for Flutter setup).
 
+## Before you fix a bug or touch the UI
+
+**Read [`docs/FEATURE_MAP.md`](./docs/FEATURE_MAP.md) first.** It maps every
+screen, menu, button, setting, gesture and shortcut to the file/widget that
+implements it, so you land in the right file instead of guessing.
+
+**If your change adds, renames, moves or removes any user-facing control,
+update `docs/FEATURE_MAP.md` in the same PR.** A stale map is worse than none.
+
 ---
 
 # Contributing to Finamp (upstream guide)
