@@ -26,6 +26,12 @@ class FinampUserHelper {
   }
 
   Future<void> setAuthHeader() async {
+    // The access token lives in secure storage, and saveUser() blanks the copy
+    // in Isar on purpose. The foreground isolate keeps it in _accessTokenCache,
+    // but a background isolate starts with an empty cache — so without this
+    // hydration it builds an Authorization header with no Token and every
+    // request 401s (login works, library GETs fail).
+    await hydrateAccessTokens();
     authorizationHeader = await jellyfin_api.getAuthHeader(deviceId: deviceId);
   }
 
