@@ -141,3 +141,6 @@ app.*.map.json
 integration_test/testing
 
 # MSIX signing certs (removed P1 #4) — *.pfx / *.p12 / *.cer covered above
+
+# local benchmark artefacts
+benchmark/results/
