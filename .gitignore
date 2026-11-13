@@ -144,3 +144,7 @@ integration_test/testing
 
 # local benchmark artefacts
 benchmark/results/
+
+# Build-time network config: real Jellyfin hosts live here locally and are
+# injected by android/app/build.gradle — never commit them.
+android/nsc-hosts.local

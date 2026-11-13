@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  JellyAmp network security policy.
-  Cleartext (http) is blocked by default and only permitted for the owner's
-  own Jellyfin endpoints. The hostnames/IPs below are PLACEHOLDERS — replace
-  them with your real Jellyfin host(s) when building for yourself, and keep
-  your private addresses out of this public repository.
+  JellyAmp network security policy — COMMITTED TEMPLATE ONLY.
+
+  Cleartext (http) is blocked by default. The only hosts allowed in this file
+  are loopback; the owner's real LAN / Tailscale Jellyfin hosts are INJECTED AT
+  BUILD TIME and never committed:
+
+    * CI:      the `NSC_HOSTS` repository secret (comma/space separated hosts)
+               is passed to `flutter build`; android/app/build.gradle generates
+               an overlay copy of this file for the build type with those hosts
+               added to the cleartext domain-config.
+    * Locally: android/nsc-hosts.local (gitignored, one host per line, `#`
+               comments allowed) is read by the same Gradle task.
+
+  With no hosts configured (fresh clone, fork, PR from a stranger) this file is
+  used as-is: cleartext stays off and only loopback is exempted, so the policy
+  can never leak a private address into the public repository.
 -->
 <network-security-config>
   <base-config cleartextTrafficPermitted="false">
@@ -14,11 +25,8 @@
     </trust-anchors>
   </base-config>
 
-  <!-- Owner Jellyfin hosts — allow plain http here only (https always works). -->
+  <!-- Loopback only: a Jellyfin running on this same device. -->
   <domain-config cleartextTrafficPermitted="true">
-    <domain includeSubdomains="true">jellyfin.example.com</domain>
-    <domain includeSubdomains="false">192.168.1.100</domain>
-    <domain includeSubdomains="false">100.100.100.100</domain>
     <domain includeSubdomains="false">localhost</domain>
     <domain includeSubdomains="false">127.0.0.1</domain>
   </domain-config>

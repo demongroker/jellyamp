@@ -93,6 +93,76 @@ android {
     }
 }
 
+// ---------------------------------------------------------------------------
+// Build-time Jellyfin host injection (③). The committed
+// src/main/res/xml/network_security_config.xml carries loopback only; real LAN
+// and Tailscale hosts arrive from the CI `NSC_HOSTS` secret or the gitignored
+// android/nsc-hosts.local, are written into a generated res/ overlay for the
+// build type, and are NEVER committed. No hosts configured -> template as-is.
+// The host values are deliberately never logged (CI logs are public).
+// ---------------------------------------------------------------------------
+def nscEnv = System.getenv('NSC_HOSTS')
+def nscLocalFile = rootProject.file('nsc-hosts.local')
+def nscSource = 'none'
+def nscHosts = []
+if (nscEnv != null && !nscEnv.trim().isEmpty()) {
+    nscSource = 'NSC_HOSTS env'
+    nscHosts = nscEnv.split(/[,\s]+/).collect { it.trim() }
+} else if (nscLocalFile.exists()) {
+    nscSource = 'nsc-hosts.local'
+    nscHosts = nscLocalFile.readLines().collect { it.replaceAll(/#.*$/, '').trim() }
+}
+nscHosts = nscHosts
+    .findAll { it && it ==~ /[A-Za-z0-9.\-:_]+/ }
+    .unique()
+    .findAll { !(it in ['localhost', '127.0.0.1', '::1']) }
+
+if (!nscHosts.isEmpty()) {
+    def nscGenRes = "${buildDir}/generated/nsc/res"
+    def nscOutFile = file("${nscGenRes}/xml/network_security_config.xml")
+    def nscTemplate = file('src/main/res/xml/network_security_config.xml')
+    def nscHostsForTask = nscHosts
+    def nscTask = tasks.register('generateNetworkSecurityConfig') {
+        inputs.property('hostCount', nscHostsForTask.size())
+        // hashed, not raw: Gradle prints input values in --info/--debug logs and
+        // action logs are public, so the host list must never appear there.
+        inputs.property('hostsDigest', nscHostsForTask.join(',').md5())
+        inputs.file(nscTemplate)
+        outputs.file(nscOutFile)
+        doLast {
+            def anchor = '    <domain includeSubdomains="false">127.0.0.1</domain>'
+            def text = nscTemplate.getText('UTF-8')
+            if (!text.contains(anchor)) {
+                throw new GradleException(
+                    'generateNetworkSecurityConfig: cleartext anchor missing from ' +
+                    'src/main/res/xml/network_security_config.xml')
+            }
+            def extra = nscHostsForTask.collect { h ->
+                if (h.startsWith('*.')) {
+                    "    <domain includeSubdomains=\"true\">${h.substring(2)}</domain>"
+                } else {
+                    "    <domain includeSubdomains=\"false\">${h}</domain>"
+                }
+            }.join('\n')
+            nscOutFile.parentFile.mkdirs()
+            nscOutFile.text = text.replace(anchor, anchor + '\n' + extra)
+        }
+    }
+    // Overlay resolution: a build-type res dir outranks src/main, so the
+    // generated copy replaces the template for that variant (no duplicate).
+    android.sourceSets.release.res.srcDirs += nscGenRes
+    android.sourceSets.debug.res.srcDirs += nscGenRes
+    android.sourceSets.profile.res.srcDirs += nscGenRes
+    tasks.configureEach { t ->
+        if (t.name.startsWith('merge') && t.name.endsWith('Resources')) {
+            t.dependsOn nscTask
+        }
+    }
+    logger.lifecycle("JellyAmp: injecting ${nscHosts.size()} cleartext host(s) from ${nscSource}")
+} else {
+    logger.lifecycle('JellyAmp: no NSC hosts configured — cleartext stays loopback-only')
+}
+
 flutter {
     source '../..'
 }

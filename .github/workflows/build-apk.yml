@@ -53,6 +53,26 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      # Static analysis gate. Errors fail the job; infos/warnings are reported
+      # but not fatal until this fork's lint baseline is clean (④).
+      - name: Analyze (flutter analyze)
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      # P0.5 regression suite (benchmark/regression_*_test.dart): auth
+      # persistence, connectivity thresholds, download persistence, download
+      # state machine, search filter, update checker. These are plain VM tests —
+      # no emulator needed — so they run on every push/PR before the APK build.
+      - name: Regression tests (benchmark/regression_*)
+        run: |
+          set -euo pipefail
+          flutter test \
+            benchmark/regression_auth_persistence_test.dart \
+            benchmark/regression_connectivity_threshold_test.dart \
+            benchmark/regression_download_persistence_test.dart \
+            benchmark/regression_download_state_machine_test.dart \
+            benchmark/regression_search_filter_test.dart \
+            benchmark/regression_update_checker_test.dart
+
       - name: Decode release keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/demongroker-finamp.jks
 
@@ -66,6 +86,11 @@ jobs:
           EOF
 
       - name: Build APK (arm64)
+        # NSC_HOSTS carries the owner's Jellyfin hosts; android/app/build.gradle
+        # injects them into the network-security-config at build time, so no
+        # private address is ever committed to this public repo (③).
+        env:
+          NSC_HOSTS: ${{ secrets.NSC_HOSTS }}
         run: flutter build apk --release --target-platform android-arm64
 
       - name: Determine APK filename
@@ -118,6 +143,17 @@ jobs:
             build/app/outputs/flutter-apk/${{ steps.filename.outputs.name }}.sha256
             build/app/outputs/flutter-apk/release-body.md
           retention-days: 30
+
+      # Signing material must not outlive the build step, whatever happened
+      # above. The runner is ephemeral, but a failed build keeps the workspace
+      # around for the "re-run failed jobs" path and for artifact/debug uploads.
+      - name: Remove decoded keystore and key.properties
+        if: always()
+        run: |
+          rm -f android/app/demongroker-finamp.jks android/key.properties
+          if ls android/app/*.jks android/key.properties >/dev/null 2>&1; then
+            echo "::error::signing material survived the build"; exit 1
+          fi
 
   release:
     needs: build
