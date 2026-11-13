@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+
+import 'resumable_download.dart';
 
 /// Downloads and installs a Jellyamp APK update in-app.
 class UpdateInstaller {
@@ -11,42 +12,54 @@ class UpdateInstaller {
 
   static const MethodChannel _channel = MethodChannel('com.unicornsonlsd.finamp/update_installer');
 
+  // Borrowed names, kept so callers/tests keep compiling.
+  static const Duration defaultStallTimeout = ResumableDownload.defaultStallTimeout;
+  static const int defaultMaxAttempts = ResumableDownload.defaultMaxAttempts;
+
+  static Future<File> _targetFile() async {
+    final dir = await getTemporaryDirectory();
+    return File('${dir.path}/jellyamp-update.apk');
+  }
+
   /// Downloads the APK at [url] to app-private cache, reporting [onProgress]
   /// as a fraction in [0, 1].
-  static Future<File> downloadApk(String url, {void Function(double progress)? onProgress}) async {
-    final dir = await getTemporaryDirectory();
-    final file = File('${dir.path}/jellyamp-update.apk');
+  ///
+  /// Resumable and stall-tolerant (see [ResumableDownload]): a stall aborts the
+  /// transfer after [stallTimeout] with no bytes instead of hanging on
+  /// "Downloading… 43 %" forever, and a retry — in this call or a later tap —
+  /// continues from the bytes already on disk instead of restarting the APK.
+  static Future<File> downloadApk(
+    String url, {
+    void Function(double progress)? onProgress,
+    Duration stallTimeout = defaultStallTimeout,
+    int maxAttempts = defaultMaxAttempts,
+    bool resume = true,
+  }) async {
+    final file = await _targetFile();
+    return ResumableDownload.toFile(
+      Uri.parse(url),
+      destination: file,
+      onProgress: onProgress,
+      stallTimeout: stallTimeout,
+      maxAttempts: maxAttempts,
+      resume: resume,
+    );
+  }
 
-    final client = http.Client();
-    try {
-      final request = http.Request('GET', Uri.parse(url));
-      final response = await client.send(request);
-
-      if (response.statusCode != 200) {
-        throw Exception('Download failed: HTTP ${response.statusCode}');
-      }
-
-      final total = response.contentLength ?? 0;
-      final sink = file.openWrite();
-      var received = 0;
-
-      await for (final chunk in response.stream) {
-        sink.add(chunk);
-        received += chunk.length;
-        if (total > 0) onProgress?.call(received / total);
-      }
-      await sink.close();
-
-      return file;
-    } finally {
-      client.close();
-    }
+  /// Removes any half-downloaded update (used when a checksum fails, so the
+  /// next attempt cannot resume from bytes known to be wrong).
+  static Future<void> discardPartialDownload() async {
+    final file = await _targetFile();
+    await ResumableDownload.discardPartial(file);
+    if (await file.exists()) await file.delete();
   }
 
   /// Computes the SHA-256 hex digest of [file].
   static Future<String> sha256Of(File file) async {
-    final bytes = await file.readAsBytes();
-    return sha256.convert(bytes).toString();
+    // Streamed, not readAsBytes: the APK is ~40–110 MB and reading it whole
+    // doubles peak memory on a phone that is installing an update.
+    final digest = await sha256.bind(file.openRead()).first;
+    return digest.toString();
   }
 
   /// Returns true when [file]'s SHA-256 matches [expectedHex] (case-insensitive).

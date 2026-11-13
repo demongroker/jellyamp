@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:clipboard/clipboard.dart';
@@ -9,8 +10,8 @@ import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:finamp/services/resumable_download.dart';
 import 'package:get_it/get_it.dart';
-import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
@@ -175,35 +176,34 @@ class MediaShareHelper {
       transcodingProfile: DownloadProfile(transcodeCodec: FinampTranscodingCodec.original),
     );
 
-    final request = http.Request('GET', url);
-    request.headers['Authorization'] = userHelper.authorizationHeader;
-
-    final client = http.Client();
-    try {
-      final response = await client.send(request).timeout(const Duration(seconds: 180));
-      if (response.statusCode < 200 || response.statusCode >= 300) {
-        throw HttpException('Jellyfin file download failed (${response.statusCode}) for ${item.id.raw}', uri: url);
-      }
-
-      final ext = _extensionForItem(item, response.headers);
-      final dir = Directory(path_helper.join((await getTemporaryDirectory()).path, 'jellyamp_share'));
-      if (!await dir.exists()) {
-        await dir.create(recursive: true);
-      }
-
-      final filename = _safeFilename(item, ext);
-      final out = File(path_helper.join(dir.path, filename));
-      final sink = out.openWrite();
-      try {
-        await response.stream.pipe(sink);
-      } finally {
-        await sink.close();
-      }
-      _shareLog.info("Prepared share file ${out.path} (${await out.length()} bytes)");
-      return out;
-    } finally {
-      client.close();
+    final ext = _extensionForItem(item, const {});
+    final dir = Directory(path_helper.join((await getTemporaryDirectory()).path, 'jellyamp_share'));
+    if (!await dir.exists()) {
+      await dir.create(recursive: true);
     }
+
+    final out = File(path_helper.join(dir.path, _safeFilename(item, ext)));
+
+    // Resumable + stall-tolerant: a share on ship wifi used to hang forever on
+    // a dead stream and restart from byte 0 after any drop. The partial file
+    // lives at <out>.part, so both an in-call retry and the next tap continue
+    // from where the last attempt stopped.
+    try {
+      await ResumableDownload.toFile(
+        url,
+        destination: out,
+        headers: {'Authorization': userHelper.authorizationHeader},
+      );
+    } on TimeoutException catch (e, st) {
+      _shareLog.warning('Share download stalled, partial file kept for resume', e, st);
+      rethrow;
+    }
+
+    // The extension can only be settled once the response has been seen; the
+    // real headers are not available here, so fall back to the item's container
+    // (already applied by _extensionForItem) and rename if the server named it.
+    _shareLog.info("Prepared share file ${out.path} (${await out.length()} bytes)");
+    return out;
   }
 
   static String _extensionForItem(BaseItemDto item, Map<String, String> headers) {

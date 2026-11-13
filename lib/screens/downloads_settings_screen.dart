@@ -9,9 +9,11 @@ import 'package:finamp/screens/downloads_location_screen.dart';
 import 'package:finamp/services/downloads_service.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
+import 'package:finamp/services/network_presets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 
 class DownloadsSettingsScreen extends StatefulWidget {
   const DownloadsSettingsScreen({super.key});
@@ -41,6 +43,7 @@ class _DownloadsSettingsScreenState extends State<DownloadsSettingsScreen> {
             onTap: () => Navigator.of(context).pushNamed(DownloadsLocationScreen.routeName),
           ),
           if (Platform.isIOS || Platform.isAndroid) const RequireWifiSwitch(),
+          const NetworkPresetTile(),
           const SyncFavoritesSwitch(),
           ListTile(
             // TODO real UI for this
@@ -313,6 +316,45 @@ class _BufferSizeListTileState extends State<DownloadSizeWarningCutoffTile> {
           },
         ),
       ),
+    );
+  }
+}
+
+/// One-tap "At sea / low-data" preset (⑤): sets the download codec, the
+/// transcode bitrate and the audio buffer together, and puts the previous
+/// values back when switched off.
+class NetworkPresetTile extends StatelessWidget {
+  const NetworkPresetTile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final preset = NetworkPresets.atSea;
+    return ValueListenableBuilder(
+      valueListenable: FinampSettingsHelper.finampSettingsListener,
+      builder: (context, Box<FinampSettings> box, _) {
+        final active = NetworkPresets.isActive(preset);
+        return ListTile(
+          leading: const Icon(Icons.sailing),
+          title: Text(preset.label),
+          subtitle: Text(preset.description),
+          trailing: Switch(
+            value: active,
+            onChanged: (enabled) async {
+              if (enabled) {
+                await NetworkPresets.apply(preset);
+                if (context.mounted) {
+                  GlobalSnackbar.message((ctx) => 'At sea / low-data mode on.');
+                }
+              } else {
+                await NetworkPresets.revert(preset);
+                if (context.mounted) {
+                  GlobalSnackbar.message((ctx) => 'At sea / low-data mode off.');
+                }
+              }
+            },
+          ),
+        );
+      },
     );
   }
 }

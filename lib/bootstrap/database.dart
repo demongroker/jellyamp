@@ -42,6 +42,9 @@ Future<void> setupHive() async {
     Hive.openBox<RawThemeResult>("CachedThemes", path: dir.path),
     Hive.openBox<String>("UpdateState", path: dir.path),
     Hive.openBox<String>("LastServerUrl", path: dir.path),
+    // Previous codec/bitrate/buffer, JSON per network preset id, so a preset can
+    // be reverted exactly (see lib/services/network_presets.dart).
+    Hive.openBox<String>("NetworkPresetBackup", path: dir.path),
   ]);
 
   // If the settings box is empty, we add an initial settings value here.

@@ -178,6 +178,10 @@ class _UpdateBannerState extends ConsumerState<UpdateBanner> {
       final ok = await UpdateInstaller.verifySha256(file, expectedSha256);
       if (!mounted) return;
       if (!ok) {
+        // Never resume from bytes that failed the checksum — a resumed file
+        // built on them would fail the same way forever.
+        await UpdateInstaller.discardPartialDownload();
+        if (!mounted) return;
         setState(() {
           _status = _UpdateStatus.idle;
           _message = 'Update verification failed — the download does not match the release. Tap Update to retry.';
