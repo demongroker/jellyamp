@@ -6,6 +6,39 @@ Tags are semver (`vX.Y.Z`) — the in-app update checker parses them.
 
 ## [Unreleased]
 
+## [1.2.5] - 2026-11-13
+
+### Security
+- **`MediaItemContentProvider` no longer reads or fetches anything it is asked to.** The provider is
+  exported, so any app on the phone could make it open an app-private file or fetch an arbitrary URL
+  from Jellyamp's network identity. A local path must now resolve inside an allowed media directory
+  (`files/images`, `files/downloads`, `cache/images`, the app's external `images`/`downloads`), and a
+  remote URL must be `https` unless the host is an explicit private/loopback literal for a LAN
+  Jellyfin; remote reads are capped at 16 MB with connect/read timeouts.
+
+### Added
+- **At sea / low-data mode** (Downloads settings): one switch that sets Opus 128 kbps (AAC on iOS) and
+  a 90 s buffer, and puts your previous codec/bitrate/buffer back when switched off.
+- **Resumable, stall-tolerant downloads** for the in-app APK update and for sharing an original audio
+  file: bytes land in a `.part` file, a retry resumes with an HTTP `Range` request instead of
+  restarting, and a stream that stops sending bytes aborts after 30 s instead of hanging on
+  "Downloading… 43 %" forever. A server that ignores `Range` restarts the file cleanly, and a failed
+  checksum deletes the partial file so it can never be resumed from.
+
+### Changed
+- **CI now gates on `flutter analyze` and the `benchmark/regression_*` suite** before building the
+  APK, so a release cannot ship on a red test. The decoded keystore and `key.properties` are removed
+  with `if: always()`, and the build fails if they survive.
+- **Jellyfin hosts are injected at build time** from the `NSC_HOSTS` CI secret (or a gitignored
+  `android/nsc-hosts.local`) instead of being committed; the checked-in network-security-config
+  contains loopback only.
+
+### Fixed
+- The `regression_auth_persistence` test asserted that the token was still absent after
+  `setAuthHeader()`, but that call hydrates from secure storage on purpose (a background isolate would
+  otherwise send an empty `Token` and 401). The test now asserts the real contract: the header carries
+  the vaulted token.
+
 ## [1.2.3] - 2026-10-18
 
 ### Fixed
