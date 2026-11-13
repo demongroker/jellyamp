@@ -150,23 +150,35 @@ void main() {
   });
 
   test('auth persists across app restart and tokens hydrate from secure storage', () async {
+    // Restart, first half: nothing but the vault may hold the token. This is the
+    // security-relevant contract, and it is checked on the DB, not on a live
+    // object that may hydrate at any moment.
+    final persisted = await isar.finampUsers.get(0);
+    expect(persisted!.accessToken, isEmpty, reason: 'no plaintext token in Isar after restart');
+
     // "Restart": a brand-new helper on the same DB (fresh instance, same Isar).
     final helper = FinampUserHelper(deviceId: 'dev-1');
+    // setAuthHeader() hydrates from the vault on purpose (finamp_user_helper.dart:
+    // a background isolate starts with an empty token cache and would otherwise
+    // send an Authorization header with no Token and 401 every request), so the
+    // contract is NOT "the token is still absent after this call" — it is "the
+    // header carries the vaulted token".
     await helper.setAuthHeader();
     expect(helper.isUsersEmpty, isFalse, reason: 'user row survived');
     expect(helper.currentUser!.id, 'user-1', reason: 'auth persistence');
+    expect(helper.currentUser!.accessToken, 'secret-token', reason: 'hydrated from the vault');
+    expect(storage['finamp_accessToken_user-1'], 'secret-token', reason: 'vault still authoritative');
 
-    // Before hydration the token is not in memory.
-    expect(helper.currentUser!.accessToken, isEmpty);
-
+    // Hydration is idempotent: a second pass must not blank or duplicate it.
     await helper.hydrateAccessTokens();
-    expect(helper.currentUser!.accessToken, 'secret-token', reason: 'token hydrated from vault');
+    expect(helper.currentUser!.accessToken, 'secret-token');
 
     // A saved queue / playback state uses the auth header for server reconnect;
-    // it must not be empty and must carry the user id.
+    // it must not be empty and must carry the user id AND the vaulted token.
     final header = helper.authorizationHeader;
     expect(header, startsWith('MediaBrowser '));
     expect(header, contains('UserId="user-1"'));
+    expect(header, contains('Token="secret-token"'), reason: 'header must carry the vaulted token');
   });
 
   test('removeUser clears the current user and the stored token', () async {
