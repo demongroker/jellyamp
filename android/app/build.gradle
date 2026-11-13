@@ -153,10 +153,17 @@ if (!nscHosts.isEmpty()) {
     android.sourceSets.release.res.srcDirs += nscGenRes
     android.sourceSets.debug.res.srcDirs += nscGenRes
     android.sourceSets.profile.res.srcDirs += nscGenRes
-    tasks.configureEach { t ->
-        if (t.name.startsWith('merge') && t.name.endsWith('Resources')) {
-            t.dependsOn nscTask
-        }
+    // Every AGP task that reads the res sources must wait for the file to exist:
+    // the merge, the source-set path mapping and the navigation-resource
+    // processing all consume the res dirs, and Gradle 8 fails the build with an
+    // implicit-dependency validation error if a generated output is read by a
+    // task that does not depend on its producer.
+    tasks.matching { t ->
+        t.name.contains('SourceSetPaths') ||
+            t.name.contains('Resources') ||
+            t.name == 'preBuild'
+    }.configureEach { t ->
+        t.dependsOn nscTask
     }
     logger.lifecycle("JellyAmp: injecting ${nscHosts.size()} cleartext host(s) from ${nscSource}")
 } else {
