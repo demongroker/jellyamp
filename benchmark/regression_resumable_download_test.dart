@@ -45,23 +45,24 @@ void main() {
         HttpHeaders.contentRangeHeader,
         'bytes $offset-${payload.length - 1}/${payload.length}',
       );
-      request.response.add(body.sublist(0, 4096));
+
+      // Detach BEFORE writing any body so the bytes on the wire are exactly what
+      // this test decides to send (a short body on a full-length 200 is the
+      // faithful "connection dropped mid-transfer" case).
+      final socket = await request.response.detachSocket(writeHeaders: true);
 
       if (requests == 1) {
-        // First attempt: promise the whole asset, deliver 4 KB, then close the
-        // response early — the client sees a truncated body, exactly what a
-        // dropped ship-wifi link looks like.
-        await request.response.flush();
-        try {
-          await request.response.close();
-        } catch (_) {
-          // close() rejects a short write; the connection is already gone.
-        }
+        // First attempt: headers, a taste of the body, then a hard connection
+        // reset — exactly what a dropped ship-wifi link looks like.
+        socket.add(body.sublist(0, 4096));
+        await socket.flush();
+        socket.destroy();
         return;
       }
 
-      request.response.add(body.sublist(4096));
-      await request.response.close();
+      socket.add(body);
+      await socket.flush();
+      await socket.close();
     });
 
     final destination = File('${tempDir.path}/resumed.bin');
@@ -85,14 +86,15 @@ void main() {
 
   test('a stalled stream fails fast instead of hanging, and keeps .part for the next tap', () async {
     final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
-    var closed = false;
+    Socket? held;
     server.listen((request) async {
       request.response.statusCode = HttpStatus.ok;
       request.response.headers.contentLength = 1024;
-      request.response.add(Uint8List.fromList(List<int>.filled(10, 7)));
-      await request.response.flush();
-      // Never send anything else and never close: a dead-but-open link.
-      closed = true;
+      // Detach so the 10 bytes go on the wire immediately, then simply never
+      // send the rest and never close: a dead-but-open link.
+      held = await request.response.detachSocket(writeHeaders: true);
+      held!.add(Uint8List.fromList(List<int>.filled(10, 7)));
+      await held!.flush();
     });
 
     final destination = File('${tempDir.path}/stalled.bin');
@@ -108,11 +110,12 @@ void main() {
     );
 
     final part = File('${destination.path}.part');
-    expect(closed, isTrue);
+    expect(held, isNotNull);
     expect(part.existsSync(), isTrue, reason: 'partial bytes are the resume point; they must survive');
     expect(part.lengthSync(), 10);
     expect(destination.existsSync(), isFalse, reason: 'a stalled transfer must never produce a "complete" file');
 
+    held!.destroy();
     await server.close(force: true);
   });
 
@@ -125,17 +128,16 @@ void main() {
       requests++;
       request.response.statusCode = HttpStatus.ok;
       request.response.headers.contentLength = payload.length;
-      request.response.add(requests == 1 ? payload.sublist(0, 4096) : payload);
+      final socket = await request.response.detachSocket(writeHeaders: true);
       if (requests == 1) {
-        await request.response.flush();
-        try {
-          await request.response.close();
-        } catch (_) {
-          // short write: the client already saw the connection drop
-        }
+        socket.add(payload.sublist(0, 4096));
+        await socket.flush();
+        socket.destroy();
         return;
       }
-      await request.response.close();
+      socket.add(payload);
+      await socket.flush();
+      await socket.close();
     });
 
     final destination = File('${tempDir.path}/restarted.bin');
