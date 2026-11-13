@@ -248,6 +248,7 @@ class SearchResults {
     this.tracks = const [],
     this.playlists = const [],
     this.genres = const [],
+    this.albumSubtitles = const {},
   });
 
   final List<BaseItemDto> artists;
@@ -255,6 +256,11 @@ class SearchResults {
   final List<BaseItemDto> tracks;
   final List<BaseItemDto> playlists;
   final List<BaseItemDto> genres;
+
+  /// Album id -> label for rows that share a title with another, different
+  /// album (`1989 · 11 tracks · On device`), so two "Skid Row" rows can be told
+  /// apart. Empty for the common case.
+  final Map<String, String> albumSubtitles;
 
   bool get isEmpty => artists.isEmpty && albums.isEmpty && tracks.isEmpty && playlists.isEmpty && genres.isEmpty;
 

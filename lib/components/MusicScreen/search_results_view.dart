@@ -55,7 +55,7 @@ class SearchResultsView extends ConsumerWidget {
         return ListView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           children: [
-            for (final (title, items) in sections) ...[
+            for (final (title, items) in sections) ... [
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 18, 16, 4),
                 child: Text(
@@ -65,7 +65,11 @@ class SearchResultsView extends ConsumerWidget {
                   ).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
-              _SectionItems(items: items, previewCount: _previewCount),
+              _SectionItems(
+                items: items,
+                previewCount: _previewCount,
+                subtitles: title == l10n.albums ? results.albumSubtitles : const {},
+              ),
             ],
             const SizedBox(height: 16),
           ],
@@ -78,10 +82,14 @@ class SearchResultsView extends ConsumerWidget {
 /// Renders a section's items, previewing [previewCount] rows with a
 /// "View all N" expander for the rest.
 class _SectionItems extends StatefulWidget {
-  const _SectionItems({required this.items, required this.previewCount});
+  const _SectionItems({required this.items, required this.previewCount, this.subtitles = const {}});
 
   final List<BaseItemDto> items;
   final int previewCount;
+
+  /// Item id -> caption rendered above the row (used to tell same-title albums
+  /// apart: `1989 · 11 tracks · On device`).
+  final Map<String, String> subtitles;
 
   @override
   State<_SectionItems> createState() => _SectionItemsState();
@@ -99,7 +107,20 @@ class _SectionItemsState extends State<_SectionItems> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        for (final item in visible) ItemWrapper(item: item),
+        for (final item in visible) ...[
+          if (widget.subtitles[item.id.raw] != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(64, 6, 16, 0),
+              child: Text(
+                widget.subtitles[item.id.raw]!,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontFeatures: const [FontFeature.tabularFigures()],
+                ),
+              ),
+            ),
+          ItemWrapper(item: item),
+        ],
         if (!showAll)
           Padding(
             padding: const EdgeInsets.only(left: 8),

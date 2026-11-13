@@ -6,6 +6,24 @@ Tags are semver (`vX.Y.Z`) — the in-app update checker parses them.
 
 ## [Unreleased]
 
+## [1.2.6] - 2026-11-13
+
+### Added
+- **Duplicate artists and albums are merged in search.** Jellyfin happily returns two
+  `MusicArtist` rows for one band (one with artwork, one with a plain disc) and two
+  `MusicAlbum` rows under the same title. Search now folds them: artists group by a normalised
+  name (case, spacing, punctuation, diacritics, a leading "The ", and `&`/`+` vs "and"), and the
+  entry **with artwork wins** so the row looks like the artist the user knows; the other ids are
+  attached to it.
+- **Same-title albums that are genuinely different stay separate but become distinguishable.**
+  Two albums merge only when the artist and title match *and* at least half of their combined
+  track titles overlap (Jaccard ≥ 0.5, so a 4-track reissue sharing one song with an 11-track
+  album is not the same release). Otherwise both rows are kept and labelled
+  `1989 · 11 tracks · On device` / `2008 · 4 tracks · Server`. Track lists are fetched only for
+  titles that appear more than once, so the extra work is bounded by actual duplicates.
+- Downloads are untouched by the fold: playback still resolves the downloaded file for any track
+  that is downloaded (downloads are keyed by server id), and downloaded tracks keep their SD badge.
+
 ## [1.2.5] - 2026-11-13
 
 ### Security

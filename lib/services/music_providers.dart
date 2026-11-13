@@ -20,6 +20,7 @@ import 'finamp_settings_helper.dart';
 import 'finamp_user_helper.dart';
 import 'item_by_id_provider.dart';
 import 'jellyfin_api_helper.dart';
+import 'library_merge.dart';
 import 'music_screen_provider.dart';
 
 part 'music_providers.g.dart';
@@ -142,14 +143,67 @@ final groupedSearchProvider = FutureProvider.autoDispose.family<SearchResults, S
     albums = await _filterAlbumsByQuality(jellyfinApiHelper, query, albums);
   }
 
+  // Fold the server's duplicate artist/album rows (same name, different id) so
+  // the user sees one artist and one album per real-world thing. Track titles
+  // are fetched only for titles that occur more than once, which is what makes
+  // "same album, two rows" decidable without a request per result.
+  final trackTitles = await _fetchTrackTitlesForDuplicateTitles(jellyfinApiHelper, albums);
+  final downloads = GetIt.instance<DownloadsService>();
+  final mergedAlbums = LibraryMerge.mergeAlbums(
+    albums,
+    trackTitlesByAlbumId: trackTitles,
+    isOnDevice: (item) => downloads
+        .getStatus(DownloadStub.fromItem(type: DownloadItemType.collection, item: item), null)
+        .isDownloaded,
+  );
+  final mergedArtists = LibraryMerge.mergeArtists(apply(results[0]));
+
   return SearchResults(
-    artists: apply(results[0]),
-    albums: albums,
+    artists: mergedArtists.map((entry) => entry.artist).toList(),
+    albums: mergedAlbums.map((entry) => entry.album).toList(),
+    albumSubtitles: {
+      for (final entry in mergedAlbums)
+        if (entry.disambiguator != null) entry.album.id.raw: entry.disambiguator!,
+    },
     tracks: apply(results[2]),
     playlists: apply(results[3]),
     genres: apply(results[4]),
   );
 });
+
+/// Normalised track titles for every album whose *title* appears more than once
+/// in this result set — the only rows where a merge decision has to be made.
+Future<Map<String, Set<String>>> _fetchTrackTitlesForDuplicateTitles(
+  JellyfinApiHelper api,
+  List<BaseItemDto> albums,
+) async {
+  final byTitle = <String, List<BaseItemDto>>{};
+  for (final album in albums) {
+    final key = LibraryMerge.normalize(album.name);
+    if (key.isEmpty) continue;
+    byTitle.putIfAbsent(key, () => []).add(album);
+  }
+
+  final candidates = byTitle.values.where((group) => group.length > 1).expand((group) => group).toList();
+  if (candidates.isEmpty) return const {};
+
+  final result = <String, Set<String>>{};
+  await Future.wait(
+    candidates.map((album) async {
+      final tracks = await api.getItems(
+        parentItem: album,
+        includeItemTypes: BaseItemDtoType.track.jellyfinName!,
+        recursive: true,
+        fields: 'Name',
+      );
+      result[album.id.raw] = (tracks ?? const <BaseItemDto>[])
+          .map((track) => LibraryMerge.normalize(track.name))
+          .where((name) => name.isNotEmpty)
+          .toSet();
+    }),
+  );
+  return result;
+}
 
 /// Album quality semantics: an album matches `codec:` / `bit:` only when ALL
 /// of its tracks do (an empty album never matches).
