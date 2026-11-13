@@ -71,7 +71,8 @@ jobs:
             benchmark/regression_download_persistence_test.dart \
             benchmark/regression_download_state_machine_test.dart \
             benchmark/regression_search_filter_test.dart \
-            benchmark/regression_update_checker_test.dart
+            benchmark/regression_update_checker_test.dart \
+            benchmark/regression_resumable_download_test.dart
 
       - name: Decode release keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/demongroker-finamp.jks
