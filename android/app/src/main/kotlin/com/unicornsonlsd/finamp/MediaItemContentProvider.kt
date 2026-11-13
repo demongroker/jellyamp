@@ -42,7 +42,7 @@ class MediaItemContentProvider : ContentProvider() {
             ctx.cacheDir?.resolve("images"),
             ctx.getExternalFilesDir(null)?.resolve("images"),
             ctx.getExternalFilesDir(null)?.resolve("downloads"),
-        ).map { runCatching { it.canonicalPath }.getOrElse { it.absolutePath } }
+        ).map { dir -> runCatching { dir.canonicalPath }.getOrElse { dir.absolutePath } }
     }
 
     private fun localFileOrNull(path: String?): File? {
