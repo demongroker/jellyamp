@@ -24,6 +24,52 @@ class MediaItemContentProvider : ContentProvider() {
 
     private lateinit var memoryCache: LruCache<String, ByteArray>
 
+    /**
+     * Security (audit J-P0-2): this provider is exported, so every app on the phone can call it.
+     * Before this guard it (a) opened ANY app-private path read-only and (b) fetched ANY URL into
+     * its cache — i.e. arbitrary local file read plus SSRF from the app's network identity.
+     * Now a local path must resolve inside an allowed media directory, and a remote URL must be
+     * https (or an explicit private/loopback host, for people running Jellyfin on their LAN) and
+     * stay under a size cap instead of being read into memory unbounded.
+     */
+    private val maxRemoteBytes = 16L * 1024 * 1024
+
+    private fun allowedLocalRoots(): List<String> {
+        val ctx = context ?: return emptyList()
+        return listOfNotNull(
+            ctx.filesDir?.resolve("images"),
+            ctx.filesDir?.resolve("downloads"),
+            ctx.cacheDir?.resolve("images"),
+            ctx.getExternalFilesDir(null)?.resolve("images"),
+            ctx.getExternalFilesDir(null)?.resolve("downloads"),
+        ).map { runCatching { it.canonicalPath }.getOrElse { it.absolutePath } }
+    }
+
+    private fun localFileOrNull(path: String?): File? {
+        if (path.isNullOrBlank()) return null
+        val f = runCatching { File(path).canonicalFile }.getOrNull() ?: return null
+        val canonical = f.canonicalPath
+        val allowed = allowedLocalRoots().any { root ->
+            canonical == root || canonical.startsWith(root + File.separator)
+        }
+        if (!allowed) {
+            Log.w("MediaItemContentProvider", "refused local read outside allowed dirs")
+            return null
+        }
+        return f.takeIf { it.isFile }
+    }
+
+    private fun remoteAllowed(u: String): Boolean {
+        val parsed = runCatching { URL(u) }.getOrNull() ?: return false
+        val scheme = parsed.protocol.lowercase()
+        if (scheme == "https") return true
+        if (scheme != "http") return false
+        // Plain http only for an explicit private/loopback literal (house LAN server).
+        val host = parsed.host.orEmpty()
+        return host == "localhost" || host.startsWith("127.") || host.startsWith("10.") ||
+            host.startsWith("192.168.") || Regex("""^172\.(1[6-9]|2\d|3[01])\.""").containsMatchIn(host)
+    }
+
     override fun openFile(uri: Uri, mode: String): ParcelFileDescriptor? {
         val fragment = uri.encodedFragment
         if (fragment != null) {
@@ -48,7 +94,19 @@ class MediaItemContentProvider : ContentProvider() {
                 }
             }
 
-            val response = URL(fixedUri).readBytes()
+            if (!remoteAllowed(fixedUri)) {
+                Log.w("MediaItemContentProvider", "refused remote fetch (scheme/host)")
+                throw FileNotFoundException("host not allowed")
+            }
+            val response = URL(fixedUri).openConnection().run {
+                connectTimeout = 15_000
+                readTimeout = 30_000
+                val len = contentLengthLong
+                if (len > maxRemoteBytes) throw FileNotFoundException("remote file too large")
+                inputStream.use { it.readBytes().also { b ->
+                    if (b.size > maxRemoteBytes) throw FileNotFoundException("remote file too large")
+                } }
+            }
             memoryCache.put(fixedUri, response)
             return openSafePipeHelper(
                 uri,
@@ -61,7 +119,8 @@ class MediaItemContentProvider : ContentProvider() {
         }
 
         // this means it's a local image (downloaded or placeholder art)
-        return ParcelFileDescriptor.open(File(uri.path!!), ParcelFileDescriptor.MODE_READ_ONLY)
+        val file = localFileOrNull(uri.path) ?: throw FileNotFoundException("path not allowed")
+        return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
     }
 
     override fun onCreate(): Boolean {
