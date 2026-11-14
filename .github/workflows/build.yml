@@ -28,9 +28,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Clone repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
     
-    - uses: actions/setup-java@v5
+    - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
       with:
         distribution: 'zulu'
         java-version: '17'
@@ -51,14 +51,14 @@ jobs:
 
     # Use the same flutter setup as the linux build to allow sharing the pub cache and it utilizing the same cache key
     - name: Determine Flutter stable version
-      uses: subosito/flutter-action@v2
+      uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
       id: flutter-version
       with:
         architecture: 'x64'
         channel: 'stable'
         dry-run: true
     - name: Set up Flutter
-      uses: subosito/flutter-action@v2
+      uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
       with:
         # Prebuilt ARM linux builds are not provided, so build flutter from source
         channel: master
@@ -70,7 +70,7 @@ jobs:
         pub-cache-key: "flutter-pub-:os:-:channel:-:version:-:arch:-:hash:"
     
     - name: Gradle cache
-      uses: actions/cache@v5
+      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
       with: 
         path: |
           ~/.gradle/caches
@@ -80,7 +80,7 @@ jobs:
         restore-keys: ${{ runner.os }}-gradle-
 
     - name: Cache Dart build cache
-      uses: actions/cache@v5
+      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
       with:
         path: |
           .dart_tool
@@ -93,7 +93,7 @@ jobs:
 
     - run: flutter build apk --debug --no-pub
 
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
       with:
         name: finamp-android-debug.apk
         path: build/app/outputs/flutter-apk/app-debug.apk
@@ -112,7 +112,7 @@ jobs:
       if: *integration_if
       timeout-minutes: 20
       # android emulator is flaky so we retry once
-      uses: Wandalen/wretry.action@v3.8.0
+      uses: Wandalen/wretry.action@e68c23e6309f2871ca8ae4763e7629b9c258e1ea # v3.8.0
       with:
         action: reactivecircus/android-emulator-runner@v2
         # Use the newest supported version of android
@@ -130,7 +130,7 @@ jobs:
       if: *integration_if
       timeout-minutes: 20
       # android emulator is flaky so we retry once
-      uses: Wandalen/wretry.action@v3.8.0
+      uses: Wandalen/wretry.action@e68c23e6309f2871ca8ae4763e7629b9c258e1ea # v3.8.0
       with:
         action: reactivecircus/android-emulator-runner@v2
         # We can't use the oldest supported version api 24 because it doesn't recognize the certificates
@@ -149,21 +149,21 @@ jobs:
     name: Build for iOS
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
-    - uses: maxim-lobanov/setup-xcode@v1
+    - uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90 # v1
       with:
         xcode-version: latest-stable
 
     - name: Set up Flutter
-      uses: subosito/flutter-action@v2
+      uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
       with:
         channel: 'stable'
         cache: false
         pub-cache: true
 
     - name: Cache CocoaPods
-      uses: actions/cache@v5
+      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
       with:
         path: |
           ios/Pods
@@ -172,7 +172,7 @@ jobs:
         restore-keys: ${{ runner.os }}-pods-
 
     - name: Cache Dart build cache
-      uses: actions/cache@v5
+      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
       with:
         path: |
           .dart_tool
@@ -187,7 +187,7 @@ jobs:
 
     - name: Start simulator
       if: *integration_if
-      uses: futureware-tech/simulator-action@v5
+      uses: futureware-tech/simulator-action@e89aa8f93d3aec35083ff49d2854d07f7186f7f5 # v5
       with:
         model: 'iPhone 17'
         os_version: '>= 26.0'
@@ -212,9 +212,9 @@ jobs:
             arch: arm64
     steps:
     - name: Clone repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
-    - uses: actions/setup-java@v5
+    - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
       id: java-version
       with:
         distribution: 'zulu'
@@ -226,7 +226,7 @@ jobs:
         sudo apt-get install -y build-essential cmake ninja-build libgtk-3-dev libmpv-dev
 
     - name: Determine Flutter stable version
-      uses: subosito/flutter-action@v2
+      uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
       id: flutter-version
       with:
         architecture: 'x64'
@@ -235,7 +235,7 @@ jobs:
         dry-run: true
 
     - name: Set up Flutter
-      uses: subosito/flutter-action@v2
+      uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
       with:
         # Prebuilt ARM linux builds are not provided, so build flutter from source
         channel: master
@@ -248,7 +248,7 @@ jobs:
         pub-cache-key: "flutter-pub-:os:-:channel:-:version:-:arch:-:hash:"
 
     - name: Cache Dart build cache
-      uses: actions/cache@v5
+      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
       with:
         path: |
           .dart_tool
@@ -261,7 +261,7 @@ jobs:
 
     - name: Clone isar repository
       if: matrix.arch == 'arm64'
-      uses: actions/checkout@v6
+      uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       with:
         path: isar
         repository: Komodo5197/isar-community
@@ -299,13 +299,13 @@ jobs:
         tar -czf ${TAR_NAME} --directory build/linux/${{ matrix.arch }}/release/ bundle icons jellyamp.desktop.m4 com.demongroker.jellyamp.metainfo.xml \
         && sha256sum ${TAR_NAME} > ${SHA_NAME}
 
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
       with:
         name: ${{ env.TAR_NAME }}
         path: ${{ env.TAR_NAME }}
         compression-level: 0 # no compression
     
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
       with:
         name: ${{ env.SHA_NAME }}
         path: ${{ env.SHA_NAME }}
@@ -331,16 +331,16 @@ jobs:
       run: git config --system core.longpaths true
 
     - name: Clone repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
     # - uses: actions/setup-java@v2
     #   with:
     #     distribution: 'zulu'
     #     java-version: '17'
     - name: Set up Rust (for smtc_windows)
-      uses: hecrj/setup-rust-action@v2
+      uses: hecrj/setup-rust-action@110f36749599534ca96628b82f52ae67e5d95a3c # v2
 
     - name: Set up Flutter
-      uses: subosito/flutter-action@v2
+      uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
       with:
         channel: 'stable'
         cache: false
@@ -350,7 +350,7 @@ jobs:
     - run: flutter pub get
 
     - name: Cache Dart build cache
-      uses: actions/cache@v5
+      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
       with:
         path: |
           build
@@ -372,7 +372,7 @@ jobs:
 
     # TODO pack in redistributables?
     # upload original, unzipped directory. GitHub will zip it anyway
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
       with:
         name: ${{ env.BASE_NAME }}
         path: build/windows/x64/runner/Release/
@@ -383,7 +383,7 @@ jobs:
         mv build/windows/x64/runner/Release/finamp.msix ./${{ env.BASE_NAME }}.msix
 
     #TODO would be nice to have an old-school installer here that can take the .exe + libraries and install them to the device + create a shortcut
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
       with:
         name: ${{ env.BASE_NAME }}.msix
         path: ./${{ env.BASE_NAME }}.msix
@@ -402,7 +402,7 @@ jobs:
 
     - name: Upload release bundle + checksums
       if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
       with:
         name: ${{ env.BASE_NAME }}.release
         path: |
@@ -436,12 +436,12 @@ jobs:
       contents: write
     steps:
       - name: Download all build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           path: release-assets
 
       - name: Attach desktop assets to the release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           tag_name: ${{ github.ref_name }}
           files: |
