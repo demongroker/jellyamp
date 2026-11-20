@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-/// Frosted ice-glass panel for high-impact chrome (actions, now-playing, chips).
+/// Frosted glass panel for high-impact chrome (actions, now-playing, chips).
 /// Avoid stacking these inside long scroll lists.
 class GlassSurface extends StatelessWidget {
   const GlassSurface({
@@ -30,7 +30,7 @@ class GlassSurface extends StatelessWidget {
     final scheme = ColorScheme.of(context);
     final fill =
         isDark
-            ? Color.alphaBlend(scheme.primary.withOpacity(0.08), const Color(0xFF121820).withOpacity(opacity))
+            ? Color.alphaBlend(scheme.primary.withOpacity(0.08), const Color(0xFF1B2740).withOpacity(opacity))
             : Color.alphaBlend(scheme.primary.withOpacity(0.06), Colors.white.withOpacity(0.55 + opacity * 0.2));
     final borderColor = (isDark ? Colors.white : scheme.onSurface).withOpacity(borderOpacity);
 

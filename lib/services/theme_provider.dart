@@ -275,7 +275,7 @@ class FinampThemeFromImage extends _$FinampThemeFromImage {
     }
     HSLColor average;
     if (population == 0) {
-      return RawThemeResult.fromColors(Color(0xFF7DD3FC), Color(0xFF7DD3FC));
+      return RawThemeResult.fromColors(Color(0xFFD4AF37), Color(0xFFD4AF37));
     } else {
       average = HSLColor.fromColor(
         Color.from(alpha: 1.0, red: r / population, green: g / population, blue: b / population),
@@ -305,7 +305,7 @@ class FinampThemeFromImage extends _$FinampThemeFromImage {
     }
 
     return RawThemeResult.fromColors(
-      palette.vibrantColor?.color ?? palette.dominantColor?.color ?? const Color(0xFF7DD3FC),
+      palette.vibrantColor?.color ?? palette.dominantColor?.color ?? const Color(0xFFD4AF37),
       background,
     );
   }
@@ -365,9 +365,9 @@ ColorScheme getGrayTheme(Brightness brightness) {
   );
 }
 
-final defaultThemeDark = ColorScheme.fromSeed(seedColor: const Color(0xFF7DD3FC), brightness: Brightness.dark);
+final defaultThemeDark = ColorScheme.fromSeed(seedColor: const Color(0xFFD4AF37), brightness: Brightness.dark);
 
-final defaultThemeLight = ColorScheme.fromSeed(seedColor: const Color(0xFF7DD3FC), brightness: Brightness.light);
+final defaultThemeLight = ColorScheme.fromSeed(seedColor: const Color(0xFFD4AF37), brightness: Brightness.light);
 
 ColorScheme getDefaultTheme(Brightness brightness) =>
     brightness == Brightness.dark ? defaultThemeDark : defaultThemeLight;

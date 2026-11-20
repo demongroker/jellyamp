@@ -6,6 +6,27 @@ Tags are semver (`vX.Y.Z`) — the in-app update checker parses them.
 
 ## [Unreleased]
 
+## [1.2.7] - 2026-11-20
+
+### Changed
+- **Navy + gold house brand.** JellyAmp now shares one identity with Hermes, VideoDroid and
+  Vela. Both curated `ColorScheme`s were rewritten to the shared tokens: dark is navy
+  `#0B1220` base / `#111A2B` surface / `#1B2740` cards with gold `#D4AF37`; light is white
+  surfaces with a **darkened gold** `#7A5F14` primary, because full gold fails contrast on
+  white. Glass chrome, the now-playing bar, the home header and quick-action buttons were
+  repointed from the old charcoal hexes to the navy ones so nothing is left half-migrated.
+- **Android now uses the curated brand too.** `getColorScheme` used to force the *ember*
+  orange preset on Android, so the curated scheme only ever appeared on iOS — the brand
+  never matched on the owner's phone. Ember is still selectable as a custom accent, and a
+  user-picked accent still wins over the brand.
+- Brand constants renamed `ice*` → `brand*` (`brandPrimaryColor`, `brandBgColor`,
+  `brandSurfaceColor`, `brandHighlightColor`); all usages updated. Default accent for new
+  installs is gold; **existing users keep their stored accent**.
+
+### Not in this release
+- The playback-transparency panel (codec, bitrate, transcode reason) is still to come.
+- No device install or screenshot verification yet — palette and contrast are untested on a phone.
+
 ## [1.2.6] - 2026-11-13
 
 ### Added

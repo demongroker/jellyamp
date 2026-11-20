@@ -141,13 +141,13 @@ class FinampMusicScreenHeader extends ConsumerWidget implements PreferredSizeWid
                             Color.alphaBlend(
                               ColorScheme.of(context).primary.withOpacity(0.22),
                               Theme.brightnessOf(context) == Brightness.dark
-                                  ? const Color(0xFF121820).withOpacity(0.75)
+                                  ? const Color(0xFF1B2740).withOpacity(0.75)
                                   : Colors.white.withOpacity(0.72),
                             ),
                             Color.alphaBlend(
                               ColorScheme.of(context).primary.withOpacity(0.08),
                               Theme.brightnessOf(context) == Brightness.dark
-                                  ? const Color(0xFF0B0F14).withOpacity(0.55)
+                                  ? const Color(0xFF0B1220).withOpacity(0.55)
                                   : Colors.white.withOpacity(0.45),
                             ),
                           ],

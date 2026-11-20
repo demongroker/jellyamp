@@ -76,7 +76,7 @@ class _HomeScreenQuickActionButtonState extends State<HomeScreenQuickActionButto
         isDark
             ? Color.alphaBlend(
               accentColor.withOpacity(widget.disabled ? 0.05 : 0.12),
-              const Color(0xFF121820).withOpacity(0.55),
+              const Color(0xFF1B2740).withOpacity(0.55),
             )
             : Color.alphaBlend(accentColor.withOpacity(widget.disabled ? 0.06 : 0.10), Colors.white.withOpacity(0.62));
 

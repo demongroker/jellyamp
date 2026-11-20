@@ -17,8 +17,8 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 ///   * OFFLINE  -> "OFFLINE - Showing downloaded library"
 ///   * ONLINE   -> nothing is rendered.
 ///
-/// It uses the frozen JellyAmp design system (ice #7DD3FC, charcoal #0B0F14,
-/// platinum/highlight #E0F2FE; see color_schemes.g.dart + jellyamp_theme.dart)
+/// It uses the frozen JellyAmp design system (gold #D4AF37, navy #0B1220,
+/// gold highlight #F0DFA8; see color_schemes.g.dart + jellyamp_theme.dart)
 /// and is wrapped in [IgnorePointer] so it never blocks interaction.
 class ConnectivityStatusIndicator extends ConsumerWidget {
   const ConnectivityStatusIndicator({super.key});
@@ -41,16 +41,16 @@ class ConnectivityStatusIndicator extends ConsumerWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: jSpaceMd, vertical: jSpaceXs),
           decoration: BoxDecoration(
-            color: iceBgColor.withValues(alpha: 0.9),
+            color: brandBgColor.withValues(alpha: 0.9),
             borderRadius: BorderRadius.circular(jRadiusArtwork),
-            border: Border.all(color: icePrimaryColor.withValues(alpha: 0.4)),
+            border: Border.all(color: brandPrimaryColor.withValues(alpha: 0.4)),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, size: 16, color: icePrimaryColor),
+              Icon(icon, size: 16, color: brandPrimaryColor),
               const SizedBox(width: jSpaceSm),
-              Text(label, style: const TextStyle(color: iceHighlightColor, fontSize: 12, fontWeight: FontWeight.w600)),
+              Text(label, style: const TextStyle(color: brandHighlightColor, fontSize: 12, fontWeight: FontWeight.w600)),
             ],
           ),
         ),

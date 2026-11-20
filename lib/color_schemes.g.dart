@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:finamp/services/finamp_settings_helper.dart';
@@ -7,11 +5,13 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 const jellyfinBlueColor = Color(0xFF00A4DC);
 const jellyfinPurpleColor = Color(0xFFAA5CC3);
 
-/// Jellyamp ice-glass brand accents (iOS liquid glass).
-const icePrimaryColor = Color(0xFF7DD3FC);
-const iceBgColor = Color(0xFF0B0F14);
-const iceSurfaceColor = Color(0xFF121820);
-const iceHighlightColor = Color(0xFFE0F2FE);
+/// JellyAmp brand accents — navy + gold, shared with Hermes, VideoDroid and Vela.
+/// Values: ~/.hermes/plans/design-tokens-navy-gold.md. Gold never carries text on a
+/// light surface; the light scheme uses the darkened gold 7A5F14.
+const brandPrimaryColor = Color(0xFFD4AF37);
+const brandBgColor = Color(0xFF0B1220);
+const brandSurfaceColor = Color(0xFF1B2740);
+const brandHighlightColor = Color(0xFFF0DFA8);
 
 /// Jellyamp ember brand accents (Android M3 re-skin).
 const emberPrimaryColor = Color(0xFFFF6B35);
@@ -21,72 +21,72 @@ const emberSurfaceColor = Color(0xFF221309);
 /// Jellyamp light: frosted ice / platinum glass.
 const lightColorScheme = ColorScheme(
   brightness: Brightness.light,
-  primary: Color(0xFF0284C7),
+  primary: Color(0xFF7A5F14),
   onPrimary: Color(0xFFFFFFFF),
-  primaryContainer: Color(0xFFCFFAFE),
-  onPrimaryContainer: Color(0xFF0C4A6E),
-  secondary: Color(0xFF5B6B7A),
+  primaryContainer: Color(0xFFF5E7BE),
+  onPrimaryContainer: Color(0xFF3A2E10),
+  secondary: Color(0xFF41547A),
   onSecondary: Color(0xFFFFFFFF),
-  secondaryContainer: Color(0xFFE2E8F0),
-  onSecondaryContainer: Color(0xFF1E293B),
-  tertiary: Color(0xFF0EA5E9),
+  secondaryContainer: Color(0xFFDDE4F0),
+  onSecondaryContainer: Color(0xFF1A2740),
+  tertiary: Color(0xFF8A6D1F),
   onTertiary: Color(0xFFFFFFFF),
-  tertiaryContainer: Color(0xFFE0F2FE),
-  onTertiaryContainer: Color(0xFF0C4A6E),
-  error: Color(0xFFBA1A1A),
+  tertiaryContainer: Color(0xFFF6E5CC),
+  onTertiaryContainer: Color(0xFF3C2A0D),
+  error: Color(0xFFB3261E),
   errorContainer: Color(0xFFFFDAD6),
   onError: Color(0xFFFFFFFF),
   onErrorContainer: Color(0xFF410002),
-  background: Color(0xFFF4F7FA),
-  onBackground: Color(0xFF0F172A),
-  surface: Color(0xFFF4F7FA),
-  surfaceContainerHighest: Color(0xFFE8EEF4),
-  onSurface: Color(0xFF0F172A),
-  surfaceVariant: Color(0xFFD9E2EC),
-  onSurfaceVariant: Color(0xFF475569),
-  outline: Color(0xFF94A3B8),
-  onInverseSurface: Color(0xFFF1F5F9),
-  inverseSurface: Color(0xFF1E293B),
-  inversePrimary: Color(0xFF7DD3FC),
+  background: Color(0xFFF7F8FA),
+  onBackground: Color(0xFF101828),
+  surface: Color(0xFFFFFFFF),
+  surfaceContainerHighest: Color(0xFFE7EBF2),
+  onSurface: Color(0xFF101828),
+  surfaceVariant: Color(0xFFEEF1F6),
+  onSurfaceVariant: Color(0xFF48566E),
+  outline: Color(0xFFC7CFDB),
+  onInverseSurface: Color(0xFFE6EDF7),
+  inverseSurface: Color(0xFF1B2740),
+  inversePrimary: Color(0xFFD4AF37),
   shadow: Color(0xFF000000),
-  surfaceTint: icePrimaryColor,
-  outlineVariant: Color(0xFFCBD5E1),
+  surfaceTint: Color(0xFF7A5F14),
+  outlineVariant: Color(0xFFDDE3EC),
   scrim: Color(0xFF000000),
 );
 
-/// Jellyamp dark: liquid ice glass on charcoal.
+/// JellyAmp dark: gold on navy.
 const darkColorScheme = ColorScheme(
   brightness: Brightness.dark,
-  primary: icePrimaryColor,
-  onPrimary: Color(0xFF0C4A6E),
-  primaryContainer: Color(0xFF0369A1),
-  onPrimaryContainer: Color(0xFFE0F2FE),
-  secondary: Color(0xFFA5B4C8),
-  onSecondary: Color(0xFF1E293B),
-  secondaryContainer: Color(0xFF334155),
-  onSecondaryContainer: Color(0xFFE2E8F0),
-  tertiary: Color(0xFFBAE6FD),
-  onTertiary: Color(0xFF0C4A6E),
-  tertiaryContainer: Color(0xFF0E7490),
-  onTertiaryContainer: Color(0xFFECFEFF),
-  error: Color(0xFFFFB4AB),
-  errorContainer: Color(0xFF93000A),
-  onError: Color(0xFF690005),
+  primary: brandPrimaryColor,
+  onPrimary: Color(0xFF0B1220),
+  primaryContainer: Color(0xFF3A2E10),
+  onPrimaryContainer: Color(0xFFF0DFA8),
+  secondary: Color(0xFF8FA3C8),
+  onSecondary: Color(0xFF0B1220),
+  secondaryContainer: Color(0xFF24334D),
+  onSecondaryContainer: Color(0xFFD7E1F2),
+  tertiary: Color(0xFFE0B478),
+  onTertiary: Color(0xFF3C2A0D),
+  tertiaryContainer: Color(0xFF4A3720),
+  onTertiaryContainer: Color(0xFFF6E5CC),
+  error: Color(0xFFF85149),
+  errorContainer: Color(0xFF5C1A16),
+  onError: Color(0xFF0B1220),
   onErrorContainer: Color(0xFFFFDAD6),
-  background: iceBgColor,
-  onBackground: Color(0xFFF0F6FA),
-  surface: iceBgColor,
-  surfaceContainerHighest: iceSurfaceColor,
-  onSurface: Color(0xFFF0F6FA),
-  surfaceVariant: Color(0xFF1E293B),
-  onSurfaceVariant: Color(0xFFA5B4C8),
-  outline: Color(0xFF64748B),
-  onInverseSurface: Color(0xFF0B0F14),
-  inverseSurface: Color(0xFFE2E8F0),
-  inversePrimary: Color(0xFF0284C7),
+  background: brandBgColor,
+  onBackground: Color(0xFFE6EDF7),
+  surface: Color(0xFF111A2B),
+  surfaceContainerHighest: brandSurfaceColor,
+  onSurface: Color(0xFFE6EDF7),
+  surfaceVariant: Color(0xFF1B2740),
+  onSurfaceVariant: Color(0xFFA9B6CC),
+  outline: Color(0xFF2A3A57),
+  onInverseSurface: Color(0xFF0B1220),
+  inverseSurface: Color(0xFFE6EDF7),
+  inversePrimary: Color(0xFF7A5F14),
   shadow: Color(0xFF000000),
-  surfaceTint: icePrimaryColor,
-  outlineVariant: Color(0xFF334155),
+  surfaceTint: brandPrimaryColor,
+  outlineVariant: Color(0xFF22304A),
   scrim: Color(0xFF000000),
 );
 
@@ -94,9 +94,9 @@ const darkColorScheme = ColorScheme(
 /// otherwise falls back to default color schemes
 /// [lightColorScheme] or [darkColorScheme]
 ColorScheme getColorScheme(Color? color, Brightness brightness, bool amoledTheme) {
-  // A user-picked custom accent always wins; otherwise use the platform brand
-  // — ember M3 on Android, curated liquid ice glass elsewhere (iOS).
-  final hasCustomAccent = color != null && color != icePrimaryColor;
+  // A user-picked custom accent always wins; otherwise the curated navy + gold
+  // brand applies on every platform.
+  final hasCustomAccent = color != null && color != brandPrimaryColor;
 
   ColorScheme scheme;
   if (hasCustomAccent) {
@@ -105,19 +105,10 @@ ColorScheme getColorScheme(Color? color, Brightness brightness, bool amoledTheme
       brightness: brightness,
       dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
     );
-  } else if (Platform.isAndroid) {
-    // Ember brand with warm charcoal surfaces.
-    scheme = ColorScheme.fromSeed(
-      seedColor: emberPrimaryColor,
-      brightness: brightness,
-      dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-    ).copyWith(
-      background: brightness == Brightness.dark ? emberBgColor : const Color(0xFFFFF6F0),
-      surface: brightness == Brightness.dark ? emberBgColor : const Color(0xFFFFF6F0),
-      surfaceContainerHighest: brightness == Brightness.dark ? emberSurfaceColor : const Color(0xFFFFE5D8),
-    );
   } else {
-    // Curated liquid ice glass (hand-tuned charcoal surfaces, kept intact).
+    // One identity on every platform: curated navy + gold. Android used to force the
+    // ember preset here, which meant the brand never matched the other apps on the
+    // owner's phone. Ember remains available as a user-picked accent.
     scheme = brightness == Brightness.dark ? darkColorScheme : lightColorScheme;
   }
 

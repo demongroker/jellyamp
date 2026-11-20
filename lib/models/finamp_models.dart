@@ -113,8 +113,8 @@ class DefaultSettings {
   static const amoledTheme = false;
   static const Locale? locale = null;
 
-  /// Jellyamp default: ice cyan (liquid glass brand).
-  static const Color? accentColor = Color(0xFF7DD3FC);
+  /// JellyAmp default: gold (navy + gold house brand).
+  static const Color? accentColor = Color(0xFFD4AF37);
   static const shouldTranscode = false;
   static const transcodeBitrate = 320000;
   static const androidStopForegroundOnPause = true;

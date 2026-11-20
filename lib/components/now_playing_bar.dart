@@ -246,7 +246,7 @@ class NowPlayingBar extends ConsumerWidget {
                       isDark
                           ? Color.alphaBlend(
                             ColorScheme.of(context).primary.withOpacity(0.14),
-                            const Color(0xFF121820).withOpacity(0.92),
+                            const Color(0xFF1B2740).withOpacity(0.92),
                           )
                           : Color.alphaBlend(
                             ColorScheme.of(context).primary.withOpacity(0.08),
