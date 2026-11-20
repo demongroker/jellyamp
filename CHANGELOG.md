@@ -6,6 +6,18 @@ Tags are semver (`vX.Y.Z`) — the in-app update checker parses them.
 
 ## [Unreleased]
 
+## [1.2.8] - 2026-11-20
+
+### Changed
+- **Cards read as panels on AMOLED.** The navy card token moved `#1B2740` → `#22314F` and
+  `cardTheme` now draws a **1 dp `scheme.outline` edge** (`#2A3A57` in dark), so a card is no
+  longer the same near-black as the page behind it. Dark cards explicitly use the card token;
+  light keeps its derived surface tone.
+- **Danger red `#F85149` → `#FF7469`.** The lighter card dropped refusal text to 3.87:1; it is
+  now 4.91:1. Measured pairs on the new card: body 11.00:1, muted 6.33:1, gold 6.16:1,
+  success 5.10:1, warning 5.13:1.
+- Light mode unchanged: primary stays the darkened gold `#7A5F14` (6.04:1 on white).
+
 ## [1.2.7] - 2026-11-20
 
 ### Changed

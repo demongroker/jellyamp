@@ -84,8 +84,14 @@ ThemeData applyJellyAmpTheme(ThemeData theme) {
       elevation: 0,
       margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(jRadiusCard)),
-      color: scheme.surfaceContainerLow,
+      // 1 dp navy.outline edge: the card fill alone is only 1.44:1 against the page
+      // background, so the hairline is what makes a card read as a panel on AMOLED.
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(jRadiusCard),
+        side: BorderSide(color: scheme.outline, width: 1),
+      ),
+      // Dark cards use the navy card token; light keeps the derived surface tone.
+      color: isDark ? scheme.surfaceVariant : scheme.surfaceContainerLow,
     ),
     listTileTheme: _listTileTheme(scheme),
     navigationBarTheme: _navBarTheme(scheme),

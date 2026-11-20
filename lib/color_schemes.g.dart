@@ -10,7 +10,7 @@ const jellyfinPurpleColor = Color(0xFFAA5CC3);
 /// light surface; the light scheme uses the darkened gold 7A5F14.
 const brandPrimaryColor = Color(0xFFD4AF37);
 const brandBgColor = Color(0xFF0B1220);
-const brandSurfaceColor = Color(0xFF1B2740);
+const brandSurfaceColor = Color(0xFF22314F);
 const brandHighlightColor = Color(0xFFF0DFA8);
 
 /// Jellyamp ember brand accents (Android M3 re-skin).
@@ -69,7 +69,7 @@ const darkColorScheme = ColorScheme(
   onTertiary: Color(0xFF3C2A0D),
   tertiaryContainer: Color(0xFF4A3720),
   onTertiaryContainer: Color(0xFFF6E5CC),
-  error: Color(0xFFF85149),
+  error: Color(0xFFFF7469),
   errorContainer: Color(0xFF5C1A16),
   onError: Color(0xFF0B1220),
   onErrorContainer: Color(0xFFFFDAD6),
@@ -78,7 +78,7 @@ const darkColorScheme = ColorScheme(
   surface: Color(0xFF111A2B),
   surfaceContainerHighest: brandSurfaceColor,
   onSurface: Color(0xFFE6EDF7),
-  surfaceVariant: Color(0xFF1B2740),
+  surfaceVariant: Color(0xFF22314F),
   onSurfaceVariant: Color(0xFFA9B6CC),
   outline: Color(0xFF2A3A57),
   onInverseSurface: Color(0xFF0B1220),
