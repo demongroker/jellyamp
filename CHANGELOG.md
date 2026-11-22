@@ -6,6 +6,18 @@ Tags are semver (`vX.Y.Z`) — the in-app update checker parses them.
 
 ## [Unreleased]
 
+## [1.2.9] - 2026-11-22
+
+### Changed
+- **The shared APK is now named after the build.** The local download server and the share sheet
+  used to hardcode `Jellyamp.apk`, so a second install or a partially downloaded file could
+  overwrite or be mistaken for another build. The copy is now named from the installed package
+  (version included) via `package_info_plus`, and both the HTTP `Content-Disposition` header and
+  the share-sheet file name follow it.
+- **Stale copies are cleaned up.** Each share leaves its own copy in the `jellyamp_share` cache
+  directory, which the OS can reclaim but rarely does; older `Jellyamp-*.apk` copies are now
+  deleted when a new one is prepared.
+
 ## [1.2.8] - 2026-11-20
 
 ### Changed

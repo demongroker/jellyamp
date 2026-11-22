@@ -7,6 +7,7 @@ import 'package:finamp/components/global_snackbar.dart';
 import 'package:finamp/l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -18,21 +19,23 @@ class _ApkServer {
   static const int _autoStopMinutes = 15;
 
   HttpServer? _server;
-  String? _servingPath;
   int? _servingPort;
   String? _currentToken;
+  String? _servingFileName;
   Timer? _autoStopTimer;
 
   bool get isRunning => _server != null;
   int? get port => _servingPort;
   String? get token => _currentToken;
+  String? get servingFileName => _servingFileName;
 
   Future<String?> start({required File apkFile, int port = 8765}) async {
     await stop();
 
     _currentToken = _generateToken();
-    _servingPath = apkFile.path;
     _servingPort = port;
+    _servingFileName = path_helper.basename(apkFile.path);
+    final downloadName = _servingFileName!;
 
     try {
       final server = await HttpServer.bind(InternetAddress.anyIPv4, port);
@@ -61,7 +64,7 @@ class _ApkServer {
               request.response.statusCode = HttpStatus.ok;
               request.response.headers.contentType = ContentType('application', 'vnd.android.package-archive');
               request.response.headers.set('Content-Length', length);
-              request.response.headers.set('Content-Disposition', 'attachment; filename="Jellyamp.apk"');
+              request.response.headers.set('Content-Disposition', 'attachment; filename="$downloadName"');
               await request.response.addStream(apkFile.openRead());
             } else {
               request.response.statusCode = HttpStatus.ok;
@@ -70,7 +73,7 @@ class _ApkServer {
                 '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width">'
                 '<title>Jellyamp</title></head><body style="font-family:sans-serif;padding:2rem">'
                 '<h1>Jellyamp</h1>'
-                '<p><a href="/Jellyamp.apk?token=$_currentToken">Download Jellyamp.apk</a></p>'
+                '<p><a href="/$downloadName?token=$_currentToken">Download $downloadName</a></p>'
                 '</body></html>',
               );
             }
@@ -98,9 +101,9 @@ class _ApkServer {
 
     final s = _server;
     _server = null;
-    _servingPath = null;
     _servingPort = null;
     _currentToken = null;
+    _servingFileName = null;
 
     if (s != null) {
       await s.close(force: true);
@@ -150,15 +153,46 @@ class AppShareHelper {
     return null;
   }
 
+  /// Name the shared APK carries, versioned so the recipient can tell which
+  /// build they were handed — mirrors VideoDroid's `VideoDroid-<version>.apk`.
+  static Future<String> _apkFileName() async {
+    var version = '';
+    try {
+      version = (await PackageInfo.fromPlatform()).version;
+    } catch (e) {
+      _log.warning("Could not read package version", e);
+    }
+    final safe = version.replaceAll(RegExp(r'[^A-Za-z0-9._-]'), '-');
+    return safe.isEmpty ? 'Jellyamp.apk' : 'Jellyamp-$safe.apk';
+  }
+
   static Future<File?> prepareShareableApkFile() async {
     final sourcePath = await getInstalledApkPath();
     if (sourcePath == null) return null;
 
     final cache = await getTemporaryDirectory();
-    final out = File(path_helper.join(cache.path, 'jellyamp_share', 'Jellyamp.apk'));
-    await out.parent.create(recursive: true);
+    final dir = Directory(path_helper.join(cache.path, 'jellyamp_share'));
+    await dir.create(recursive: true);
 
+    final name = await _apkFileName();
+    final out = File(path_helper.join(dir.path, name));
     await File(sourcePath).copy(out.path);
+
+    // Each release leaves its own copy behind, and this is a cache dir the OS
+    // can reclaim but rarely does — drop the previous builds.
+    await for (final entity in dir.list()) {
+      if (entity is! File) continue;
+      final base = path_helper.basename(entity.path);
+      if (base != name && base.startsWith('Jellyamp-') && base.endsWith('.apk')) {
+        try {
+          await entity.delete();
+        } catch (e) {
+          _log.fine("Could not delete stale APK copy $base", e);
+        }
+      }
+    }
+
+    _log.info("Prepared share APK ${out.path} (${await out.length()} bytes)");
     return out;
   }
 
@@ -170,11 +204,12 @@ class AppShareHelper {
         GlobalSnackbar.message((ctx) => AppLocalizations.of(ctx)!.shareApkUnavailable);
         return;
       }
+      final name = path_helper.basename(file.path);
       await SharePlus.instance.share(
         ShareParams(
-          files: [XFile(file.path, mimeType: 'application/vnd.android.package-archive', name: 'Jellyamp.apk')],
+          files: [XFile(file.path, mimeType: 'application/vnd.android.package-archive', name: name)],
           text: 'Jellyamp — Jellyfin music player',
-          subject: 'Jellyamp.apk',
+          subject: name,
         ),
       );
     } catch (e, st) {
@@ -226,6 +261,7 @@ class AppShareHelper {
     if (ips.isEmpty) ips.add('127.0.0.1');
 
     final token = _apkServer.token;
-    return ips.map((ip) => 'http://$ip:$port/Jellyamp.apk?token=$token').toList();
+    final name = _apkServer.servingFileName ?? 'Jellyamp.apk';
+    return ips.map((ip) => 'http://$ip:$port/$name?token=$token').toList();
   }
 }
