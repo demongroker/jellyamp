@@ -1,9 +1,37 @@
 import 'package:flutter/material.dart';
 
-/// Search + Shuffle homepage (JAMP-002).
+/// Plain snapshot of what's playing. Deliberately free of audio/Jellyfin types
+/// so the homepage widget stays unit-testable without mocking.
+class NowPlaying {
+  const NowPlaying({
+    required this.title,
+    this.artist,
+    this.imageUrl,
+    required this.isPlaying,
+    this.position = Duration.zero,
+    this.duration,
+  });
+
+  final String title;
+  final String? artist;
+  final String? imageUrl;
+  final bool isPlaying;
+  final Duration position;
+  final Duration? duration;
+
+  /// 0..1 when a duration is known, otherwise null (no bar shown).
+  double? get progress {
+    final d = duration;
+    if (d == null || d.inMilliseconds <= 0) return null;
+    final p = position.inMilliseconds.clamp(0, d.inMilliseconds);
+    return p / d.inMilliseconds;
+  }
+}
+
+/// Search + Shuffle homepage (JAMP-002 / JAMP-004).
 ///
-/// Deliberately self-contained: it takes plain callbacks and a list of library
-/// names, so it can be tested without Hive, Riverpod or a Jellyfin backend.
+/// Self-contained: plain callbacks + library names + an optional [NowPlaying]
+/// snapshot, so it can be tested without Hive, Riverpod or a Jellyfin backend.
 class HomeShuffleView extends StatelessWidget {
   const HomeShuffleView({
     super.key,
@@ -12,9 +40,9 @@ class HomeShuffleView extends StatelessWidget {
     this.onShuffleAll,
     this.onShuffleLibrary,
     this.onBrowse,
-    this.nowPlayingTitle,
-    this.nowPlayingArtist,
+    this.nowPlaying,
     this.onNowPlayingTap,
+    this.onTogglePlayPause,
   });
 
   final List<String> libraries;
@@ -22,9 +50,9 @@ class HomeShuffleView extends StatelessWidget {
   final VoidCallback? onShuffleAll;
   final void Function(String library)? onShuffleLibrary;
   final VoidCallback? onBrowse;
-  final String? nowPlayingTitle;
-  final String? nowPlayingArtist;
+  final NowPlaying? nowPlaying;
   final VoidCallback? onNowPlayingTap;
+  final VoidCallback? onTogglePlayPause;
 
   @override
   Widget build(BuildContext context) {
@@ -88,11 +116,12 @@ class HomeShuffleView extends StatelessWidget {
           ),
           const SizedBox(height: 20),
 
-          if (nowPlayingTitle != null) ...[
+          // Live now-playing card; hidden entirely when nothing is queued.
+          if (nowPlaying != null) ...[
             _NowPlayingCard(
-              title: nowPlayingTitle!,
-              artist: nowPlayingArtist,
+              data: nowPlaying!,
               onTap: onNowPlayingTap,
+              onToggle: onTogglePlayPause,
             ),
             const SizedBox(height: 8),
           ],
@@ -164,15 +193,16 @@ class _GradientShuffleButton extends StatelessWidget {
 }
 
 class _NowPlayingCard extends StatelessWidget {
-  const _NowPlayingCard({required this.title, this.artist, this.onTap});
+  const _NowPlayingCard({required this.data, this.onTap, this.onToggle});
 
-  final String title;
-  final String? artist;
+  final NowPlaying data;
   final VoidCallback? onTap;
+  final VoidCallback? onToggle;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final progress = data.progress;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
@@ -182,48 +212,88 @@ class _NowPlayingCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           color: theme.colorScheme.surfaceContainerHigh,
         ),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF4527A0), Color(0xFF00897B)],
+            Row(
+              children: [
+                _Art(url: data.imageUrl, title: data.title),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(data.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.titleSmall),
+                      if (data.artist != null)
+                        Text(data.artist!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            )),
+                    ],
+                  ),
                 ),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                title.isEmpty ? '?' : title.substring(0, 1).toUpperCase(),
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: theme.colorScheme.onPrimary,
-                  fontWeight: FontWeight.w800,
+                IconButton(
+                  tooltip: data.isPlaying ? 'Pause' : 'Play',
+                  onPressed: onToggle,
+                  icon: Icon(data.isPlaying ? Icons.pause : Icons.play_arrow),
                 ),
-              ),
+              ],
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.titleSmall),
-                  if (artist != null)
-                    Text(artist!,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        )),
-                ],
-              ),
-            ),
-            Icon(Icons.queue_music, color: theme.colorScheme.onSurfaceVariant),
+            if (progress != null) ...[
+              const SizedBox(height: 10),
+              LinearProgressIndicator(value: progress),
+            ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _Art extends StatelessWidget {
+  const _Art({required this.url, required this.title});
+
+  final String? url;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    const size = 48.0;
+    final fallback = Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF4527A0), Color(0xFF00897B)],
+        ),
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        title.isEmpty ? '?' : title.substring(0, 1).toUpperCase(),
+        style: theme.textTheme.titleMedium?.copyWith(
+          color: theme.colorScheme.onPrimary,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+    );
+    if (url == null || url!.isEmpty) {
+      return fallback;
+    }
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Image.network(
+        url!,
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => fallback,
       ),
     );
   }

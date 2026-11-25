@@ -62,15 +62,60 @@ void main() {
     expect(searched, 1);
   });
 
-  testWidgets('shows a now-playing card when a track is set', (tester) async {
-    await tester.pumpWidget(_wrap(HomeShuffleView(
-      libraries: const [],
-      nowPlayingTitle: 'Midnight City',
-      nowPlayingArtist: 'M83',
-    )));
+  group('now playing card', () {
+    const data = NowPlaying(
+      title: 'Midnight City',
+      artist: 'M83',
+      isPlaying: true,
+      position: Duration(seconds: 30),
+      duration: Duration(minutes: 4),
+    );
 
-    expect(find.text('Midnight City'), findsOneWidget);
-    expect(find.text('M83'), findsOneWidget);
+    testWidgets('hidden when nowPlaying is null', (tester) async {
+      await tester.pumpWidget(_wrap(HomeShuffleView(libraries: const [])));
+      expect(find.text('Midnight City'), findsNothing);
+      expect(find.byIcon(Icons.pause), findsNothing);
+    });
+
+    testWidgets('shows title, artist, progress and pause icon',
+        (tester) async {
+      await tester.pumpWidget(_wrap(HomeShuffleView(
+        libraries: const [],
+        nowPlaying: data,
+      )));
+      await tester.pump();
+
+      expect(find.text('Midnight City'), findsOneWidget);
+      expect(find.text('M83'), findsOneWidget);
+      expect(find.byType(LinearProgressIndicator), findsOneWidget);
+      expect(find.byIcon(Icons.pause), findsOneWidget);
+    });
+
+    testWidgets('play/pause fires onTogglePlayPause', (tester) async {
+      var toggles = 0;
+      await tester.pumpWidget(_wrap(HomeShuffleView(
+        libraries: const [],
+        nowPlaying: data,
+        onTogglePlayPause: () => toggles++,
+      )));
+
+      await tester.tap(find.byIcon(Icons.pause));
+      await tester.pump();
+      expect(toggles, 1);
+    });
+
+    testWidgets('tapping the card fires onNowPlayingTap', (tester) async {
+      var opened = 0;
+      await tester.pumpWidget(_wrap(HomeShuffleView(
+        libraries: const [],
+        nowPlaying: data,
+        onNowPlayingTap: () => opened++,
+      )));
+
+      await tester.tap(find.text('Midnight City'));
+      await tester.pump();
+      expect(opened, 1);
+    });
   });
 
   testWidgets('homepage golden', (tester) async {
@@ -82,8 +127,13 @@ void main() {
         onShuffleAll: () {},
         onShuffleLibrary: (_) {},
         onBrowse: () {},
-        nowPlayingTitle: 'Midnight City',
-        nowPlayingArtist: 'M83',
+        nowPlaying: const NowPlaying(
+          title: 'Midnight City',
+          artist: 'M83',
+          isPlaying: true,
+          position: Duration(seconds: 30),
+          duration: Duration(minutes: 4),
+        ),
       ),
     )));
     await expectLater(

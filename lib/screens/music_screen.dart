@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:finamp/components/HomeScreen/finamp_music_screen_header.dart';
 import 'package:finamp/components/HomeScreen/finamp_navigation_rail.dart';
 import 'package:finamp/components/HomeScreen/home_screen_content.dart';
@@ -15,6 +17,11 @@ import 'package:finamp/services/finamp_settings_helper.dart';
 import 'package:finamp/services/finamp_user_helper.dart';
 import 'package:finamp/services/item_by_id_provider.dart';
 import 'package:finamp/services/jellyfin_api_helper.dart';
+import 'package:finamp/services/current_track_metadata_provider.dart';
+import 'package:finamp/services/media_state_stream.dart';
+import 'package:finamp/services/music_player_background_task.dart';
+import 'package:finamp/components/HomeScreen/home_shuffle_view.dart';
+import 'package:finamp/components/now_playing_bar.dart';
 import 'package:finamp/services/music_providers.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -282,28 +289,59 @@ class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderSt
               children:
                   sortedTabs.map((tabType) {
                     if (tabType == ContentType.home && widget.singleTabConfig == null) {
-                      return HomeScreenContent(
-                        refresh: refreshMap[tabType],
-                        libraries: const ['Favorites', 'Albums', 'Artists'],
-                        onSearch: () => setState(() {
-                          isSearching = true;
-                          if (_tabController != null &&
-                              !_tabController!.indexIsChanging &&
-                              sortedTabs.elementAt(_tabController!.index) == ContentType.home) {
-                            // we can't search on the home tab yet
-                            _tabController!.index = sortedTabs.toList().indexWhere(
-                                  (ContentType tabType) => tabType != ContentType.home,
-                                );
-                          }
-                        }),
-                        onBrowse: () => setState(() {
-                          if (_tabController != null) {
-                            _tabController!.index = sortedTabs.toList().indexWhere(
-                                  (ContentType tabType) => tabType != ContentType.home,
-                                );
-                          }
-                        }),
-                      );
+                      return Consumer(builder: (context, ref, _) {
+                        final media = ref.watch(mediaStateProvider);
+                        final track = ref.watch(currentTrackProvider).valueOrNull;
+                        final base = track?.baseItem;
+                        NowPlaying? nowPlaying;
+                        if (base != null || media?.mediaItem != null) {
+                          nowPlaying = NowPlaying(
+                            title: base?.name ?? media.mediaItem?.title ?? "",
+                            artist: base?.albumArtist ?? media.mediaItem?.artist,
+                            imageUrl: base == null
+                                ? null
+                                : GetIt.instance<JellyfinApiHelper>()
+                                    .getImageUrl(item: base)
+                                    ?.toString(),
+                            isPlaying: media.playbackState.playing,
+                            position: Duration(
+                                milliseconds:
+                                    media.playbackState.position.inMilliseconds),
+                            duration: media.mediaItem?.duration,
+                          );
+                        }
+                        final handler =
+                            GetIt.instance<MusicPlayerBackgroundTask>();
+                        return HomeScreenContent(
+                          refresh: refreshMap[tabType],
+                          libraries: const ['Favorites', 'Albums', 'Artists'],
+                          nowPlaying: nowPlaying,
+                          onNowPlayingTap: () => NowPlayingBar.openPlayerScreen(),
+                          onTogglePlayPause: () =>
+                              unawaited(handler.togglePlayback()),
+                          onSearch: () => setState(() {
+                            isSearching = true;
+                            if (_tabController != null &&
+                                !_tabController!.indexIsChanging &&
+                                sortedTabs.elementAt(_tabController!.index) ==
+                                    ContentType.home) {
+                              // we can't search on the home tab yet
+                              _tabController!.index = sortedTabs.toList().indexWhere(
+                                    (ContentType tabType) =>
+                                        tabType != ContentType.home,
+                                  );
+                            }
+                          }),
+                          onBrowse: () => setState(() {
+                            if (_tabController != null) {
+                              _tabController!.index = sortedTabs.toList().indexWhere(
+                                    (ContentType tabType) =>
+                                        tabType != ContentType.home,
+                                  );
+                            }
+                          }),
+                        );
+                      });
                     }
                     final contentTabType =
                         tabType == ContentType.genericArtists

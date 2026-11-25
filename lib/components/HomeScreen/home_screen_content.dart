@@ -44,16 +44,18 @@ class HomeScreenContent extends ConsumerStatefulWidget {
     this.libraries = const [],
     this.onSearch,
     this.onBrowse,
-    this.nowPlayingTitle,
-    this.nowPlayingArtist,
+    this.nowPlaying,
+    this.onNowPlayingTap,
+    this.onTogglePlayPause,
   });
 
   final MusicRefreshCallback? refresh;
   final List<String> libraries;
   final VoidCallback? onSearch;
   final VoidCallback? onBrowse;
-  final String? nowPlayingTitle;
-  final String? nowPlayingArtist;
+  final NowPlaying? nowPlaying;
+  final VoidCallback? onNowPlayingTap;
+  final VoidCallback? onTogglePlayPause;
 
   @override
   ConsumerState<HomeScreenContent> createState() => _HomeScreenContentState();
@@ -111,8 +113,9 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent>
                 onShuffleAll: _shuffleAll,
                 onShuffleLibrary: _shuffleLibrary,
                 onBrowse: widget.onBrowse,
-                nowPlayingTitle: widget.nowPlayingTitle,
-                nowPlayingArtist: widget.nowPlayingArtist,
+                nowPlaying: widget.nowPlaying,
+                onNowPlayingTap: widget.onNowPlayingTap,
+                onTogglePlayPause: widget.onTogglePlayPause,
               ),
             ),
           if (hasActions) const SliverPadding(padding: EdgeInsets.only(top: 6.0)),
