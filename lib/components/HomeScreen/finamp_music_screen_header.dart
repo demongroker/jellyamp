@@ -10,6 +10,8 @@ import 'package:finamp/menus/components/icon_button_with_semantics.dart';
 import 'package:finamp/models/finamp_models.dart';
 import 'package:finamp/models/music_models.dart';
 import 'package:finamp/screens/downloads_screen.dart';
+import 'package:finamp/screens/playback_history_screen.dart';
+import 'package:finamp/screens/queue_restore_screen.dart';
 import 'package:finamp/screens/settings_screen.dart';
 import 'package:finamp/screens/tabs_settings_screen.dart';
 import 'package:finamp/services/downloads_service.dart';
@@ -279,6 +281,33 @@ class FinampMusicScreenHeader extends ConsumerWidget implements PreferredSizeWid
                           onSearch!();
                         }
                       },
+                    ),
+                  // JAMP-003: the rail's useful destinations, in one menu next
+                  // to Search. Logs (bug icon) intentionally stays out of the
+                  // normal-user menu; it lives inside Settings.
+                  if (singleTabConfig == null || singleTabConfig?.base is TabsHomeSection)
+                    PopupMenuButton<String>(
+                      tooltip: 'More',
+                      icon: const Icon(Icons.more_vert),
+                      onSelected: (value) {
+                        final route = switch (value) {
+                          'downloads' => DownloadsScreen.routeName,
+                          'history' => PlaybackHistoryScreen.routeName,
+                          'queues' => QueueRestoreScreen.routeName,
+                          _ => SettingsScreen.routeName,
+                        };
+                        Navigator.of(context).pushNamed(route);
+                      },
+                      itemBuilder: (context) => const [
+                        PopupMenuItem(value: 'downloads', child: Row(children: [
+                          Icon(Icons.file_download_outlined, size: 20), SizedBox(width: 12), Text('Downloads')])),
+                        PopupMenuItem(value: 'history', child: Row(children: [
+                          Icon(TablerIcons.clock, size: 20), SizedBox(width: 12), Text('History')])),
+                        PopupMenuItem(value: 'queues', child: Row(children: [
+                          Icon(Icons.auto_delete_outlined, size: 20), SizedBox(width: 12), Text('Queues')])),
+                        PopupMenuItem(value: 'settings', child: Row(children: [
+                          Icon(Icons.settings_outlined, size: 20), SizedBox(width: 12), Text('Settings')])),
+                      ],
                     ),
                   if (singleTabConfig?.base case CollectionHomeSection collection)
                     IconButtonWithSemantics(

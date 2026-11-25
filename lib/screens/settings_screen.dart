@@ -1,3 +1,4 @@
+import 'package:finamp/screens/logs_screen.dart';
 import 'dart:io';
 
 import 'package:finamp/components/MusicScreen/offline_mode_switch_list_tile.dart';
@@ -287,6 +288,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
               onTap: () => showClientCertificateMenu(context: context),
             ),
+          // JAMP-003: debug/log view stays out of the normal top-bar menu but
+          // remains reachable here for support and diagnostics.
+          ListTile(
+            leading: const Icon(Icons.bug_report_outlined),
+            title: const Text('Logs & diagnostics'),
+            onTap: () => Navigator.of(context).pushNamed(LogsScreen.routeName),
+          ),
           const LogoutListTile(),
         ],
       ),

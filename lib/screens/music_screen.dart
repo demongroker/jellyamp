@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:finamp/components/HomeScreen/finamp_music_screen_header.dart';
-import 'package:finamp/components/HomeScreen/finamp_navigation_rail.dart';
 import 'package:finamp/components/HomeScreen/home_screen_content.dart';
 import 'package:finamp/components/MusicScreen/artist_type_selection_row.dart';
 import 'package:finamp/components/MusicScreen/music_screen_tab_view.dart';
@@ -409,16 +408,8 @@ class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderSt
                   }).toList(),
             );
 
-            // The full-width navigation drawer has been replaced by a slim,
-            // always-visible left NavigationRail (shown for the main home
-            // shell only; single-tab configs keep their embedded layout).
-            if (widget.showHeader) {
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [const FinampNavigationRail(), Expanded(child: child)],
-              );
-            }
-
+            // JAMP-003: no permanent rail on phone widths. The home shell uses
+            // the full width; its useful destinations live in the top-bar menu.
             return child;
           },
         ),
