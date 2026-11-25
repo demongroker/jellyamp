@@ -282,7 +282,28 @@ class _MusicScreenState extends ConsumerState<MusicScreen> with TickerProviderSt
               children:
                   sortedTabs.map((tabType) {
                     if (tabType == ContentType.home && widget.singleTabConfig == null) {
-                      return HomeScreenContent(refresh: refreshMap[tabType]);
+                      return HomeScreenContent(
+                        refresh: refreshMap[tabType],
+                        libraries: const ['Favorites', 'Albums', 'Artists'],
+                        onSearch: () => setState(() {
+                          isSearching = true;
+                          if (_tabController != null &&
+                              !_tabController!.indexIsChanging &&
+                              sortedTabs.elementAt(_tabController!.index) == ContentType.home) {
+                            // we can't search on the home tab yet
+                            _tabController!.index = sortedTabs.toList().indexWhere(
+                                  (ContentType tabType) => tabType != ContentType.home,
+                                );
+                          }
+                        }),
+                        onBrowse: () => setState(() {
+                          if (_tabController != null) {
+                            _tabController!.index = sortedTabs.toList().indexWhere(
+                                  (ContentType tabType) => tabType != ContentType.home,
+                                );
+                          }
+                        }),
+                      );
                     }
                     final contentTabType =
                         tabType == ContentType.genericArtists

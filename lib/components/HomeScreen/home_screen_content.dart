@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:balanced_text/balanced_text.dart';
 import 'package:finamp/components/Buttons/cta_small.dart';
 import 'package:finamp/components/HomeScreen/home_screen_quick_action_button.dart';
+import 'package:finamp/components/HomeScreen/home_shuffle_view.dart';
 import 'package:finamp/components/HomeScreen/quick_action_editor.dart';
 import 'package:finamp/components/MusicScreen/item_card.dart';
 import 'package:finamp/components/MusicScreen/item_wrapper.dart';
@@ -20,6 +21,8 @@ import 'package:finamp/services/music_screen_provider.dart';
 import 'package:finamp/services/queue_service.dart';
 import 'package:finamp/services/quick_actions_service.dart';
 import 'package:finamp/components/update_banner.dart';
+import 'package:finamp/components/global_snackbar.dart';
+import 'package:finamp/services/audio_service_helper.dart';
 import 'package:finamp/utils/platform_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,9 +38,22 @@ import '../../services/music_providers.dart';
 final _homeScreenLogger = Logger("HomeScreen");
 
 class HomeScreenContent extends ConsumerStatefulWidget {
-  const HomeScreenContent({super.key, this.refresh});
+  const HomeScreenContent({
+    super.key,
+    this.refresh,
+    this.libraries = const [],
+    this.onSearch,
+    this.onBrowse,
+    this.nowPlayingTitle,
+    this.nowPlayingArtist,
+  });
 
   final MusicRefreshCallback? refresh;
+  final List<String> libraries;
+  final VoidCallback? onSearch;
+  final VoidCallback? onBrowse;
+  final String? nowPlayingTitle;
+  final String? nowPlayingArtist;
 
   @override
   ConsumerState<HomeScreenContent> createState() => _HomeScreenContentState();
@@ -57,6 +73,26 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent>
     ref.invalidate(UserInfoProviders.userInfoProvider);
   }
 
+  Future<void> _shuffleAll() async {
+    try {
+      await GetIt.instance<AudioServiceHelper>().shuffleAll(
+        onlyShowFavorites: false,
+      );
+    } catch (e) {
+      GlobalSnackbar.error(e);
+    }
+  }
+
+  Future<void> _shuffleLibrary(String library) async {
+    try {
+      await GetIt.instance<AudioServiceHelper>().shuffleAll(
+        onlyShowFavorites: library.toLowerCase() == 'favorites',
+      );
+    } catch (e) {
+      GlobalSnackbar.error(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -67,6 +103,18 @@ class _HomeScreenContentState extends ConsumerState<HomeScreenContent>
       child: CustomScrollView(
         slivers: [
           const SliverPadding(padding: EdgeInsets.only(top: 8.0), sliver: SliverToBoxAdapter(child: UpdateBanner())),
+          if (widget.libraries.isNotEmpty)
+            SliverToBoxAdapter(
+              child: HomeShuffleView(
+                libraries: widget.libraries,
+                onSearch: widget.onSearch,
+                onShuffleAll: _shuffleAll,
+                onShuffleLibrary: _shuffleLibrary,
+                onBrowse: widget.onBrowse,
+                nowPlayingTitle: widget.nowPlayingTitle,
+                nowPlayingArtist: widget.nowPlayingArtist,
+              ),
+            ),
           if (hasActions) const SliverPadding(padding: EdgeInsets.only(top: 6.0)),
           SliverLayoutBuilder(
             builder: (context, constraints) {
