@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
   <defs>
-    <linearGradient id="ice" x1="48" y1="40" x2="208" y2="216" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#0EA5E9" offset="0"/>
-      <stop stop-color="#7DD3FC" offset="0.55"/>
-      <stop stop-color="#E0F2FE" offset="1"/>
+    <linearGradient id="jellyamp" x1="128" y1="20" x2="128" y2="236" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F766E" offset="0"/>
+      <stop stop-color="#22C55E" offset="1"/>
     </linearGradient>
-    <radialGradient id="sheen" cx="38%" cy="32%" r="60%">
-      <stop stop-color="#FFFFFF" stop-opacity="0.35" offset="0"/>
-      <stop stop-color="#FFFFFF" stop-opacity="0" offset="1"/>
-    </radialGradient>
+    <clipPath id="launcherMask">
+      <circle cx="128" cy="128" r="108"/>
+    </clipPath>
   </defs>
-  <circle cx="128" cy="128" r="108" fill="url(#ice)"/>
-  <circle cx="128" cy="128" r="108" fill="url(#sheen)"/>
-  <ellipse cx="112" cy="158" rx="28" ry="20" fill="#FFFFFF"/>
-  <rect x="132" y="72" width="12" height="90" rx="5" fill="#FFFFFF"/>
-  <path d="M144 72 C188 82 196 108 186 128 C168 112 156 96 144 90 Z" fill="#FFFFFF"/>
+  <g clip-path="url(#launcherMask)">
+    <circle cx="128" cy="128" r="108" fill="url(#jellyamp)"/>
+    <rect x="19.56" y="148.74" width="40.30" height="107.26" rx="20.15" fill="#FFFFFF"/>
+    <rect x="78.81" y="87.11" width="40.30" height="168.89" rx="20.15" fill="#FFFFFF"/>
+    <rect x="137.48" y="25.48" width="40.30" height="230.52" rx="20.15" fill="#FFFFFF"/>
+    <rect x="196.74" y="112.59" width="40.30" height="143.41" rx="20.15" fill="#FFFFFF"/>
+  </g>
 </svg>
